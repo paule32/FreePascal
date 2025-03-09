@@ -1,0 +1,157 @@
+<%
+
+// ***
+// * This template is described as a tutorial in HelpNDoc's help file
+// ***
+
+// Variable declarations
+var
+	// List of topics available in the current project
+	aTopicList: THndTopicsInfoArray;
+var
+	// Current topic index
+	nCurTopic: Integer;
+var
+	// Topic level
+	nTopicLevel: integer;
+	
+// Main program
+begin
+	// Output BOM for HTML UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+	// Instruct the generator to generate the desired output file
+	HndGeneratorInfo.CurrentFile := ExtractFileName(HndGeneratorInfo.OutputFile);
+	// Get the list of topics available
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+%>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="generator" content="<% print(HTMLEncode(HndGeneratorInfo.HelpNDocVersion)); %>">
+	<title><% print(HTMLEncode(HndProjects.GetProjectTitle())); %></title>
+	<style type="text/css">
+	<%
+		// Output global CSS content
+		print(HndProjects.GetProjectCssContent());
+	%>
+
+	<%
+		if HndGeneratorInfo.GetCustomSettingValue('GenerateToc') then
+		begin
+	%>
+
+		body {
+			align-items: stretch;
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			overflow: hidden;
+			margin: 0;
+			padding: 0;
+		}
+
+		.toc {
+			height: 100vh;
+			flex: 0 0 <% print(HndGeneratorInfo.GetCustomSettingValue('TocWidth')); %>;
+			overflow: auto;
+		}
+
+		.content {
+			height: 100vh;
+			overflow: auto;
+		}
+
+		.toc-inner, .content-inner {
+			margin: 1em;
+		}
+
+		.toc-inner a {
+			display: block;
+			padding: 0.5em 0 0.5em 0;
+			text-decoration: none;
+			color: #000;
+			font-size: 11pt;
+			font-family: 'Segoe UI';
+		}
+
+		.toc-inner a:hover {
+			background-color: #ddd;
+		}
+
+		.toc-inner a.toclevel-2 { padding-left: 1em }
+		.toc-inner a.toclevel-3 { padding-left: 2em }
+		.toc-inner a.toclevel-4 { padding-left: 3em }
+		.toc-inner a.toclevel-5 { padding-left: 4em }
+		.toc-inner a.toclevel-6 { padding-left: 5em }
+		.toc-inner a.toclevel-7 { padding-left: 6em }
+		.toc-inner a.toclevel-8 { padding-left: 7em }
+		.toc-inner a.toclevel-9 { padding-left: 8em }
+	<%
+		end;
+	%>
+
+	.copyright {
+		font-style: italic;
+		padding-top: 20px;
+	}
+
+	</style>
+</head>
+
+<body>
+	<%
+		if HndGeneratorInfo.GetCustomSettingValue('GenerateToc') then
+		begin
+	%>
+	<div class="toc">
+		<div class="toc-inner">
+			<%
+				// Loop through all the topics
+				for nCurTopic := 0 to length(aTopicList) - 1 do
+				begin
+					// Get the topic level
+					nTopicLevel := HndTopics.GetTopicLevel(aTopicList[nCurTopic].Id);
+					// Add the topic title
+					printf('<a href="#%s" class="toclevel-%d">%s</a>', [aTopicList[nCurTopic].HelpId, nTopicLevel, aTopicList[nCurTopic].caption]);
+				end;
+			%>	
+		</div>
+	</div>
+	<%
+		end;
+	%>
+
+    <div class="content">
+		<div class="content-inner">
+			<%
+			
+			// Loop through all the topics
+			for nCurTopic := 0 to length(aTopicList) - 1 do
+			begin
+				// Notify about the topic being generated
+				HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+				// Add an anchor to be able to link to that topic
+				printf('<a name="%s"></a>', [aTopicList[nCurTopic].helpid]);
+				// Get the topic level
+				nTopicLevel := HndTopics.GetTopicLevel(HndGeneratorInfo.CurrentTopic);
+				// Add the topic title
+				printf('<h%d>%s</h%d>', [nTopicLevel, HndTopics.GetTopicHeaderTextCalculated(HndGeneratorInfo.CurrentTopic), nTopicLevel]);
+				// Output the topic content
+				print(HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic));
+			end;
+			
+			%>
+			
+			<p class="copyright">
+				<% print(HTMLEncode(HndProjects.GetProjectCopyright())); %>
+			</p>
+		</div>
+	</div>
+		
+</body>
+</html>
+
+<%
+end.
+%>

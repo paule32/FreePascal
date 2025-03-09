@@ -1,0 +1,162 @@
+﻿[config]
+name=Legacy framed HTML Template
+category=HTML Documentation
+extension=html
+topicextension=html
+
+[var_BaseColor]
+name=Base color
+name.fr=Couleur de base
+name.de=Grundfarbe
+name.es=Color de base
+description=Customize the documentation's base color.
+description.fr=Personnaliser la couleur de base de la documentation.
+description.de=Festlegen der Grundfarbe der Dokumentation.
+description.es=Personalizar el color de base de la documentación.
+kind=color
+default=#EFEFEF
+
+[var_IconStyle]
+name=Base icon set
+name.fr=Ensemble d'icônes de base
+name.de=Icons
+name.es=Conjunto de iconos de base
+kind=enum
+default=chm
+values=chm|folder|vista
+description=Define the style for the icons displayed in the table of contents, keywords and search trees.
+description.fr=Définir le style des icônes affichées dans la table des matières, les mots clés et la recherche.
+description.de=Legt den Stil der im Inhaltsverzeichnis, den Stichwörtern und dem Suchbaum angezeigten Icons fest.
+description.es=Definir el estilo de los iconos mostrados en la tabla de contenido, palabras clave y árboles de búsqueda.
+
+[var_TocTitle]
+name=Table of contents tab title
+name.fr=Titre de l'onglet table des matières
+name.de=Inhaltsverzeichnis-Tab Überschrift
+name.es=Título de la pestaña de la tabla de contenido
+kind=string
+default=Contents
+description=Define the title for the table of contents tab.
+description.fr=Définir le titre de l'onglet table des matières.
+description.de=Legt den Titel für den Inhaltsverzeichnis-Tab fest.
+description.es=Definir el título de la pestaña de la tabla de contenido.
+
+[var_TocShow]
+name=Show the table of contents tab
+name.fr=Afficher l'onglet table des matières
+name.de=Inhaltsverzeichnis-Tab anzeigen
+name.es=Mostrar la pestaña de la tabla de contenido
+kind=bool
+default=1
+description=If checked, the table of contents tab will be shown. Hidden otherwise.
+description.fr=Si coché, l'onglet table des matières sera affiché. Il sera caché sinon.
+description.de=Wenn markiert, wird der Inhaltsverzeichnis-Tab angezeigt, ansonsten unsichtbar.
+description.es=Si se marca, se mostrará la tabla de contenido. De lo contrario, quedará oculta.
+
+[var_TocExpanded]
+name=Expand table of contents tree
+name.fr=Développer la table des matières
+name.de=Inhaltsverzeichnis-Baum expandieren
+name.es=Expandir el árbol de la tabla de contenido
+kind=bool
+default=1
+description=If checked, the table of contents tree will be fully expanded. Collapsed otherwise.
+description.fr=Si coché, l'arbre de la table des matières est complètement développé. Il sera compacté sinon.
+description.de=Wenn markiert, wird der Inhaltsverzeichnis-Baum komplett expandiert, ansonsten komprimiert.
+description.es=Si se marca, el árbol de la tabla de contenido se expandirá por completo. De lo contrario, quedará plegado.
+
+[var_TocWidth]
+name=Table of contents width
+name.fr=Largeur de la table des matières
+name.de=Breite des Inhaltsverzeichnisses
+name.es=Ancho de la tabla de contenido
+kind=int
+default=300
+description=Indicates the width of the table of contents panel.
+description.fr=Indiquer la largeur du panneau de la table des matières.
+description.de=Zeigt die Breite des Inhaltsverzeichnis-Panels an.
+description.es=Indicar el ancho del panel de la tabla de contenido.
+
+[var_TocKeywordsTitle]
+name=Keywords tab title
+name.fr=Titre de l'onglet mots clés
+name.de=Schlüßelwörter Tab Überschrift
+name.es=Título de la pestaña de palabras clave
+kind=string
+default=Index
+description=Define the title for the keywords tab.
+description.fr=Définir le titre de l'onglet mots clés.
+description.de=Definiert die Überschrift für den Stichwörter-Tab.
+description.es=Definir el título de la pestaña de palabras clave.
+
+[var_TocKeywordsShow]
+name=Show the keywords tab
+name.fr=Afficher l'onglet mots clés
+name.de=Stichwörter-Tab anzeigen
+name.es=Mostrar la pestaña de palabras clave
+kind=bool
+default=1
+description=If checked, the keywords tab will be shown. Hidden otherwise.
+description.fr=Si coché, l'onglet mots clés sera affiché. Il sera caché sinon.
+description.de=Wenn markiert, wird der Stichwörter-Tab angezeigt, ansonsten unsichtbar.
+description.es=Si se marca, se mostrará la pestaña de palabras clave. De lo contrario, quedará oculta.
+
+[var_TocKeywordsExpanded]
+name=Expand keywords tree
+name.fr=Développer les mots clés
+name.de=Stichwörter-Baum expandieren
+name.es=Expandir árbol de palabras clave
+kind=bool
+default=1
+description=If checked, the keywords tree will be fully expanded. Collapsed otherwise.
+description.fr=Si coché, l'arbre des mots clés sera complètement développé. Il sera compacté sinon.
+description.de=Wenn markiert, wird der Stichwörter-Baum komplett expandiert, ansonsten komprimiert.
+description.es=Si se marca, el árbol de las palabras clave se mostrará completamente expandido. De lo contrario, quedará plegado.
+
+[var_TocSearchTitle]
+name=Search tab title
+name.fr=Titre de l'onglet recherche
+name.de=Titel des Suchen-Tabs
+name.es=Título de la pestaña de búsqueda
+kind=string
+default=Search
+description=Define the title for the search tab.
+description.fr=Définir le titre de l'onglet recherche.
+description.de=Definiert die Überschrift für den Suchen-Tab.
+description.es=Definir el título de la pestaña de búsqueda.
+
+[var_TocSearchShow]
+name=Show the search tab
+name.fr=Afficher l'onglet recherche
+name.de=Suchen-Tab anzeigen
+name.es=Mostrar la pestaña de búsqueda
+kind=bool
+default=1
+description=If checked, the search tab will be shown. Hidden otherwise.
+description.fr=Si coché, l'onglet recherche sera affiché. Il sera caché sinon.
+description.de=Wenn markiert, wird der Suchen-Tab angezeigt, ansonsten unsichtbar.
+description.es=Si se marca, se mostrará la pestaña de búsqueda. De lo contrario, quedará oculta.
+
+[var_ShowBreadCrumbs]
+name=Show BreadCrumbs
+name.fr=Afficher le cheminement
+name.de=Brotkrümelnavigation
+name.es=Mostrar breadcrumbs
+description=Show the breadcrumbs at the top of each topic bellow the topic title.
+description.fr=Afficher le cheminement au haut de chaque chapitre en dessous du titre du chapitre.
+description.de=Brotkrümelnavigation über jedem Kapitel/Thema unterhalb des Titels anzeigen.
+description.es=Mostrar breadcrumbs en la parte superior de cada tema bajo el título del tema.
+kind=bool
+default=1
+
+[var_ShowNavigation]
+name=Show navigation arrows
+name.fr=Afficher les flèches de navigation
+name.de=Navigationspfeile anzeigen
+name.es=Mostrar flechas de navegación
+description=Show the navigation arrows at the top of each topic right of the topic title.
+description.fr=Afficher les flèches de navigation en haut de chaque chapitre à droite du titre du chapitre.
+description.de=Navigationspfeile über jedem Kapitel/Thema auf der rechten Seite des Titels anzeigen.
+description.es=Mostrar las flechas de navegación en la parte superior de cada tema a la derecha del título del tema.
+kind=bool
+default=1

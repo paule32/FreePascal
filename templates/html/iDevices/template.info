@@ -1,0 +1,88 @@
+﻿[config]
+name=iPhone, iPad and iPod template
+category=HTML Documentation
+extension=html
+
+[var_TocTitle]
+name=Table of contents tab title
+name.fr=Titre de l'onglet table des matières
+name.de=Inhaltsverzeichnis-Tab Überschrift
+name.es=Título de la pestaña de la tabla de contenido
+kind=string
+default=Table of Contents
+description=Define the title for the table of contents tab.
+description.fr=Définir le titre de l'onglet table des matières.
+description.de=Legt den Titel für den Inhaltsverzeichnis-Tab fest.
+description.es=Definir el título de la pestaña de la tabla de contenido.
+
+[var_TocKeywordsTitle]
+name=Keywords tab title
+name.fr=Titre de l'onglet mots clés
+name.de=Schlüßelwörter Tab Überschrift
+name.es=Título de la pestaña de palabras clave
+kind=string
+default=Index
+description=Define the title for the keywords tab.
+description.fr=Définir le titre de l'onglet mots clés.
+description.de=Definiert die Überschrift für den Stichwörter-Tab.
+description.es=Definir el título de la pestaña de palabras clave.
+
+[var_TocSearchTitle]
+name=Search tab title
+name.fr=Titre de l'onglet recherche
+name.de=Titel des Suchen-Tabs
+name.es=Título de la pestaña de búsqueda
+kind=string
+default=Search
+description=Define the title for the search tab.
+description.fr=Définir le titre de l'onglet recherche.
+description.de=Definiert die Überschrift für den Suchen-Tab.
+description.es=Definir el título de la pestaña de búsqueda.
+
+[var_TranslationNoResults]
+name=Translation for "No results"
+name.fr=Traduction de "No results"
+name.de=Übersetzung für "No results"
+name.es=Traducción de "No results"
+description=Translation for the string: "No results"
+description.fr=Traduction de la phrase: "No results"
+description.de=Übersetzung für den String: "No results"
+description.es=Traducción de la string: "No results"
+kind=string
+default=No results
+
+[var_TranslationNoResultsInvalid]
+name=Translation for "No results or invalid input"
+name.fr=Traduction de "No results or invalid input"
+name.de=Übersetzung für "No results or invalid input"
+name.es=Traducción de "No results or invalid input"
+description=Translation for the string: "No results or invalid input"
+description.fr=Traduction de la phrase: "No results or invalid input"
+description.de=Übersetzung für den String: "No results or invalid input"
+description.es=Traducción de la string: "No results or invalid input"
+kind=string
+default=No results or invalid input
+
+[var_TranslationLoading]
+name=Translation for "Loading..."
+name.fr=Traduction de "Loading..."
+name.de=Übersetzung für "Loading..."
+name.es=Traducción de "Loading..."
+description=Translation for the string: "Loading..."
+description.fr=Traduction de la phrase: "Loading..."
+description.de=Übersetzung für den String: "Loading..."
+description.es=Traducción de la string: "Loading..."
+kind=string
+default=Loading...
+
+[var_TranslationCancel]
+name=Translation for "Cancel"
+name.fr=Traduction de "Cancel"
+name.de=Übersetzung für "Cancel"
+name.es=Traducción de "Cancel"
+description=Translation for the string: "Cancel"
+description.fr=Traduction de la phrase: "Cancel"
+description.de=Übersetzung für den String: "Cancel"
+description.es=Traducción de la string: "Cancel"
+kind=string
+default=Cancel

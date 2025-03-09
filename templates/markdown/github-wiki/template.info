@@ -1,0 +1,45 @@
+﻿[config]
+name=GitHub Wiki Pages
+category=Markdown
+extension=md
+topicextension=md
+inherits=
+linkformattopic=%helpid%
+linkformatanchor=%helpid%#%anchorname%
+
+[var_TranslationTableOfContents]
+name=Translation for "Table of contents"
+name.de=Übersetzung für "Table of contents"
+name.es=Traducción de "Table of contents"
+name.fr=Traduction de "Table of contents"
+description=Translation for the string: "Table of contents"
+description.de=Übersetzung für den String: "Table of contents"
+description.es=Traducción de la string: "Table of contents"
+description.fr=Traduction de la phrase: "Table of contents"
+default=Table of contents
+kind=string
+values=
+
+[var_GenerateCommonFooter]
+name=Generate common footer
+name.de=Gemeinsame Fußzeile generieren
+name.es=Generar pie de página común
+name.fr=Générer un pied de page commun
+description=Generate common copyright footer
+description.de=Gemeinsame Copyright-Fußzeile generieren
+description.es=Crear un pie de página de copyright común
+description.fr=Générer un pied de page commun pour les droits d'auteur
+default=1
+kind=bool
+
+[var_GenerateSidebar]
+name=Generate sidebar
+name.de=Seitenleiste generieren
+name.es=Generar barra lateral
+name.fr=Générer une barre latérale
+description=Generate a sidebar for your wiki
+description.de=Erzeugen Sie eine Seitenleiste für Ihr Wiki
+description.es=Generar una barra lateral para su wiki
+description.fr=Générer une barre latérale pour votre wiki
+default=1
+kind=bool

@@ -1,0 +1,106 @@
+<%
+const
+	KIND_PICTURES = 1;
+	
+var
+	sOutputFileName: string;
+var
+	sNameSpace, sVirtualFolder: string;
+var
+	sDefaultTopicId, sDefaultTopicUrl: string;
+var
+	sPicturePath, sIconApplication, sIconAbout: string;
+var
+	aPictureList: THndLibraryItemsInfoArray;
+var
+	nCnt: integer;
+	
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+
+begin
+	sOutputFileName := ChangeFileExt(ExtractFileName(HndGeneratorInfo.OutputFile), '');
+	// NameSpace
+	sNameSpace := HndGeneratorInfo.GetCustomSettingValue('Namespace');
+	if Trim(sNameSpace) = '' then
+		sNameSpace := lowercase(StringReplace(HndUtils.HTMLEscape(HndProjects.GetProjectTitle()), ' ', '.', [rfReplaceAll]));
+	// VirtualFolder	
+	sVirtualFolder := HndGeneratorInfo.GetCustomSettingValue('VirtualFolder');
+	if Trim(sVirtualFolder) = '' then
+		sVirtualFolder := 'doc';
+	// Default topic
+	sDefaultTopicUrl := '';
+	// Try to get the default topic
+	sDefaultTopicId := HndProjects.GetProjectDefaultTopic();
+	// None defined: the first one is the default topic
+	if (sDefaultTopicId = '') then
+		sDefaultTopicId := HndTopicsEx.GetTopicNextGenerated(HndTopics.GetProjectTopic(), True);
+	// Create its url
+	if (sDefaultTopicId <> '') then
+		sDefaultTopicUrl := format('%s%s', [HndTopics.GetTopicHelpId(sDefaultTopicId), GetTopicExtension()]);
+	// Get pictures from library
+	aPictureList := HndLibraryItems.GetItemList([KIND_PICTURES]);  // Get picture from library
+	for nCnt := 0 to length(aPictureList) - 1 do
+	begin
+		// Picture path
+		sPicturePath := '';
+		if aPictureList[nCnt].Source = 1 then  // Included in project
+			sPicturePath := format('%s%s.%s', [HndGeneratorInfo.OutputDirLib, aPictureList[nCnt].Caption, aPictureList[nCnt].Extension])
+		else if aPictureList[nCnt].Source = 2 then  // Included at generation
+			sPicturePath := format('%s%s', [HndGeneratorInfo.OutputDirLib, ExtractFileName(HndLibraryItems.GetItemUrlFile(aPictureList[nCnt].Id))]);
+		// Update 
+		if aPictureList[nCnt].Id = HndGeneratorInfo.GetCustomSettingValue('ApplicationIcon') then
+			sIconApplication := sPicturePath
+		else if aPictureList[nCnt].Id = HndGeneratorInfo.GetCustomSettingValue('AboutIcon') then
+			sIconAbout := sPicturePath;
+	end;
+
+	printLn('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<QHelpCollectionProject version="1.0">
+	<assistant>
+		<title><% print(HndUtils.HTMLEscape(HndProjects.GetProjectTitle())); %></title>
+		<homePage>qthelp://<% printf('%s/%s/%s', [sNameSpace, sVirtualFolder, sDefaultTopicUrl]); %></homePage>
+		<startPage>qthelp://<% printf('%s/%s/%s', [sNameSpace, sVirtualFolder, sDefaultTopicUrl]); %></startPage>
+		<currentFilter></currentFilter>
+		<% if sIconApplication <> '' then begin %>
+			<applicationIcon><% print(sIconApplication); %></applicationIcon>
+		<% end; %>
+		<enableFilterFunctionality visible="<% print(lowercase(HndGeneratorInfo.GetCustomSettingValue('FilterVisible'))); %>"><% print(lowercase(HndGeneratorInfo.GetCustomSettingValue('FilterEnabled'))); %></enableFilterFunctionality>
+		<enableDocumentationManager><% print(lowercase(HndGeneratorInfo.GetCustomSettingValue('DocumentationManagerEnabled'))); %></enableDocumentationManager>
+		<enableAddressBar visible="<% print(lowercase(HndGeneratorInfo.GetCustomSettingValue('AddressBarVisible'))); %>"><% print(lowercase(HndGeneratorInfo.GetCustomSettingValue('AddressBarEnabled'))); %></enableAddressBar>
+		<enableFullTextSearchFallback><% print(lowercase(HndGeneratorInfo.GetCustomSettingValue('FullTextSearchFallback'))); %></enableFullTextSearchFallback>
+        <aboutMenuText>
+            <text><% print(HndGeneratorInfo.GetCustomSettingValue('AboutMenuText')); %></text>
+        </aboutMenuText>
+        <aboutDialog>
+			<% if HndGeneratorInfo.GetCustomSettingValue('AboutText') <> '' then begin %>
+				<file>_about.txt</file>
+			<% end; %>
+			<% if sIconAbout <> '' then begin %>
+				<icon><% print(sIconAbout); %></icon>
+			<% end; %>
+        </aboutDialog>
+	</assistant>
+	<docFiles>
+		<generate>
+			<file>
+				<input>project.qhp</input>
+				<output><% print(sOutputFileName); %>.qch</output>
+			</file>
+		</generate>
+		<register>
+			<file><% print(sOutputFileName); %>.qch</file>
+		</register>
+	</docFiles>
+</QHelpCollectionProject>
+
+<%
+end.
+%>

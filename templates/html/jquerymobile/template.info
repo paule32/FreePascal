@@ -1,0 +1,12 @@
+﻿[config]
+name=jQuery Mobile Template
+category=HTML Documentation
+extension=html
+
+[var_Theme]
+name=Theme
+name.fr=Thème
+name.de=Thema
+kind=enum
+default=default
+values=default|flatui|squareui

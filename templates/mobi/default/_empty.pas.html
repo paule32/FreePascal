@@ -1,0 +1,33 @@
+﻿<%
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+
+begin
+	// Setup the file name
+	HndGeneratorInfo.CurrentFile := '_empty' + GetTopicExtension();
+	
+	// XML header
+	print('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Empty topic</title>
+</head>
+
+<body>
+	<div></div>
+</body>
+	
+</html>
+
+<%
+end.
+%>

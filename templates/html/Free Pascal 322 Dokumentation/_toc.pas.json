@@ -1,0 +1,63 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+    nCurTopic, nCurIcon: Integer;
+var
+    sParentId, sParentHelpId: string;
+var
+    sIconData, sUrl: string;
+	
+	function GetEscapedValue(Value: string): string;
+	begin
+		Result := Value;
+		// 1. Replace backslashes
+		Result := StringReplace(Result, '\', '\\', [rfReplaceAll]);
+		// 2. Replace double quotes
+		Result := StringReplace(Result, '"', '\"', [rfReplaceAll]);
+	end;
+
+    // Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+
+begin
+    aTopicList := HndTopicsEx.GetTopicListGenerated(True, False);
+    print('[');
+    for nCurTopic := 0 to length(aTopicList) - 1 do
+    begin
+        // Parent
+        sParentId := HndTopics.GetTopicParent(aTopicList[nCurTopic].Id);
+        if (sParentId = HndTopics.GetProjectTopic()) then
+            sParentHelpId := '#'
+        else
+            sParentHelpId := HndTopics.GetTopicHelpId(sParentId);
+        // Icon
+        sIconData := '';
+        nCurIcon := HndTopics.GetTopicIconIndex(aTopicList[nCurTopic].Id);
+        if nCurIcon > -1 then
+            sIconData := Format(', "icon": "icon-%d"', [nCurIcon]);
+        // URL
+        if (aTopicList[nCurTopic].Kind = 2) then
+            sUrl := HndTopics.GetTopicUrlLink(aTopicList[nCurTopic].Id)
+        else
+            sUrl := aTopicList[nCurTopic].HelpId + GetTopicExtension(); 
+        // Print the topic
+        printf('{ "id": "%s", "parent" : "%s", "text": "%s", "a_attr": {"href": "%s"} %s }', [
+            aTopicList[nCurTopic].HelpId,
+            sParentHelpId,
+            GetEscapedValue(aTopicList[nCurTopic].Caption),
+            GetEscapedValue(sUrl),
+            sIconData
+        ]);
+        // Separator
+        if nCurTopic < length(aTopicList) - 1 then
+            print(',');
+    end;
+    print(']');
+end.
+%>

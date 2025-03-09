@@ -1,0 +1,112 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	sTopicUrl: string;
+var
+	nCurTopic, nBlocLevel, nTopicKind, nCurTopicLevel, nCurTopicChildrenCnt: Integer;
+var
+	nDif, nClose: Integer;
+
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+	
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+
+	// Change current file
+	HndGeneratorInfo.CurrentFile := 'OEBPS\_toc' + GetTopicExtension();
+	
+	// Lists
+	aTopicList := HndTopicsEx.GetTopicListGenerated(True, False);
+	
+	// Avoid syntax error
+	println('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+	<title><% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocTitle'))); %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<style>
+		.toc-level-0 { margin-left: 0; }
+		.toc-level-1 { margin-left: 2em; }
+		.toc-level-2 { margin-left: 2em; }
+		.toc-level-3 { margin-left: 2em; }
+		.toc-level-4 { margin-left: 2em; }
+		.toc-level-5 { margin-left: 2em; }
+		.toc-level-6 { margin-left: 2em; }
+		.toc-level-7 { margin-left: 2em; }
+		.toc-level-8 { margin-left: 2em; }
+		.toc-level-9 { margin-left: 2em; }
+	</style>
+</head>
+
+<body>
+
+	<h1><% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocTitle'))); %></h1>
+
+    <div class="toc-content">
+	
+		<%
+			// Topics
+			nBlocLevel := 0;
+			for nCurTopic := 0 to length(aTopicList) - 1 do
+			begin
+				HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+				nTopicKind := aTopicList[nCurTopic].Kind;
+				nCurTopicLevel := HndTopics.GetTopicLevel(HndGeneratorInfo.CurrentTopic);
+				nCurTopicChildrenCnt := HndTopicsEx.GetTopicDirectChildrenCountGenerated(HndGeneratorInfo.CurrentTopic, True);
+				
+				// Topic URL
+				if nTopicKind = 1 then sTopicUrl := '_empty' + GetTopicExtension()  // Empty
+				else sTopicUrl := format('%s%s', [aTopicList[nCurTopic].HelpId, GetTopicExtension()]);  // Normal topic
+
+				// Close the previous topics
+				if ((nCurTopic > 0) and (nCurTopicLevel < HndTopics.GetTopicLevel(aTopicList[nCurTopic - 1].id))) then
+				begin
+					nDif := HndTopics.GetTopicLevel(aTopicList[nCurTopic - 1].id) - nCurTopicLevel;
+					for nClose := 0 to nDif - 1 do
+					begin
+						print('</div>');
+						nBlocLevel := nBlocLevel - 1;
+					end;
+				end;
+
+				printfln('<div class="toc-level-%d">', [nBlocLevel]);
+					printfln('<a href="%s">%s</a>', [sTopicUrl, HndUtils.HTMLEscape(aTopicList[nCurTopic].caption)]);
+				
+				if (nCurTopicChildrenCnt > 0) then nBlocLevel := nBlocLevel + 1
+				else println('</div>');
+					
+				// Close the last topic
+				if (HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True) = '') then
+				begin
+					while nBlocLevel > 0 do
+					begin
+						print('</div>');
+						nBlocLevel := nBlocLevel - 1;
+					end;
+				end;
+
+			end;
+		%>
+		
+    </div>
+</body>
+	
+</html>
+
+<%
+
+	end.
+	
+%>

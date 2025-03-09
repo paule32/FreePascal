@@ -1,0 +1,134 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	nCurTopic, nCurParent, nTopicKind, nHeaderKind, nFooterKind: integer;
+var
+	sTopicHeader, sTopicFooter, sTopicContent, sRelativeTopic: string;
+var
+	aBreadCrumb: array of String;
+
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+
+	// Output global CSS content
+	HndGeneratorInfo.CurrentFile := 'css\hnd.css';
+	print(HndProjects.GetProjectCssContent());
+	
+	// Clear search data
+	HndJsSearchEngine.ClearSearchData();
+	
+	// Each individual topics...
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+	for nCurTopic := 0 to length(aTopicList) - 1 do
+	begin
+		// Notify about the topic being generated
+		HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+		// Topic kind
+		nTopicKind := HndTopics.GetTopicKind(HndGeneratorInfo.CurrentTopic);
+		if (nTopicKind = 1) then continue;  // Empty topic: do not generate anything
+		// Setup the file name
+		HndGeneratorInfo.CurrentFile := aTopicList[nCurTopic].HelpId + '.html';
+		// Topic header
+		nHeaderKind := HndTopics.GetTopicHeaderKind(HndGeneratorInfo.CurrentTopic);
+		sTopicHeader := HndTopics.GetTopicHeaderTextCalculated(HndGeneratorInfo.CurrentTopic);
+		// Topic footer
+		nFooterKind := HndTopics.GetTopicFooterKind(HndGeneratorInfo.CurrentTopic);
+		sTopicFooter := HndTopics.GetTopicFooterTextCalculated(HndGeneratorInfo.CurrentTopic);
+		// Topic content
+		sTopicContent := HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic);
+		
+		// Add Search data
+		HndJsSearchEngine.AddSearchData(
+			sTopicHeader,
+			HndGeneratorInfo.CurrentTopic
+		);
+		HndJsSearchEngine.AddSearchData(
+			HndUtils.HtmlToText(sTopicContent),
+			HndGeneratorInfo.CurrentTopic
+		);
+		HndJsSearchEngine.AddSearchData(
+			sTopicFooter,
+			HndGeneratorInfo.CurrentTopic
+		);
+		
+		// Create the breadcrumb
+		aBreadCrumb.SetLength(0);
+		if HndGeneratorInfo.GetCustomSettingValue('ShowBreadCrumbs') then
+		begin
+			sRelativeTopic := HndTopics.GetTopicParent(HndGeneratorInfo.CurrentTopic);
+			while (sRelativeTopic <> '') and (sRelativeTopic <> HndTopics.GetProjectTopic()) do
+			begin
+				aBreadCrumb.SetLength(Length(aBreadCrumb) + 1);
+				aBreadCrumb[Length(aBreadCrumb) - 1] := sRelativeTopic;
+				sRelativeTopic := HndTopics.GetTopicParent(sRelativeTopic);
+			end;
+		end;
+
+%>
+
+    <div>
+
+        <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="left">
+                    <a href="#" data-panel="left" class="link open-panel icon-only"><i class="icon icon-bars"></i></a>
+                    <%
+						sRelativeTopic := HndTopicsEx.GetTopicPreviousGenerated(HndGeneratorInfo.CurrentTopic, True);
+						if (sRelativeTopic <> '') and (sRelativeTopic <> HndTopics.GetProjectTopic()) then
+						begin
+				    %>
+                        <a href="<% printf('%s.html', [HndTopics.GetTopicHelpId(sRelativeTopic)]); %>" class="link"><i class="icon icon-back"></i> </a>
+                    <%
+						end;
+                    %>
+
+                </div>
+                <div class="center sliding">
+                    <% print(HTMLEncode(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %>
+                </div>
+                <div class="right">
+                    <%
+						sRelativeTopic := HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True);
+						if (sRelativeTopic <> '') and (sRelativeTopic <> HndTopics.GetProjectTopic()) then
+						begin
+					%>
+                        <a href="<% printf('%s.html', [HndTopics.GetTopicHelpId(sRelativeTopic)]); %>" class="link"><i class="icon icon-forward"></i> </a>
+                    <%
+                    	end;
+                    %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="pages">
+            <div data-page="topics" class="page">
+                <!-- Scrollable page content-->
+                <div class="page-content hide-bars-on-scroll">
+                    <div class="content-block">
+
+						<!-- Topic content -->
+                       	<% print(HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic)); %>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <%
+	end;
+	
+	// Output JS Search engine data
+	HndGeneratorInfo.CurrentFile := 'js\hndsd.js';
+	print(HndJsSearchEngine.GetJsData());
+
+	// Clear the search engine
+	HndJsSearchEngine.ClearSearchData();
+	
+end.
+%>

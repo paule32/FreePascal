@@ -1,0 +1,47 @@
+<div>
+
+    <!-- Top Navbar -->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="center sliding">
+                <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocSearchTitle'))); %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="pages">
+        <div data-page="search" class="page">
+
+            <!-- Search bar -->
+            <form class="searchbar searchbar-init">
+                <div class="searchbar-input">
+                    <input type="search" placeholder="Search" />
+                    <a href="#" class="searchbar-clear"></a>
+                </div>
+                <a href="#" class="searchbar-cancel">
+                    <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TranslationCancel'))); %>
+                </a>
+            </form>
+
+            <!-- Search bar overlay -->
+            <div class="searchbar-overlay"></div>
+
+            <!-- Content -->
+            <div class="page-content">
+                <div class="list-block hnd-list-container">
+                    <ul id="search-result">
+                        <li class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TranslationNoResultsInvalid'))); %>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

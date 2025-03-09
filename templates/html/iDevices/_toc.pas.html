@@ -1,0 +1,109 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+    nBlocLevel: integer = 0;
+var
+    nCurTopic, nTopicKind, nCurTopicLevel, nDif, nClose, nCurTopicChildrenCnt: integer;
+var
+    sTopicUrl, sTopicClass: string;
+    
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+%>
+
+    <div>
+
+        <!-- Top Navbar -->
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="center sliding">
+                    <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocTitle'))); %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="pages toolbar-through navbar-through">
+            <div data-page="toc" class="page">
+                <div class="page-content">
+                    <div class="list-block hnd-list-container">
+
+                        <ul id="toc" class="">
+
+                            <%
+                                    nBlocLevel := 0;
+                                    aTopicList := HndTopicsEx.GetTopicListGenerated(True, False);
+                                    for nCurTopic := 0 to length(aTopicList) - 1 do
+                                    begin
+                                        HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+                                        nTopicKind := aTopicList[nCurTopic].Kind;
+                                        nCurTopicLevel := HndTopics.GetTopicLevel(HndGeneratorInfo.CurrentTopic);
+                                        nCurTopicChildrenCnt := HndTopicsEx.GetTopicDirectChildrenCountGenerated(HndGeneratorInfo.CurrentTopic, True);
+                                        
+                                        // Topic URL
+                                        if nTopicKind = 2 then sTopicUrl := HndTopics.GetTopicUrlLink(HndGeneratorInfo.CurrentTopic)  // Link to URL
+                                        else if nTopicKind = 1 then sTopicUrl := '#" onclick="return false;'  // Empty
+                                        else sTopicUrl := format('%s.html', [aTopicList[nCurTopic].HelpId]);  // Normal topic
+                                        
+                                        // Close the previous topics
+                                        if ((nCurTopic > 0) and (nCurTopicLevel < HndTopics.GetTopicLevel(aTopicList[nCurTopic - 1].id))) then
+                                        begin
+                                            nDif := HndTopics.GetTopicLevel(aTopicList[nCurTopic - 1].id) - nCurTopicLevel;
+                                            for nClose := 0 to nDif - 1 do
+                                            begin
+                                                print('</ul></li>');
+                                                nBlocLevel := nBlocLevel - 1;
+                                            end;
+                                        end;
+                                        
+                                        // Topic class
+                                        if nCurTopicChildrenCnt > 0 then sTopicClass := 'folder'
+                                        else sTopicClass := '';
+                                %>
+
+                                <li class="<% print(sTopicClass); %>" id="<% print(aTopicList[nCurTopic].HelpId); %>">
+                                    <a href="<% print(sTopicUrl); %>" data-view=".view-main" class="item-link item-content">
+                                        <div class="item-inner">
+                                            <div class="item-title">
+                                                <% print(HTMLEncode(aTopicList[nCurTopic].caption)); %>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <%
+                                            if (nCurTopicChildrenCnt > 0) then
+                                            begin
+                                                print('<ul>');
+                                                nBlocLevel := nBlocLevel + 1;
+                                            end
+                                            else begin
+                                                print('</li>');
+                                            end;
+                                            
+                                            // Close the last topic
+                                            if (HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True) = '') then
+                                            begin
+                                                while nBlocLevel > 0 do
+                                                begin
+                                                    print('</ul></li>');
+                                                    nBlocLevel := nBlocLevel - 1;
+                                                end;
+                                            end;
+                                        
+                                        end;
+                                    %>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <%
+end.
+%>

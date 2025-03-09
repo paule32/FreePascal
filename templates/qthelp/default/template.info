@@ -1,0 +1,52 @@
+﻿[config]
+name=Default QtHelp Template
+category=QtHelp
+extension=qhc
+topicextension=html
+
+[var_BaseColor]
+name=Base color
+name.fr=Couleur de base
+name.de=Grundfarbe
+name.es=Color de base
+description=Customize the documentation's base color.
+description.fr=Personnaliser la couleur de base de la documentation.
+description.de=Festlegen der Grundfarbe der Dokumentation.
+description.es=Personalizar el color de base de la documentación.
+kind=color
+default=#EFEFEF
+
+[var_CustomCss]
+name=Custom CSS
+name.fr=CSS Personnalisé
+name.de=Benutzerdefinierte CSS
+name.es=CSS Personalizado
+kind=memo
+description=Specify custom CSS to customize the generated HTML content.
+description.fr=Indiquer le code CSS à utiliser pour personnaliser le contenu HTML généré.
+description.de=Geben Sie benutzerdefinierte CSS zum Anpassen der generierten HTML-Inhalte an.
+description.es=Especificar CSS personalizado para personalizar el contenido HTML generado.
+
+[var_ShowBreadCrumbs]
+name=Show BreadCrumbs
+name.fr=Afficher le cheminement
+name.de=Brotkrümelnavigation
+name.es=Mostrar breadcrumbs
+description=Show the breadcrumbs at the top of each topic bellow the topic title.
+description.fr=Afficher le cheminement au haut de chaque chapitre en dessous du titre du chapitre.
+description.de=Brotkrümelnavigation über jedem Kapitel/Thema unterhalb des Titels anzeigen.
+description.es=Mostrar breadcrumbs en la parte superior de cada tema bajo el título del tema.
+kind=bool
+default=1
+
+[var_ShowNavigation]
+name=Show navigation arrows
+name.fr=Afficher les flèches de navigation
+name.de=Navigationspfeile anzeigen
+name.es=Mostrar flechas de navegación
+description=Show the navigation arrows at the top of each topic right of the topic title.
+description.fr=Afficher les flèches de navigation en haut de chaque chapitre à droite du titre du chapitre.
+description.de=Navigationspfeile über jedem Kapitel/Thema auf der rechten Seite des Titels anzeigen.
+description.es=Mostrar las flechas de navegación en la parte superior de cada tema a la derecha del título del tema.
+kind=bool
+default=1

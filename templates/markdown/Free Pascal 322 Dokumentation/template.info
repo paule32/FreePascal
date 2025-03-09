@@ -1,0 +1,22 @@
+﻿[config]
+name=Free Pascal 322 Dokumentation
+category=Markdown
+extension=md
+topicextension=md
+inherits=
+linkformattopic=
+linkformatanchor=
+
+[var_TranslationTableOfContents]
+name=Translation for "Table of contents"
+name.de=Übersetzung für "Table of contents"
+name.es=Traducción de "Table of contents"
+name.fr=Traduction de "Table of contents"
+description=Translation for the string: "Table of contents"
+description.de=Übersetzung für den String: "Table of contents"
+description.es=Traducción de la string: "Table of contents"
+description.fr=Traduction de la phrase: "Table of contents"
+default=Table of contents
+kind=string
+values=
+

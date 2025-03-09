@@ -1,0 +1,45 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+    nCurTopic: integer;
+    
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+    
+begin
+    // No need BOM for UTF8 files
+    HndGeneratorInfo.BOMOutput := False;
+
+    // Get a list of generated topics
+    aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+    
+	// Each individual topics...
+	for nCurTopic := 0 to length(aTopicList) - 1 do
+    begin
+    
+        HndGeneratorInfo.CurrentFile := Format('context\%d%s', [aTopicList[nCurTopic].HelpContext, GetTopicExtension()]);
+%>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Redirecting to "<% print(HTMLEncode(aTopicList[nCurTopic].Caption)); %>"</title>
+    <link rel="canonical" href="../<% print(aTopicList[nCurTopic].HelpId + GetTopicExtension()); %>" />
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=../<% print(aTopicList[nCurTopic].HelpId + GetTopicExtension); %>" />
+</head>
+
+</html>
+
+<%
+	end;  // For each topic
+	
+end.
+%>

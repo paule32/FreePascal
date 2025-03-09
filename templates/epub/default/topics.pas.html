@@ -1,0 +1,96 @@
+﻿<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	nCurTopic, nTopicKind, nHeaderKind: integer;
+var
+	sTopicHeader: string;
+var
+	oEditor: TObject;
+
+    function GetCustomCss: string;
+    begin
+        Result := HndGeneratorInfo.GetCustomSettingValue('CustomCss');
+        if (Result <> '') then
+            Result := '<style type="text/css">' + Result + '</style>';
+    end;
+
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+
+	// Output global CSS content
+	HndGeneratorInfo.CurrentFile := 'OEBPS\css\hnd.css';
+	print(HndProjects.GetProjectCssContent());
+	
+	// Create the temp editor
+	oEditor := HndEditor.CreateTemporaryEditor();
+	
+	// Each individual topics...
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+	for nCurTopic := 0 to length(aTopicList) - 1 do
+	begin
+		// Notify about the topic being generated
+		HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+		// Topic kind
+		nTopicKind := HndTopics.GetTopicKind(HndGeneratorInfo.CurrentTopic);
+		if (nTopicKind = 1) then continue;  // Empty topic: do not generate anything
+		// Setup the file name
+		HndGeneratorInfo.CurrentFile := 'OEBPS\' + aTopicList[nCurTopic].HelpId + GetTopicExtension();
+		// Topic header
+		nHeaderKind := HndTopics.GetTopicHeaderKind(HndGeneratorInfo.CurrentTopic);
+		sTopicHeader := HndTopics.GetTopicHeaderTextCalculated(HndGeneratorInfo.CurrentTopic);
+		
+		// XML header
+		print('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	
+<head>
+	<title><% print(HndUtils.HTMLEscape(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link type="text/css" rel="stylesheet" media="all" href="css/hnd.css" />
+	<% print(GetCustomCss()); %>
+</head>
+
+<body>
+
+	<% if nHeaderKind <> 2 then begin %>
+		<div id="topic_header">
+			<h1><% print(HndUtils.HTMLEscape(sTopicHeader)); %></h1>
+		</div>
+	<% end; %>
+	
+	<div id="topic_content">
+		<%
+			if (nTopicKind = 2) then  // Link topic
+			begin
+				printf('<a href="%s">%s</a>', [ HndTopics.GetTopicUrlLink(HndGeneratorInfo.CurrentTopic),  HndTopics.GetTopicUrlLink(HndGeneratorInfo.CurrentTopic)]);
+			end
+			else begin  // Normal topic
+				print(HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic));
+			end;
+		%>
+	</div>
+	
+</body>
+	
+</html>
+
+<%
+	end;
+	
+	// Free the editor
+	HndEditor.DestroyTemporaryEditor(oEditor);
+	
+end.
+%>

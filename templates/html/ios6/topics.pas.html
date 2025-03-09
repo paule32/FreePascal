@@ -1,0 +1,133 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	nCurTopic, nHeaderKind, nFooterKind: integer;
+var
+	sTopicHeader, sTopicFooter, sTopicContent: string;
+var
+	sPrevId, sNextId: string;
+	
+	// Returns the description of the topic
+	function GetTopicDescription: string;
+	begin
+		// Get value
+		Result := HndTopics.GetTopicDescription(HndGeneratorInfo.CurrentTopic);
+		// Empty ? Use project's description instead
+		if (Result = '') then Result := HndProjects.GetProjectSummary;
+	end;
+
+begin
+
+	// Output global CSS content
+	HndGeneratorInfo.CurrentFile := 'css\hnd.css';
+	print(HndProjects.GetProjectCssContent());
+	
+	// Clear search data
+	HndJsSearchEngine.ClearSearchData();
+	
+	// Each individual topics...
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+	for nCurTopic := 0 to length(aTopicList) - 1 do
+	begin
+		// Notify about the topic being generated
+		HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+		// Setup the file name
+		HndGeneratorInfo.CurrentFile := HndTopics.GetTopicHelpId(HndGeneratorInfo.CurrentTopic) + '.html';
+		// Topic header
+		nHeaderKind := HndTopics.GetTopicHeaderKind(HndGeneratorInfo.CurrentTopic);
+		sTopicHeader := HndTopics.GetTopicHeaderTextCalculated(HndGeneratorInfo.CurrentTopic);
+		// Topic footer
+		nFooterKind := HndTopics.GetTopicFooterKind(HndGeneratorInfo.CurrentTopic);
+		sTopicFooter := HndTopics.GetTopicFooterTextCalculated(HndGeneratorInfo.CurrentTopic);
+		// Topic content
+		sTopicContent := HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic);
+		// Previous and next topics
+		sPrevId := HndTopicsEx.GetTopicPreviousGenerated(HndGeneratorInfo.CurrentTopic, True);
+		sNextId := HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True);
+		
+		// Add Search data
+		HndJsSearchEngine.AddSearchData(
+			sTopicHeader,
+			HndGeneratorInfo.CurrentTopic
+		);
+		HndJsSearchEngine.AddSearchData(
+			HndUtils.HtmlToText(sTopicContent),
+			HndGeneratorInfo.CurrentTopic
+		);
+		HndJsSearchEngine.AddSearchData(
+			sTopicFooter,
+			HndGeneratorInfo.CurrentTopic
+		);
+
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta name="viewport" content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" />
+<meta name="generator" content="<% print(HTMLEncode(HndGeneratorInfo.HelpNDocVersion)); %>">
+<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="css/base.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="css/hnd.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="js/functions.js" type="text/javascript"></script>
+<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/hnd.js" type="text/javascript"></script>
+<title><% print(HTMLEncode(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %></title>
+<meta name="description" content="<% print(HTMLEncode(GetTopicDescription())); %>" /> 
+</head>
+
+<body>
+
+<div id="topbar">
+	<div id="title"><% print(HTMLEncode(HndTopics.GetTopicHeaderTextCalculated(HndGeneratorInfo.CurrentTopic))); %></div>
+
+	<div id="leftnav">
+		<a href="<% print(ExtractFileName(HndGeneratorInfo.OutputFile)); %>"><img alt="home" src="images/home.png" /></a>
+		<% if ((sPrevId <> '') and (sPrevId <> HndTopics.GetProjectTopic())) then begin %>
+			<a href="<% printf('%s.html', [HndTopics.GetTopicHelpId(sPrevId)]); %>"><% print(HTMLEncode(HndTopics.GetTopicCaption(sPrevId))); %></a>
+		<% end; %>
+	</div>
+	
+	<% if sNextId <> '' then begin %>
+	<div id="rightnav">
+		<a href="<% printf('%s.html', [HndTopics.GetTopicHelpId(sNextId)]); %>"><% print(HTMLEncode(HndTopics.GetTopicCaption(sNextId))); %></a>
+	</div>
+	<% end; %>
+</div>
+<div id="content">
+	<ul class="pageitem">
+		<li class="textbox">
+			<% if nHeaderKind <> 2 then begin %>
+				<span class="header"><% print(HTMLEncode(sTopicHeader)); %></span>
+			<% end; %>
+			<p>
+				<% print(HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic)); %>
+			</p>
+		</li>
+	</ul>
+</div>
+<div id="footer">
+	<% if nFooterKind <> 2 then begin %>
+		<div><% print(HTMLEncode(sTopicFooter)); %></div>
+	<% end; %>
+</div>
+</body>
+
+</html>
+
+<%
+	end;
+	
+	// Output JS Search engine data
+	HndGeneratorInfo.CurrentFile := 'js\hndsd.js';
+	print(HndJsSearchEngine.GetJsData());
+
+	// Clear the search engine
+	HndJsSearchEngine.ClearSearchData();
+	
+end.
+%>

@@ -1,0 +1,79 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	nBlocLevel: integer = 0;
+var
+	nCurTopic, nCurTopicLevel, nDif, nClose: integer;
+var
+	sCurTopic, sProjectTitle: string;
+
+begin
+
+	// Setup the file name
+	HndGeneratorInfo.CurrentFile := ExtractFileName(HndGeneratorInfo.OutputFile);
+
+	sProjectTitle := HndProjects.GetProjectTitle();
+	aTopicList := HndTopicsEx.GetTopicListGenerated(True, False);
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta content="yes" name="apple-mobile-web-app-capable" />
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
+<link href="css/toc.css" rel="stylesheet" media="screen" type="text/css" />
+<script src="js/functions.js" type="text/javascript"></script>
+<title><% print(HTMLEncode(sProjectTitle)); %></title>
+<meta content="help,authoring" name="keywords" />
+<meta content="HelpNDoc help file" name="description" />
+</head>
+
+<body>
+
+<div id="topbar">
+	<div id="title">
+		<% print(HTMLEncode(sProjectTitle)); %></div>
+</div>
+<div id="tributton">
+	<div class="links">
+		<a id="pressed" href="<% print(HndGeneratorInfo.CurrentFile); %>">Table of contents</a><a href="keywords.html">Index</a><a href="search.html">Search</a></div>
+</div>
+<div id="content">
+	<span class="graytitle">Table of contents</span>
+	<ul class="pageitem">
+	
+		<%
+		for nCurTopic := 0 to length(aTopicList) - 1 do
+		begin
+			sCurTopic := aTopicList[nCurTopic].id;
+			nCurTopicLevel := HndTopics.GetTopicLevel(sCurTopic);
+		%>
+		
+			<li class="menu level<% print(inttostr(nCurTopicLevel)); %>">
+				<a href="<% printf('%s.html', [HndTopics.GetTopicHelpId(sCurTopic)]); %>">
+					<span class="name"><% print(HTMLEncode(HndTopics.GetTopicCaption(sCurTopic))); %></span>
+					<span class="arrow"></span>
+				</a>
+			</li>
+		
+		<%
+		end;
+		%>
+		
+	</ul>
+</div>
+<div id="footer">
+	<div><% print(HTMLEncode(HndProjects.GetProjectCopyright())); %></div>
+<div>
+
+</body>
+
+</html>
+
+<%
+end.
+%>

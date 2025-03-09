@@ -1,0 +1,52 @@
+﻿[config]
+name=Default EPub Template
+category=eBook
+extension=epub
+topicextension=html
+
+[var_CoverInline]
+name=Inline cover page
+name.fr=Page de couverture incluse
+name.de=Inline cover page
+name.es=Página de portada integrada
+kind=bool
+default=0
+description=Include an inline cover page.
+description.fr=Inclure une page de couverture.
+description.de=Include an inline cover page.
+description.es=Incluir una página de portada integrada.
+
+[var_CustomCss]
+name=Custom CSS
+name.fr=CSS Personnalisé
+name.de=Benutzerdefinierte CSS
+name.es=CSS Personalizado
+kind=memo
+description=Specify custom CSS to customize the generated HTML content.
+description.fr=Indiquer le code CSS à utiliser pour personnaliser le contenu HTML généré.
+description.de=Geben Sie benutzerdefinierte CSS zum Anpassen der generierten HTML-Inhalte an.
+description.es=Especificar CSS personalizado para personalizar el contenido HTML generado.
+
+[var_TocTitle]
+name=Table of contents title
+name.fr=Titre de la table des matières
+name.de=Inhaltsverzeichnis Überschrift
+name.es=Título de la tabla de contenido
+kind=string
+default=Table of Contents
+description=Define the title for the table of contents.
+description.fr=Définir le titre de la table des matières.
+description.de=Legt den Titel für den Inhaltsverzeichnis fest.
+description.es=Definir el título de la tabla de contenido.
+
+[var_TocInline]
+name=Inline table of contents
+name.fr=Table des matières incluse
+name.de=Inline table of contents
+name.es=Tabla de contenido integrada
+kind=bool
+default=0
+description=Include an inline table of contents after the cover page.
+description.fr=Inclure une table des matières après la page de couverture.
+description.de=Include an inline table of contents after the cover page.
+description.es=Incluir una tabla de contenido integrada después de la página de portada.

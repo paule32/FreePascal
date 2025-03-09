@@ -1,0 +1,141 @@
+<%
+var
+	sProjectTitle, sDefaultTopicId: string;
+	
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+    
+    // Make sure we generate the file specified in the project
+    HndGeneratorInfo.CurrentFile := ExtractFileName(HndGeneratorInfo.OutputFile);
+	
+    // Retreive the project title
+	sProjectTitle := HndProjects.GetProjectTitle();
+	
+	// Try to get the default topic
+	sDefaultTopicId := HndProjects.GetProjectDefaultTopic();
+	// None defined: the first one is the default topic
+	if (sDefaultTopicId = '') then
+		sDefaultTopicId := HndTopicsEx.GetTopicNextGenerated(HndTopics.GetProjectTopic(), False);
+	if (sDefaultTopicId <> '') then
+		sDefaultTopicId := HndTopics.GetTopicHelpId(sDefaultTopicId);
+%>
+
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>
+            <% print(HTMLEncode(sProjectTitle)); %>
+        </title>
+        <!-- Path to Framework7 Library CSS-->
+        <link rel="stylesheet" href="vendors/f7/css/framework7.ios.min.css">
+        <link rel="stylesheet" href="vendors/f7/css/framework7.ios.colors.min.css">
+        <!-- Path to your custom app styles-->
+        <link rel="stylesheet" href="css/my-app.css">
+        <link rel="stylesheet" href="css/hnd.css">
+    </head>
+
+    <body>
+        <!-- Status bar overlay for fullscreen mode-->
+        <div class="statusbar-overlay"></div>
+        <!-- Views-->
+        <div class="views">
+
+            <div class="panel-overlay"></div>
+
+            <div class="panel panel-left panel-cover">
+
+                <!-- Left View -->
+                <div class="view view-left">
+                    <div class="navbar">
+                        <div class="navbar-inner">
+                            <div class="center sliding">Left View</div>
+                        </div>
+                    </div>
+                    <div class="pages toolbar-through">
+                        <div data-page="index-left" class="page">
+                            <div class="page-content">
+                                <div class="row">
+                                    <div class="col-auto"></div>
+                                    <div class="col-auto center">
+                                        <p>
+                                            <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TranslationLoading'))); %><br>
+                                            <span style="width:42px; height:42px" class="preloader"></span>
+                                        </p>
+                                    </div>
+                                    <div class="col-auto"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bottom Toolbar-->
+                    <div class="toolbar tabbar tabbar-labels">
+                        <div class="toolbar-inner">
+                            <a href="_toc.html" class="link">
+                                <i class="icon icon-toc"></i>
+                                <span class="tabbar-label"><% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocTitle'))); %></span>
+                            </a>
+                            <a href="_index.html" class="link">
+                                <i class="icon icon-index"></i>
+                                <span class="tabbar-label"><% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocKeywordsTitle'))); %></span>
+                            </a>
+                            <a href="_search.html" class="link">
+                                <i class="icon icon-search"></i>
+                                <span class="tabbar-label"><% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocSearchTitle'))); %></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your main view, should have "view-main" class-->
+            <div class="view view-main navbar-through" data-hnd-default-topic="<% print(sDefaultTopicId + '.html'); %>">
+                <!-- Top Navbar-->
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <div class="left">
+                            <a href="#" data-panel="left" class="link open-panel icon-only"><i class="icon icon-bars"></i></a>
+                        </div>
+                        <div class="center sliding">
+                            <% print(HTMLEncode(HndProjects.GetProjectTitle())); %>
+                        </div>
+                        <div class="right">
+                        </div>
+                    </div>
+                </div>
+                <!-- Pages, because we need fixed-through navbar and toolbar, it has additional appropriate classes-->
+                <div class="pages navbar-through ">
+                    <!-- Page, data-page contains page name-->
+                    <div data-page="index" class="page">
+                        <div class="page-content">
+                            <div class="row">
+                                <div class="col-auto"></div>
+                                <div class="col-auto">
+                                    <p>
+                                        <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TranslationLoading'))); %><br>
+                                        <span style="width:42px; height:42px" class="preloader"></span>
+                                    </p>
+                                </div>
+                                <div class="col-auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Scripts -->
+        <script type="text/javascript" src="vendors/f7/js/framework7.min.js"></script>
+        <script type="text/javascript" src="js/hndjsse.js"></script>
+        <script type="text/javascript" src="js/my-app.js"></script>
+    </body>
+
+    </html>
+
+    <%
+end.
+%>

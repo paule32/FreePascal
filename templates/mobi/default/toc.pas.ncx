@@ -1,0 +1,98 @@
+﻿<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	sTopicUrl: string;
+var
+	nCurTopic, nBlocLevel, nTopicKind, nCurTopicLevel, nCurTopicChildrenCnt: Integer;
+var
+	nDif, nClose: Integer;
+	
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+	
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+
+	// Change current file
+	HndGeneratorInfo.CurrentFile := 'toc.ncx';
+	
+	// Lists
+	aTopicList := HndTopicsEx.GetTopicListGenerated(True, False);
+	
+	// Avoid syntax error
+	println('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
+	"http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+    <head>
+        <meta name="dtb:uid" content="<% print(HTMLEncode(HndProjects.GetProjectTitle())); %>"/>
+        <meta name="dtb:depth" content="1"/>
+        <meta name="dtb:totalPageCount" content="0"/>
+        <meta name="dtb:maxPageNumber" content="0"/>
+    </head>
+    <docTitle>
+        <text><% print(HTMLEncode(HndProjects.GetProjectTitle())); %></text>
+    </docTitle>
+    <navMap>
+		<%
+			// Topics
+			nBlocLevel := 0;
+			for nCurTopic := 0 to length(aTopicList) - 1 do
+			begin
+				HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+				nTopicKind := aTopicList[nCurTopic].Kind;
+				nCurTopicLevel := HndTopics.GetTopicLevel(HndGeneratorInfo.CurrentTopic);
+				nCurTopicChildrenCnt := HndTopicsEx.GetTopicDirectChildrenCountGenerated(HndGeneratorInfo.CurrentTopic, True);
+				
+				// Topic URL
+				if nTopicKind = 1 then sTopicUrl := '_empty' + GetTopicExtension()  // Empty
+				else sTopicUrl := format('%s%s', [aTopicList[nCurTopic].HelpId, GetTopicExtension()]);  // Normal topic
+
+				// Close the previous topics
+				if ((nCurTopic > 0) and (nCurTopicLevel < HndTopics.GetTopicLevel(aTopicList[nCurTopic - 1].id))) then
+				begin
+					nDif := HndTopics.GetTopicLevel(aTopicList[nCurTopic - 1].id) - nCurTopicLevel;
+					for nClose := 0 to nDif - 1 do
+					begin
+						print('</navPoint>');
+						nBlocLevel := nBlocLevel - 1;
+					end;
+				end;
+
+				printfln('<navPoint id="%s" playOrder="%d">', [aTopicList[nCurTopic].HelpId, nCurTopic + 1]);
+					println('<navLabel>');
+						printfln('<text>%s</text>', [HTMLEncode(aTopicList[nCurTopic].caption)]);
+					println('</navLabel>');
+					printfln('<content src="%s"/>', [sTopicUrl]);
+				
+				if (nCurTopicChildrenCnt > 0) then nBlocLevel := nBlocLevel + 1
+				else println('</navPoint>');
+					
+				// Close the last topic
+				if (HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True) = '') then
+				begin
+					while nBlocLevel > 0 do
+					begin
+						print('</navPoint>');
+						nBlocLevel := nBlocLevel - 1;
+					end;
+				end;
+
+			end;
+		%>
+    </navMap>
+</ncx>
+
+<%
+	end.
+%>

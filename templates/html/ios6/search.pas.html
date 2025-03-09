@@ -1,0 +1,110 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	nBlocLevel: integer = 0;
+var
+	nCurTopic, nCurTopicLevel, nDif, nClose: integer;
+var
+	sProjectTitle: string;
+
+begin
+
+	sProjectTitle := HndProjects.GetProjectTitle();
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+	<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
+	<link href="css/toc.css" rel="stylesheet" media="screen" type="text/css" />
+	<script type="text/javascript" src="js/functions.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/hndjsse.js"></script>
+	<title><% print(HTMLEncode(sProjectTitle)); %> - Search</title>
+	<script type="text/javascript">
+	
+		window.bSearchDataLoaded = false;
+	
+		$(document).ready(function()
+		{
+			// Load search data
+			(function() {
+				var se = document.createElement('script'); se.type = 'text/javascript'; se.async = true;
+				se.src = 'js/hndsd.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(se, s);
+			})();
+		});
+		
+		function PerformSearch()
+		{
+			if (!window.bSearchDataLoaded) {
+				$("#search_results").html("Search engine data hasn't been fully loaded yet or an error occurred while loading it. This usually happens when documentation is browsed locally.");
+				return;
+			}
+			sValue = $("#search").val();
+			$("#search_results").html('Searching...');
+			var oSearchEngine = new HndJsSe;
+			oSearchEngine.ParseInput(sValue);			
+			oSearchEngine.PerformSearch();
+			if (!oSearchEngine.aResults || !oSearchEngine.aResults.length)
+			{
+				$("#search_results").html('<li class="menu level1"><span class="name">No results found.</span></li>');
+			}
+			else
+			{
+				$("#search_results").html('');
+				var oUl = $("#search_results");
+				for (var nCnt = 0; nCnt < oSearchEngine.aResults.length; nCnt++)
+				{
+					if (oSearchEngine.aResults[nCnt][0] < aTl.length)
+					{
+						oUl.append("<li class='menu level1'><a href='" + aTl[oSearchEngine.aResults[nCnt][0]][0] + "?search=" + escape(sValue) + "'><span class='name'>" + unescape(aTl[oSearchEngine.aResults[nCnt][0]][1]) + "</span><span class='arrow'></span></a></li>");
+					}
+				}
+			}
+		}
+	
+	</script>
+</head>
+
+<body>
+
+<div id="topbar">
+	<div id="title">
+		<% print(HTMLEncode(sProjectTitle)); %></div>
+</div>
+<div id="tributton">
+	<div class="links">
+		<a href="<% print(ExtractFileName(HndGeneratorInfo.OutputFile)); %>">Table of contents</a><a href="keywords.html">Index</a><a id="pressed" href="search.html">Search</a></div>
+</div>
+<div class="searchbox">
+	<form action="" method="get" onsubmit="PerformSearch(); return false;">
+		<fieldset><input id="search" placeholder="search" type="text" />
+		<input id="submit" type="hidden" /></fieldset>
+	</form>
+</div>
+<div id="content">
+	<span class="graytitle">Search results</span>
+	<ul id="search_results" class="pageitem">
+		<li class="menu level1">
+			<span class="name">No search performed.</span>
+		</li>
+	</ul>
+</div>
+<div id="footer">
+	<div><% print(HTMLEncode(HndProjects.GetProjectCopyright())); %></div>
+<div>
+
+</body>
+
+</html>
+
+<%
+end.
+%>

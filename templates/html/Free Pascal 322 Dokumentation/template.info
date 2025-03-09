@@ -1,0 +1,542 @@
+﻿[config]
+name=Free Pascal 322 Dokumentation
+category=HTML Documentation
+extension=html
+topicextension=html
+inherits=Default HTML Template
+linkformattopic=
+linkformatanchor=
+
+[var_Theme]
+name=Theme
+name.de=Thema
+name.es=Tema
+name.fr=Thème
+description=Specify the theme to use.
+description.de=Geben Sie das zu verwendende Thema an.
+description.es=Especificar el tema a utilizar.
+description.fr=Indiquer le thème à utiliser.
+default=Light-Blue
+kind=enum
+values=Dark-Blue|Dark-Green|Dark-Orange|Dark-Purple|Light-Blue|Light-Green|Light-Orange|Light-Purple
+
+[var_Logo]
+name=Logo
+name.de=Logo
+name.es=Logo
+name.fr=Logo
+description=Specify the picture library item used as a logo.
+description.de=Geben Sie das Bild-Bibliothekselement an, das als Logo verwendet wird.
+description.es=Especificar el elemento de biblioteca de imagen usado como logo.
+description.fr=Indiquer l'image de la bibliothèque à utiliser comme logo.
+default=
+kind=libpicture
+values=
+
+[var_LogoUrl]
+name=Logo URL
+name.de=Logo-URL
+name.es=URL del logo
+name.fr=URL du logo
+description=Specify the image URL to use as a logo.
+description.de=Geben Sie die URL des als Logo zu verwendenden Bildes an
+description.es=Especifica la URL de la imagen que usar como logo
+description.fr=Indiquer l'adresse URL de l'image à utiliser comme logo.
+default=
+kind=string
+values=
+
+[var_LogoLink]
+name=Logo link
+name.de=Logo-Link
+name.es=Enlace del logo
+name.fr=Lien du logo
+description=Specify the link to redirect to when clicking the logo.
+description.de=Geben Sie den Link an, auf den beim Klicken auf das Logo umgeleitet wird.
+description.es=Especificar el enlace al que redireccionar cuando se haga clic en el logo.
+description.fr=Indiquer le lien vers lequel rediriger lors d'un click sur le logo.
+default=
+kind=string
+values=
+
+[var_LogoAlt]
+name=Logo alt
+name.de=Logo-Alt
+name.es=Alt del logo
+name.fr=Alt du logo
+description=Specify the logo's alternative text.
+description.de=Geben Sie den alternativen Text des Logos an.
+description.es=Especificar el texto alternativo del logo.
+description.fr=Indiquer le texte alternatif du logo.
+default=
+kind=string
+values=
+
+[var_Footer]
+name=Footer (HTML)
+name.de=Fußzeile (HTML)
+name.es=Pie de página (HTML)
+name.fr=Pied-de-page (HTML)
+description=Specify the HTML content of the footer displayed at the bottom of each page.
+description.de=Geben Sie den HTML-Inhalt der Fußzeile an, die unten auf jeder Seite dargestellt wird.
+description.es=Especificar el contenido HTML del pie de página que se muestra en la parte inferior de cada página.
+description.fr=Indiquer le contenu HTML du pied-de-page affiché au bas de chaque page.
+default=
+kind=memo
+values=
+
+[var_CustomCss]
+name=Custom CSS
+name.de=Benutzerdefinierte CSS
+name.es=CSS Personalizado
+name.fr=CSS Personnalisé
+description=Specify custom CSS to customize the generated HTML content.
+description.de=Geben Sie benutzerdefinierte CSS zum Anpassen der generierten HTML-Inhalte an.
+description.es=Especificar CSS personalizado para personalizar el contenido HTML generado.
+description.fr=Indiquer le code CSS à utiliser pour personnaliser le contenu HTML généré.
+default=
+kind=memo
+values=
+
+[var_CustomJs]
+name=Custom JavaScript
+name.de=Benutzerdefinierte JavaScript
+name.es=JavaScript Personalizado
+name.fr=JavaScript Personnalisé
+description=Specify custom JavaScript to customize the generated HTML content.
+description.de=Geben Sie benutzerdefinierte JavaScript zum Anpassen der generierten HTML-Inhalte an.
+description.es=Especificar JavaScript personalizado para personalizar el contenido HTML generado.
+description.fr=Indiquer le code JavaScript à utiliser pour personnaliser le contenu HTML généré.
+default=
+kind=memo
+values=
+
+[var_TocTitle]
+name=Table of contents tab title
+name.de=Inhaltsverzeichnis-Tab Überschrift
+name.es=Título de la pestaña de la tabla de contenido
+name.fr=Titre de l'onglet table des matières
+description=Define the title for the table of contents tab.
+description.de=Legt den Titel für den Inhaltsverzeichnis-Tab fest.
+description.es=Definir el título para la pestaña de la tabla de contenido.
+description.fr=Définir le titre de l'onglet table des matières.
+default=Contents
+kind=string
+values=
+
+[var_TocShow]
+name=Show the table of contents tab
+name.de=Inhaltsverzeichnis-Tab anzeigen
+name.es=Mostrar la pestaña de la tabla de contenido
+name.fr=Afficher l'onglet table des matières
+description=If checked, the table of contents tab will be shown. Hidden otherwise.
+description.de=Wenn markiert, wird der Inhaltsverzeichnis-Tab angezeigt, ansonsten unsichtbar.
+description.es=Si se marca, se mostrará la pestaña de la tabla de contenido. De lo contrario, quedará oculta.
+description.fr=Si coché, l'onglet table des matières sera affiché. Il sera caché sinon.
+default=1
+kind=bool
+values=
+
+[var_TocExpandLevel]
+name=Table of content expand level
+name.de=Aufklappungsebene des Inhaltsverzeichnisses
+name.es=Nivel de expansión de la tabla de contenido
+name.fr=Niveau de déploiement de la table des matières
+description=Level of the table of contents. 0: collapsed, 1: level 1 topics expanded...
+description.de=Ebene des Inhaltsverzeichnisses. 0: zusammengeklappt, 1: Themen der Ebene 1 aufgeklappt...
+description.es=Nivel de la tabla de contenido. 0=plegada, 1: Temas de nivel 1 expandidos...
+description.fr=Niveau de déploiement de la table des matières. 0: compacté, 1: chapitres de niveau 1 déployés...
+default=1
+kind=int
+values=
+
+[var_TocWidth]
+name=Table of contents width
+name.de=Breite des Inhaltsverzeichnisses
+name.es=Ancho de la tabla de contenido
+name.fr=Largeur de la table des matières
+description=Indicates the width of the table of contents panel.
+description.de=Zeigt die Breite des Inhaltsverzeichnis-Panels an.
+description.es=Indicar el ancho del panel de la tabla de contenido.
+description.fr=Indiquer la largeur du panneau de la table des matières.
+default=350
+kind=int
+values=
+
+[var_TocKeywordsTitle]
+name=Keywords tab title
+name.de=Schlüßelwörter Tab Überschrift
+name.es=Título de la pestaña de palabras clave
+name.fr=Titre de l'onglet mots clés
+description=Define the title for the keywords tab.
+description.de=Definiert die Überschrift für den Stichwörter-Tab.
+description.es=Definir el título de la pestaña de palabras clave.
+description.fr=Définir le titre de l'onglet mots clés.
+default=Index
+kind=string
+values=
+
+[var_TocKeywordsShow]
+name=Show the keywords tab
+name.de=Stichwörter-Tab anzeigen
+name.es=Mostrar la pestaña de palabras clave
+name.fr=Afficher l'onglet mots clés
+description=If checked, the keywords tab will be shown. Hidden otherwise.
+description.de=Wenn markiert, wird der Stichwörter-Tab angezeigt, ansonsten unsichtbar.
+description.es=Si se marca, se mostrará la pestaña de palabras clave. De lo contrario, quedará oculta.
+description.fr=Si coché, l'onglet mots clés sera affiché. Il sera caché sinon.
+default=1
+kind=bool
+values=
+
+[var_TocKeywordsExpandLevel]
+name=Keywords expand level
+name.de=Aufklappungsebene der Schlüsselwörter
+name.es=Nivel de expansión de las palabras clave
+name.fr=Niveau de déploiement des mots clés
+description=Level of the keywords. 0: collapsed, 1: level 1 keywords expanded...
+description.de=Ebene der Schlüsselwörter. 0: zusammengeklappt, 1: Schlüsselwörter der Ebene 1 aufgeklappt...
+description.es=Nivel de expansión de las palabras clave. 0: plegadas, 1:palabras clave de nivel 1 expandidas...
+description.fr=Niveau de déploiement des mots clés. 0: compacté, 1: mots clés de niveau 1 déployés...
+default=1
+kind=int
+values=
+
+[var_TocSearchTitle]
+name=Search tab title
+name.de=Titel des Suchen-Tabs
+name.es=Título de la pestaña de búsqueda
+name.fr=Titre de l'onglet recherche
+description=Define the title for the search tab.
+description.de=Definiert die Überschrift für den Suchen-Tab.
+description.es=Definir el título de la pestaña de búsqueda.
+description.fr=Définir le titre de l'onglet recherche.
+default=Search
+kind=string
+values=
+
+[var_TocSearchShow]
+name=Show the search tab
+name.de=Suchen-Tab anzeigen
+name.es=Mostrar la pestaña de búsqueda
+name.fr=Afficher l'onglet recherche
+description=If checked, the search tab will be shown. Hidden otherwise.
+description.de=Wenn markiert, wird der Suchen-Tab angezeigt, ansonsten unsichtbar.
+description.es=Si se marca, se mostrará la pestaña de búsqueda. De lo contrario, quedará oculta.
+description.fr=Si coché, l'onglet recherche sera affiché. Il sera caché sinon.
+default=1
+kind=bool
+values=
+
+[var_ShowBreadCrumbs]
+name=Show BreadCrumbs
+name.de=Brotkrümelnavigation
+name.es=Mostrar breadcrumbs
+name.fr=Afficher le cheminement
+description=Show the breadcrumbs at the top of each topic bellow the topic title.
+description.de=Brotkrümelnavigation über jedem Kapitel/Thema unterhalb des Titels anzeigen.
+description.es=Mostrar breadcrumbs en la parte superior de cada tema bajo el título del tema.
+description.fr=Afficher le cheminement au haut de chaque chapitre en dessous du titre du chapitre.
+default=1
+kind=bool
+values=
+
+[var_ShowInlineToc]
+name=Show inline table of contents
+name.de=Inline-Inhaltsverzeichnis anzeigen
+name.es=Mostrar tabla de contenido en línea
+name.fr=Afficher la table des matières intégrée
+description=Show the current topic's table of contents at the top of each topic right of the topic title.
+description.de=Zeigen Sie das Inhaltsverzeichnis des aktuellen Themas oben in jedem Thema rechts neben dem Titel des Themas an.
+description.es=Muestar la tabla de contenido del tema actual en la parte superior de cada tema a la derecha del título del tema.
+description.fr=Afficher la table des matières du chapitre actuel en haut de chaque chapitre à droite du titre.
+default=0
+kind=bool
+values=
+
+[var_InlineTocWitdh]
+name=Inline table of content's width
+name.de=Breite des Inline-Inhaltsverzeichnisses
+name.es=Ancho de la tabla de contenido en línea
+name.fr=Largeur de la table des matières intégrée
+description=Define the preferred width of the inline table of contents
+description.de=Definieren Sie die bevorzugte Breite des Inline-Inhaltsverzeichnisses
+description.es=Definir el ancho preferido de la tabla de contenido en línea
+description.fr=Définir la largeur préférée de la table des matières intégrée
+default=auto
+kind=string
+values=
+
+[var_ShowNavigation]
+name=Show navigation arrows
+name.de=Navigationspfeile anzeigen
+name.es=Mostrar flechas de navegación
+name.fr=Afficher les flèches de navigation
+description=Show the navigation arrows at the top of each topic right of the topic title.
+description.de=Navigationspfeile über jedem Kapitel/Thema auf der rechten Seite des Titels anzeigen.
+description.es=Mostrar las flechas de navegación en la parte superior de cada tema a la derecha del título del tema.
+description.fr=Afficher les flèches de navigation en haut de chaque chapitre à droite du titre du chapitre.
+default=1
+kind=bool
+values=
+
+[var_ShowSplitter]
+name=Show splitter bar
+name.de=Splitter-Leiste anzeigen
+name.es=Mostrar barra divisora
+name.fr=Afficher la barre de séparation
+description=Show the splitter bar to be able to dynamically resize the table of contents.
+description.de=Zeigen Sie die Splitter-Leiste an, um die Größe des Inhaltsverzeichnisses dynamisch ändern zu können.
+description.es=Muestre la barra divisoria para poder cambiar el tamaño de la tabla de contenido de forma dinámica.
+description.fr=Afficher la barre de fractionnement pour pouvoir redimensionner dynamiquement la table des matières.
+default=1
+kind=bool
+values=
+
+[var_SearchEngineMinChars]
+name=Search engine: minimum number of characters
+name.de=Suchmaschine: Mindestanzahl von Zeichen
+name.es=Motor de búsqueda: número mínimo de caracteres
+name.fr=Moteur de recherche : nombre minimum de caractères
+description=Only words with more characters will be included. Less characters means larger search engine index size and longer download time.
+description.de=Es werden nur Wörter mit mehr Zeichen aufgenommen. Weniger Zeichen bedeuten eine größere Größe des Suchmaschinenindex und eine längere Downloadzeit.
+description.es=Solo se incluirán palabras con más caracteres. Menos caracteres significa mayor tamaño de índice del motor de búsqueda y mayor tiempo de descarga.
+description.fr=Seuls les mots avec plus de caractères seront inclus. Moins de caractères signifie une plus grande taille d'index de moteur de recherche et un temps de téléchargement plus long.
+default=3
+kind=int
+values=
+
+[var_SitemapGenerate]
+name=Sitemap: Generate ?
+name.de=Sitemap: Generieren?
+name.es=Sitemap: ¿Generar?
+name.fr=Sitmap: Générer ?
+description=Generate the sitemap.xml file ?
+description.de=Die sitemap.xml-Datei generieren?
+description.es=¿Generar el archivo sitemap.xml?
+description.fr=Générer le fichier sitemap.xml ?
+default=0
+kind=bool
+values=
+
+[var_SitemapBaseUrl]
+name=Sitemap base URL
+name.de=Sitemap-Basis-URL
+name.es=Sitemap URL de base
+name.fr=Sitmap URL de base
+description=Base URL where the web site will be located (e.g. http://www.example.com)
+description.de=Basis-URL, unter der sich die Website befinden wird (z. B. http://www.example.com)
+description.es=URL de base en la que se ubicará la página web (por ej. http://www.example.com)
+description.fr=URL de base où le site web sera placé (ex. http://www.example.com)
+default=
+kind=string
+values=
+
+[var_SitemapChangeFreqHome]
+name=Sitemap change frequency: home
+name.de=Sitemap-Änderungshäufigkeit: home
+name.es=Sitemap frecuencia de cambio: página de inicio
+name.fr=Sitemap fréquence de changement: accueil
+description=Change frequency of the home page in the sitemap.xml file: How frequently the page is likely to change.
+description.de=Änderungshäufigkeit der Homepage in der sitemap.xml-Datei: Wie oft die Seite sich wahrscheinlich ändert.
+description.es=Frecuencia de cambio de la página de inicio en el archivo sitemap.xml: Con cuánta frecuencia probablemente cambie la página.
+description.fr=Fréquence de changement de la page d'accueil dans le fichier sitemap.xml: A quelle fréquence la page va probablement changer.
+default=daily
+kind=enum
+values=always|hourly|daily|weekly|monthly|yearly|never
+
+[var_SitemapChangeFreqOther]
+name=Sitemap change frequency: others
+name.de=Sitemap-Änderungshäufigkeit: sonstige
+name.es=Sitemap frecuencia de cambio: otras
+name.fr=Sitemap fréquence de changement: autres
+description=Change frequency of other pages in the sitemap.xml file: How frequently the page is likely to change.
+description.de=Änderungshäufigkeit sonstiger Seiten in der sitemap.xml-Datei: Wie oft die Seite sich wahrscheinlich ändert.
+description.es=Frecuencia de cambio de las otras páginas en el archivo sitemap.xml: Con cuánta frecuencia probablemente cambie la página.
+description.fr=Fréquence de changement des autres pages dans le fichier sitemap.xml: A quelle fréquence les pages vont probablement changer.
+default=weekly
+kind=enum
+values=always|hourly|daily|weekly|monthly|yearly|never
+
+[var_SitemapPriorityHome]
+name=Sitemap priority: home
+name.de=Sitemap-Priorität: home
+name.es=Sitemap prioridad: página de inicio
+name.fr=Sitemap priorité: accueil
+description=Priority of the home page in the sitemap.xml file. Lets the search engines know which pages are most important.
+description.de=Priorität der Homepage in der sitemap.xml-Datei: Sagt den Suchmaschinen, welche Seiten am wichtigsten sind.
+description.es=Prioridad de la página de inicio en el archivo sitemap.xml. Permite a los motores de búsqueda saber qué páginas son las más importantes.
+description.fr=Priorité de la page d'accueil dans le fichier sitemap.xml. Permet aux moteurs de recherche de connaître les pages les plus importantes.
+default=1
+kind=enum
+values=0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1
+
+[var_SitemapPriorityOther]
+name=Sitemap priority: others
+name.de=Sitemap-Priorität: sonstige
+name.es=Sitemap prioridad: otras
+name.fr=Sitemap priorité: autres
+description=Priority of other pages in the sitemap.xml file. Lets the search engines know which pages are most important.
+description.de=Priorität sonstiger Seiten in der sitemap.xml-Datei: Sagt den Suchmaschinen, welche Seiten am wichtigsten sind.
+description.es=Prioridad de las otras páginas en el archivo sitemap.xml. Permite a los motores de búsqueda saber qué páginas son las más importantes.
+description.fr=Priorité des autres pages dans le fichier sitemap.xml. Permet aux moteurs de recherche de connaître les pages les plus importantes.
+default=0.8
+kind=enum
+values=0.1|0.2|0.3|0.4|0.5|0.6|0.7|0.8|0.9|1
+
+[var_TranslationSearch]
+name=Translation for "Search..."
+name.de=Übersetzung für "Search..."
+name.es=Traducción de "Search..."
+name.fr=Traduction de "Search..."
+description=Translation for the string: "Search..."
+description.de=Übersetzung für den String: "Search..."
+description.es=Traducción de la string: "Search..."
+description.fr=Traduction de la phrase: "Search..."
+default=Search...
+kind=string
+values=
+
+[var_TranslationClose]
+name=Translation for "Close"
+name.de=Übersetzung für "Close"
+name.es=Traducción de "Close"
+name.fr=Traduction de "Close"
+description=Translation for the string: "Close"
+description.de=Übersetzung für den String: "Close"
+description.es=Traducción de la string: "Close"
+description.fr=Traduction de la phrase: "Close"
+default=Close
+kind=string
+values=
+
+[var_TranslationSearchTooShort]
+name=Translation for "Search term too short"
+name.de=Übersetzung für "Search term too short"
+name.es=Traducción de "Search term too short"
+name.fr=Traduction de "Search term too short"
+description=Translation for the string: "Search term too short"
+description.de=Übersetzung für den String: "Search term too short"
+description.es=Traducción de la string: "Search term too short"
+description.fr=Traduction de la phrase: "Search term too short"
+default=Search term too short
+kind=string
+values=
+
+[var_TranslationNoResults]
+name=Translation for "No results"
+name.de=Übersetzung für "No results"
+name.es=Traducción de "No results"
+name.fr=Traduction de "No results"
+description=Translation for the string: "No results"
+description.de=Übersetzung für den String: "No results"
+description.es=Traducción de la string: "No results"
+description.fr=Traduction de la phrase: "No results"
+default=No results
+kind=string
+values=
+
+[var_TranslationMoreChars]
+name=Translation for "Please enter more characters"
+name.de=Übersetzung für "Please enter more characters"
+name.es=Traducción de "Please enter more characters"
+name.fr=Traduction de "Please enter more characters"
+description=Translation for the string: "Please enter more characters"
+description.de=Übersetzung für den String: "Please enter more characters"
+description.es=Traducción de la string: "Please enter more characters"
+description.fr=Traduction de la phrase: "Please enter more characters"
+default=Please enter more characters
+kind=string
+values=
+
+[var_TranslationListNotDownloaded]
+name=Translation for "Word list not ready yet. Please wait until the word list is fully downloaded"
+name.de=Übersetzung für "Word list not ready yet. Please wait until the word list is fully downloaded"
+name.es=Traducción de "Word list not ready yet. Please wait until the word list is fully downloaded"
+name.fr=Traduction de "Word list not ready yet. Please wait until the word list is fully downloaded"
+description=Translation for the string: "Word list not ready yet. Please wait until the word list is fully downloaded"
+description.de=Übersetzung für den String: "Word list not ready yet. Please wait until the word list is fully downloaded"
+description.es=Traducción de la string: "Word list not ready yet. Please wait until the word list is fully downloaded"
+description.fr=Traduction de la phrase: "Word list not ready yet. Please wait until the word list is fully downloaded"
+default=Word list not ready yet. Please wait until the word list is fully downloaded
+kind=string
+values=
+
+[var_TranslationIncorrectSearchData]
+name=Translation for "Incorrect or corrupt search data. Please check your HelpNDoc template"
+name.de=Übersetzung für "Incorrect or corrupt search data. Please check your HelpNDoc template"
+name.es=Traducción de "Incorrect or corrupt search data. Please check your HelpNDoc template"
+name.fr=Traduction de "Incorrect or corrupt search data. Please check your HelpNDoc template"
+description=Translation for the string: "Incorrect or corrupt search data. Please check your HelpNDoc template"
+description.de=Übersetzung für den String: "Incorrect or corrupt search data. Please check your HelpNDoc template"
+description.es=Traducción de la stringe: "Incorrect or corrupt search data. Please check your HelpNDoc template"
+description.fr=Traduction de la phrase: "Incorrect or corrupt search data. Please check your HelpNDoc template"
+default=Incorrect or corrupt search data. Please check your HelpNDoc template
+kind=string
+values=
+
+[var_TranslationRelatedTopics]
+name=Translation for "Related topics..."
+name.de=Übersetzung für "Related topics..."
+name.es=Traducción de "Related topics..."
+name.fr=Traduction de "Related topics..."
+description=Translation for the string: "Related topics..."
+description.de=Übersetzung für den String: "Related topics..."
+description.es=Traducción de la string: "Related topics..."
+description.fr=Traduction de la phrase: "Related topics..."
+default=Related topics...
+kind=string
+values=
+
+[var_TranslationLoading]
+name=Translation for "Loading..."
+name.de=Übersetzung für "Loading..."
+name.es=Traducción de "Loading..."
+name.fr=Traduction de "Loading..."
+description=Translation for the string: "Loading..."
+description.de=Übersetzung für den String: "Loading..."
+description.es=Traducción de la string: "Loading..."
+description.fr=Traduction de la phrase: "Loading..."
+default=Loading...
+kind=string
+values=
+
+[var_TranslationInlineToc]
+name=Translation for "In this page..."
+name.de=Übersetzung für "In this page..."
+name.es=Traducción de "In this page..."
+name.fr=Traduction de "In this page..."
+description=Translation for the string: "In this page..."
+description.de=Übersetzung für den String: "In this page..."
+description.es=Traducción de la string: "In this page..."
+description.fr=Traduction de la phrase: "In this page..."
+default=In this page...
+kind=string
+values=
+
+[var_GoogleAnalyticsId]
+name=Google Analytics Id
+name.de=Google-Analytics-ID
+name.es=ID de Google Analytics
+name.fr=Id Google Analytics
+description=Google Analytics tracking Id to collect user stats
+description.de=Google Analytics verfolgt ID zur Erfassung von Benutzerstatistiken
+description.es=ID de seguimiento de Google Analytics para recopilar estadísticas de usuario
+description.fr=Identifiant du suivi Google Analytics pour collecter les statistiques utilisateur
+default=
+kind=string
+values=
+
+[var_GoogleTagManagerId]
+name=Google Tag Manager Id
+name.de=Google Tag Manager-ID
+name.es=ID de Google Tag Manager
+name.fr=Id Google Tag Manager
+description=Google Tag Manager tracking Id
+description.de=Google Tag Manager-Tracking-ID
+description.es=Id. de seguimiento de Google Tag Manager
+description.fr=Identifiant de suivi Google Tag Manager
+default=
+kind=string
+values=
+

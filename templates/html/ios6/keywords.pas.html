@@ -1,0 +1,100 @@
+<%
+var
+	aKeywordList: THndKeywordsInfoArray;
+var
+	nBlocLevel: integer = 0;
+var
+	nCurKeyword, nCurKeywordLevel, nCurKeywordTopic, nDif, nClose: integer;
+var
+	sCurKeyword, sProjectTitle: string;
+var
+	sKeywordLink, sKeywordOnClick: string;
+var
+	aAssociatedTopics: array of string;
+
+begin
+
+	sProjectTitle := HndProjects.GetProjectTitle();
+	aKeywordList := HndKeywords.GetKeywordList(False);
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta content="minimum-scale=1.0, width=device-width, maximum-scale=0.6667, user-scalable=no" name="viewport" />
+	<link href="css/style.css" rel="stylesheet" media="screen" type="text/css" />
+	<link href="css/toc.css" rel="stylesheet" media="screen" type="text/css" />
+	<script src="js/functions.js" type="text/javascript"></script>
+	<title><% print(HTMLEncode(sProjectTitle)); %> - Keywords</title>
+	<script type="text/javascript">
+		function ShowKwPopup(oSender, aLinks)
+		{
+			return true;
+		}
+	</script>
+</head>
+
+<body>
+
+<div id="topbar">
+	<div id="title">
+		<% print(HTMLEncode(sProjectTitle)); %></div>
+</div>
+<div id="tributton">
+	<div class="links">
+		<a href="<% print(ExtractFileName(HndGeneratorInfo.OutputFile)); %>">Table of contents</a><a id="pressed" href="keywords.html">Index</a><a href="search.html">Search</a></div>
+</div>
+<div id="content">
+	<span class="graytitle">Index</span>
+	<ul class="pageitem">
+	
+		<%
+		for nCurKeyword := 0 to length(aKeywordList) - 1 do
+		begin
+			sCurKeyword := aKeywordList[nCurKeyword].id;
+			nCurKeywordLevel := HndKeywords.GetKeywordLevel(sCurKeyword);
+			aAssociatedTopics := HndTopicsKeywordsEx.GetGeneratedTopicsAssociatedWithKeyword(sCurKeyword);
+			if Length(aAssociatedTopics) > 0 then
+			begin
+				sKeywordLink := format('%s.html', [HndTopics.GetTopicHelpId(aAssociatedTopics[0])]);
+				sKeywordOnClick := 'return ShowKwPopup(this, [';
+				for nCurKeywordTopic := 0 to Length(aAssociatedTopics) - 1 do
+				begin
+					if nCurKeywordTopic > 0 then sKeywordOnClick := sKeywordOnClick + ',';
+					sKeywordOnClick := sKeywordOnClick + format('[''%s'',''%s.html'']', [HndTopics.GetTopicCaption(aAssociatedTopics[nCurKeywordTopic]), HndTopics.GetTopicHelpId(aAssociatedTopics[nCurKeywordTopic])]);
+				end;
+				sKeywordOnClick := sKeywordOnClick  + ']);';
+			end
+			else begin
+				sKeywordLink := '';
+				sKeywordOnClick := 'return false;';
+			end;
+		%>
+		
+			<li class="menu level<% print(inttostr(nCurKeywordLevel)); %>">
+				<a href="<% print(sKeywordLink); %>" onclick="<% print(sKeywordOnClick); %>">
+					<span class="name"><% print(HTMLEncode(HndKeywords.GetKeywordCaption(sCurKeyword))); %></span>
+					<span class="arrow"></span>
+				</a>
+			</li>
+		
+		<%
+		end;
+		%>
+		
+	</ul>
+</div>
+<div id="footer">
+	<div><% print(HTMLEncode(HndProjects.GetProjectCopyright())); %></div>
+<div>
+
+</body>
+
+</html>
+
+<%
+end.
+%>
