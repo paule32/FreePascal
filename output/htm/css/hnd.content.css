@@ -188,6 +188,14 @@ span.rvts32
  background-color: #000000;
  border-bottom: solid 1px #00ff00;
 }
+span.rvts33
+{
+ font-style: italic;
+ font-weight: bold;
+ color: #ffff00;
+ background-color: #000000;
+ text-decoration: underline;
+}
 /* ========== Para Styles ========== */
 p,ul,ol /* Paragraph Style */
 {
