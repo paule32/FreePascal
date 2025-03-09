@@ -111,3 +111,29 @@ default=
 kind=memo
 values=
 
+[var_InhaltsVerzeichnis]
+name=Topic Content
+name.de=Inhaltsverzeichnis
+name.es=
+name.fr=
+description=Text for the Table of Contents
+description.de=Text für das Inhaltsverzeichnis. Durch TAB werden Themen getrennt und automatisch nummeriert.
+description.es=
+description.fr=
+default=
+kind=memo
+values=
+
+[var_ActivateCustomTOC]
+name=Activate Custom Table of Contents
+name.de=Benutzerdefiniertes Inhaltsverzeichnis
+name.es=
+name.fr=
+description=Generates a TOC (Table of Contents) based on TAB Delimited "Topic Conten" Variable
+description.de=generiert ein Inhaltsverzeichnis basierend auf Einzüge getrennter Textzeilen
+description.es=
+description.fr=
+default=false
+kind=bool
+values=
+
