@@ -1,13 +1,226 @@
-var
-  TOCtext: String;
-
-const INDENT_SIZE = 4; // Ein Level entspricht 4 Leerzeichen oder einem Tabulator
-const MAX_LEVEL = 10;  // Maximale Anzahl der Hierarchieebenen
+// ----------------------------------------------------------------------------
+// \file : CreateTOC.pas - This file is part of my HelpNDoc.com tools.
+// \autor: Jens Kallup   - paule32 aka Blacky Cat aka Jens Kallup
+// \date : 2025 (c) all rights reserved.
+//
+// \detail
+// Create a TOC - table of content list for the current open project.
+// The structure of the TOC string/file is as follow:
+//
+// You don't need to write the Index of the topic level - it will be create and
+// add automatically.
+// The default indent size is 4 chars: #32.
+// 
+// level_one
+//     level_one_one
+// level_two
+//     level_two_one
+//     level_two_two
+//         level_two_two_one
+// ... 
+// ----------------------------------------------------------------------------
+// Customization:
+// --------------
+// IDENT_SIZE = ident size (default: 4 chars)
+// MAX_LEVEL  = maximal indent level's
+// ----------------------------------------------------------------------------
+const INDENT_SIZE =  4; // Ein Level entspricht 4 Leerzeichen oder einem Tabulator
+const MAX_LEVEL   = 10; // Maximale Anzahl der Hierarchieebenen
 
 type
   TLevelCounter = array[1..MAX_LEVEL] of Integer;
 
-procedure AddTopicLine;
+type
+  THndCreateProject = class(TObject)
+  private
+    FTOCtext: TStringList;
+    function CountIndentation(const Line: string): Integer;
+    function ProcessIndentedText: String;
+  public
+    constructor Create(AString: String); overload;
+    constructor Create; overload;
+    destructor Destroy; override;
+
+    procedure setAsString(AString: String);
+    procedure setAsStream(AStream: TStream);
+        
+    function  getAsString: String;
+    function  getAsStream: TStream;
+
+    procedure LoadFromString(AString: String);    
+    procedure LoadFromFile(AString: String);
+    procedure LoadFromStream(AStream: TStream);
+    procedure LoadFromVariable(AString: String);
+
+    function isEmpty: Boolean;
+        
+    procedure AddTOC;
+  end;
+
+
+{ THndCreateProject }
+
+// ----------------------------------------------------------------------------
+// \brief This is the CTOR of the class THndCreateProject
+// ----------------------------------------------------------------------------
+constructor THndCreateProject.Create(AString: String);
+begin
+  inherited Create;
+  try
+    FTOCtext := TStringList.Create;
+    FTOCtext.Text := AString;
+  except
+    raise Exception.Create('StringList could not be created !');
+  end;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief This is the CTOR for the class THndCreateProject
+// ----------------------------------------------------------------------------
+constructor THndCreateProject.Create;
+begin
+  inherited Create;
+  ShowMessage(ParamStr(0));
+  try
+    FTOCtext := TStringList.Create;
+    FTOCtext.Text := '';
+  except
+    raise Exception.Create('StringList could not be created !');
+  end;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief This is the DTOR for the class THndCreateProject
+// ----------------------------------------------------------------------------
+destructor THndCreateProject.Destroy;
+begin
+  FTOCtext.Clear;
+  FTOCtext.Free;
+  
+  inherited Destroy;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief  Get the TOC string assigned from a String or File.
+// \param  Nothing
+// \return String
+// ----------------------------------------------------------------------------
+function THndCreateProject.getAsString: String;
+begin
+  result := '';
+  if not Assigned(FTOCtext) then
+  begin
+    try
+      FTOCtext := TStringList.Create;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error:'+#10+E.Message);
+      end;
+    end;
+  end else
+  result := FTOCtext.Text;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief  Get the TOC as stream.
+// \param  Nothing
+// \return TStream
+// ----------------------------------------------------------------------------
+function THndCreateProject.getAsStream: TStream;
+begin
+  result := nil;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief This member set the internal representation by a given string.
+// \param AString - String
+// ----------------------------------------------------------------------------
+procedure THndCreateProject.setAsString(AString: String);
+begin
+  if not Assigned(FTOCtext) then
+  FTOCtext := TStringList.Create;
+  FTOCtext.Clear;
+  FTOCtext.Text := AString;
+end;
+
+procedure THndCreateProject.setAsStream(AStream: TStream);
+begin
+// todo
+end;
+
+// ----------------------------------------------------------------------------
+// \brief  Read the TOC structure from a given file name.
+// \param  AString - String: The file name to be open and read.
+// ----------------------------------------------------------------------------
+procedure THndCreateProject.LoadFromFile(AString: String);
+var
+  FileContents: TStringList;
+begin
+  FileContents := TStringList.Create;
+  try
+    if FileExists(AString) then
+    begin
+      FileContents.LoadFromFile(AString);
+      setAsString(FileContents.Text)
+    end else
+    raise Exception.Create('File "' + AString + '" could not be found !');
+  finally
+    FileContents.Free;
+  end;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief Load the TOC from a given string.
+// \param AString - String
+// ----------------------------------------------------------------------------
+procedure THndCreateProject.LoadFromString(AString: String);
+begin
+  setAsString(AString);
+end;
+
+procedure THndCreateProject.LoadFromStream(AStream: TStream);
+begin
+// todo
+end;
+
+procedure THndCreateProject.LoadFromVariable(AString: String);
+var
+  dst: String;
+begin
+  dst := Trim(HndGeneratorInfo.GetCustomSettingValue('ActivateCustomTOC'));
+  if Length(dst) < 1 then
+  raise Exception.Create('ActivateCustomTOC is empty or does not exists !');
+  
+  if LowerCase(dst) = 'false' then
+  begin
+    FTOCtext.Text := '';
+    ShowMessage('false');
+  end else
+  if LowerCase(dst) = 'true' then
+  begin
+    dst := Trim(HndGeneratorInfo.GetCustomSettingValue('CustomTOC'));
+    if Length(dst) < 1 then
+    raise Exception.Create('CustomTOC is empty or does not exists !');
+
+    if not Assigned(FTOCtext) then
+    FTOCtext := TStringList.Create;
+    FTOCtext.Clear;
+    FTOCtext.Text := dst; 
+  end;
+end;
+
+function THndCreateProject.isEmpty: Boolean;
+begin
+  result := true;
+  if not Assigned(FTOCtext) or (Length(FTOCtext.Text) > 1) then
+  result := false;
+end;
+
+// ----------------------------------------------------------------------------
+// \brief Add a new topic from the current topic level/line ...
+// ----------------------------------------------------------------------------
+procedure THndCreateProject.AddTOC;
 var
   Lines: TStringList;
   i, Level: Integer;
@@ -15,29 +228,43 @@ var
   TopicStack: array[0..MAX_LEVEL] of String;
 begin
   HndTopics.DeleteAllTopics;
-  
-  // Erstelle eine Liste für die Zeilen
+
+  if not Assigned(FTOCtext) then
+  raise Exception.Create('No Topics to add.');
+    
+  ProcessIndentedText;
+
+  // ----------------------------  
+  // create a list for the lines
+  // ----------------------------
   Lines := TStringList.Create;
   try
-    Lines.Text := TOCtext;
+    Lines.Text := getAsString;
     for i := 0 to Lines.Count - 1 do
     begin
       Level := 0;
 
-      // Berechne die Einrückung (4 Leerzeichen pro Stufe)
+      // ----------------------------------------
+      // calculate the indent's
+      // (default: 4 white spaces for each level
+      // ----------------------------------------
       while (Level < Length(Lines[i])) and (Lines[i][Level+1] = ' ') do
         Inc(Level);
 
       Level := Level div 4;
 
-      // Entferne führende Leerzeichen
+      // -----------------------------
+      // delete trailing white spaces
+      // -----------------------------
       Lines[i] := Trim(Lines[i]);
 
       if Lines[i] <> '' then
       begin
         if Level = 0 then
         begin
-          // Hauptthema erstellen
+          // ------------------
+          // create root topic
+          // ------------------
           CurrentTopic := HndTopics.CreateTopic;
           HndTopics.SetTopicCaption(CurrentTopic, Lines[i]);
           TopicStack[0] := CurrentTopic;
@@ -48,10 +275,11 @@ begin
           CurrentTopic := HndTopics.CreateTopic;
           HndTopics.SetTopicCaption(CurrentTopic, Lines[i]);
 
-          // Unterthema unter dem letzten höheren Thema einfügen
+          // -------------------------------
+          // add sub-topic under the parent
+          // -------------------------------
           ParentTopic  := TopicStack[Level - 1];
           HndTopics.MoveTopic(CurrentTopic, ParentTopic, THndTopicsAttachMode.htamAddChild);
-          //(Lines[i], ParentTopic);
           TopicStack[Level] := CurrentTopic;
         end;
       end;
@@ -61,7 +289,12 @@ begin
   end;
 end;
 
-function CountIndentation(const Line: string): Integer;
+// ----------------------------------------------------------------------------
+// \brief  This function calculates the indent spaces of the parent and child.
+// \param  Line - const String
+// \return Integer
+// ----------------------------------------------------------------------------
+function THndCreateProject.CountIndentation(const Line: string): Integer;
 var
   i, SpaceCount, Level: Integer;
 begin
@@ -72,13 +305,13 @@ begin
   while (i <= Length(Line)) and ((Line[i] = #9) or (Line[i] = ' ')) do
   begin
     if Line[i] = #9 then
-      Inc(Level) { Ein Tab zählt als ein Level }
+      Inc(Level) // a Tab for indention of a level
     else
     begin
       Inc(SpaceCount);
       if SpaceCount = INDENT_SIZE then
       begin
-        Inc(Level); { 4 Leerzeichen zählen als ein Level }
+        Inc(Level); // 4 white spaces for a level
         SpaceCount := 0;
       end;
     end;
@@ -88,7 +321,10 @@ begin
   result := Level;
 end;
 
-function ProcessIndentedText(var InputText: String): String;
+// ----------------------------------------------------------------------------
+// \brief This function handle the indents and the text for the current level.
+// ----------------------------------------------------------------------------
+function THndCreateProject.ProcessIndentedText: String;
 var
   Lines: TStringList;
   LevelCounter: TLevelCounter;
@@ -97,97 +333,87 @@ var
 begin
   result := '';
   
-  { Manuelle Initialisierung von LevelCounter (anstelle von FillChar) }
+  // --------------------------------------------------------------
+  // manuell initial of LevelCounter (instead of missing FillChar)
+  // --------------------------------------------------------------
   for j := 1 to MAX_LEVEL do
     LevelCounter[j] := 0;
 
-  { Zerlege den Eingabetext in Zeilen }
+  // --------------------------------------------------------------
+  // split the input text into lines
+  // --------------------------------------------------------------
   Lines := TStringList.Create;
   try
-    Lines.Text := InputText; { Zerlegt den Text in Zeilen basierend auf #13#10 }
+    // ------------------------------------------------------------
+    // split the text in each line based on newline: #13#10
+    // ------------------------------------------------------------
+    Lines.Text := FTOCtext.Text;
 
     for i := 0 to Lines.Count - 1 do
     begin
+      // ----------------------------------------------------------
+      // remove trailing white spaces/tabs for the output
+      // ----------------------------------------------------------
       Level := CountIndentation(Lines[i]);
-      TrimmedLine := Trim(Lines[i]); { Entferne führende Leerzeichen/Tabs für die Ausgabe }
+      TrimmedLine := Trim(Lines[i]);
 
-      { Aktualisiere die Nummerierung }
+      // ----------------------------------------------------------
+      // refresh/update the numbering
+      // ----------------------------------------------------------
       Inc(LevelCounter[Level + 1]);  
       for j := Level + 2 to MAX_LEVEL do
-        LevelCounter[j] := 0;  { Alle nachfolgenden Level zurücksetzen }
+        LevelCounter[j] := 0;  // reset all levels
 
-      { Erzeuge die hierarchische Nummer als String }
+      // ----------------------------------------------------------
+      // create the hieracial number as string
+      // ----------------------------------------------------------
       LevelString := '';
       for j := 1 to Level + 1 do
       begin
         if LevelCounter[j] > 0 then
         begin
           if LevelString <> '' then
-            LevelString := LevelString + '.';
+          LevelString := LevelString + '.';
           LevelString := LevelString + IntToStr(LevelCounter[j]);
         end;
       end;
 
-      { Setze die Einrückung + Nummerierung + Text zusammen }
+      // ----------------------------------------------------------
+      // combine the indent + numbering + text together
+      // ----------------------------------------------------------
       for k := 1 to (Level * INDENT_SIZE) do
       OutputLine := OutputLine + ' ';
       OutputLine := OutputLine + LevelString + '  ' + TrimmedLine + #10;
     end;
     result := OutputLine;
-    ShowMessage(outputline);
   finally
     Lines.Free;
   end;
 end;
-  
-begin
-  TOCtext :=
-'Pascal Zeichen und Symbole' + #10+
-'    Symbole' + #10+
-'    Kommentare' + #10+
-'    Reservierte Schlüsselwörter' + #10+
-'        Turbo Pascal' + #10+
-'        Object Pascal' + #10+
-'        Modifikationen' + #10+
-'    Kennzeichnungen' + #10+
-'    Hinweise für Direktiven' + #10+
-'    Zahlen' + #10+
-'    Bezeichner' + #10+
-'    Zeichenketten' + #10+
-'Konstanten' + #10+
-'    Gewöhnliche' + #10+
-'    Typisierte' + #10+
-'    Resourcen Zeichenketten' + #10+
-'Typen' + #10+
-'    Basis-Typen' + #10+
-'        Ordinale Typen' + #10+
-'        Ganze Zahlen (Integer)' + #10+
-'        Boolesche Typen' + #10+
-'        Aufzählungen' + #10+
-'        Untermengen' + #10+
-'        Zeichen' + #10+
-'    Zeichen-Typen' + #10+
-'        Char oder AnsiChar' + #10+
-'        WideChar' + #10 +
-'        Sonstige' + #10+
-'        Einzel-Byte Zeichenketten' + #10+
-'            ShortString' + #10+
-'            AnsiString' + #10+
-'            Zeichen-Code Umwandlung' + #10+
-'            RawByteString' + #10+
-'            UTF8String' + #10+
-'        Multi-Byte Zeichenketten' + #10+
-'            UnicodeString' + #10+
-'            WideString' + #10+
-'        Konstante Zeichenketten' + #10+
-'        Nullterminierente Zeichenketten (PChar)' + #10+
-'        Zeichenketten-Größen' + #10     +
-'    Strukturierte Typen' + #10         +
-'        Gepackte Struktur-Typen' + #10+
-'        Array''s' + #10;
 
-  // Verarbeitung des Texts
-  TOCtext := ProcessIndentedText(TOCtext);
-  ShowMessage(TOCtext);
-  AddTopicLine;  
+// ----------------------------------------------------------------------------
+// \brief This is the main block for this script. It will gattering infos for
+//        creating a HelpNDoc.com Project.
+// ----------------------------------------------------------------------------
+var
+  TOC: THndCreateProject;
+begin
+  TOC := THndCreateProject.Create;
+  try
+    try
+      TOC.LoadFromVariable('');
+      
+      if TOC.isEmpty then
+      raise Exception.Create('No Topics String/File.');
+
+      TOC.AddTOC;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Error:' + #10 + E.Message);
+      end;
+    end;
+  finally
+    TOC.Free;
+  end;  
 end.

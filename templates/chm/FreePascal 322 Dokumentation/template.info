@@ -137,3 +137,42 @@ default=false
 kind=bool
 values=
 
+[var_CustomTOCFile]
+name=Custom TOC - Table of Contents Import from a File
+name.de=Benutzerdefiniertes TOC - Table of Contents - von einer Datei importieren
+name.es=
+name.fr=
+description=Load the TOC - Table of Contents from a File
+description.de=Importiert das Inhaltsverzeichnis von einer Datei
+description.es=
+description.fr=
+default=
+kind=string
+values=
+
+[var_CustomTOCString]
+name=Custom TOC - Table of Contents Import from a String
+name.de=Benutzerdefinierter String für das TOC - Table of Contents
+name.es=
+name.fr=
+description=Import the custom TOC  - Table of Contents from a String
+description.de=Importiert das benutzerdefinierte TOC von einen String
+description.es=
+description.fr=
+default=
+kind=memo
+values=
+
+[var_CustomMediaPath]
+name=Custom Media Path
+name.de=Benutzerdefinierter Pfad für Media Dateien
+name.es=
+name.fr=
+description=Set the customizeable Path for Media Files
+description.de=Legt den benutzerdefinierten Pfad für Media Dateien fest.
+description.es=
+description.fr=
+default=
+kind=string
+values=
+

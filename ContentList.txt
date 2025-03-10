@@ -1,0 +1,86 @@
+Pascal Zeichen und Symbole
+    Symbole
+    Kommentare
+    Reservierte Schlüsselwörter
+        Turbo Pascal
+        Object Pascal
+        Modifikationen
+    Kennzeichnungen
+    Hinweise für Direktiven
+    Zahlen
+    Bezeichner
+    Zeichenketten
+Konstanten
+    Gewöhnliche
+    Typisierte
+    Resourcen Zeichenketten
+Typen
+    Basis-Typen
+        Ordinale Typen
+        Ganze Zahlen (Integer)
+        Boolesche Typen
+        Aufzählungen
+        Untermengen
+        Zeichen
+    Zeichen-Typen
+        Char oder AnsiChar
+        WideChar
+        Sonstige
+        Einzel-Byte Zeichenketten
+            ShortString
+            AnsiString
+            Zeichen-Code Umwandlung
+            RawByteString
+            UTF8String
+        Multi-Byte Zeichenketten
+            UnicodeString
+            WideString
+        Konstante Zeichenketten
+        Nullterminierente Zeichenketten (PChar)
+        Zeichenketten-Größen
+    Strukturierte Typen
+        Gepackte Struktur-Typen
+        Array's
+            Statische Array's
+            Dynamische Array's
+            Typen-Kompatibilität dynamischer Array's
+            Constuctor dynamischer Array's
+            Feldkonstanten-Ausdrücke dynamiscer Array's
+            Packen und Entpacken eines Array's
+        Record's
+            Layout und Größe
+            Bemerkungen und Beispiele
+        Mengen-Typen
+        Datei-Typen
+    Zeiger
+    Forward-Deklarationen
+    Prozedur-Typen
+    Variant's
+        Definition
+        Variant's in Zuweisungen und Ausdrücken
+        Variant's im Interface-Teil
+    Alias-Typen
+    Verwaltete Typen
+Variablen
+    Definition
+    Erklärung
+    Geltungssbereich
+    Initialisierte Variablen
+    Initialisierte Variablen mit Standard-Wert
+    Thread-Variablen
+    Eigenschaften
+Objekte
+    Deklaration
+    Abtrakte und Sealed Objekte
+    Felder
+    Klassen oder statische Felder
+    Constructor und Destructor
+    Methoden
+        Erklärung
+        Methoden-Aufruf
+            Statische Methoden
+            Virtuelle Methoden
+            Abstrakthierte Methoden
+            Klassen-Methoden oder statische Methoden
+    Sichtbarkeit
+Klassen
