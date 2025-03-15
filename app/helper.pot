@@ -1,0 +1,134 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: tform1.btnaddnode.caption
+msgid "Add Node"
+msgstr ""
+
+#: tform1.btndelnode.caption
+msgid "Del Node"
+msgstr ""
+
+#: tform1.button1.caption
+msgid "Create"
+msgstr ""
+
+#: tform1.button2.caption
+msgid "Clear All"
+msgstr ""
+
+#: tform1.caption
+msgid "Form1"
+msgstr ""
+
+#: tform1.label1.caption
+msgid "Topic Name:"
+msgstr ""
+
+#: tform1.label2.caption
+msgid "Topic Reference:"
+msgstr ""
+
+#: tform1.label3.caption
+msgid "Project Name:"
+msgstr ""
+
+#: tform1.label4.caption
+msgid "Project Autor:"
+msgstr ""
+
+#: tform1.label5.caption
+msgid "Project Path:"
+msgstr ""
+
+#: tform1.menuitem1.caption
+msgid "File"
+msgstr ""
+
+#: tform1.menuitem2.caption
+msgid "Exit App"
+msgstr ""
+
+#: tform1.menuitem3.caption
+msgid "New ..."
+msgstr ""
+
+#: tform1.menuitem4.caption
+msgid "Open"
+msgstr ""
+
+#: tform1.menuitem5.caption
+msgid "Save"
+msgstr ""
+
+#: tform1.menuitem6.caption
+msgid "Save As ..."
+msgstr ""
+
+#: tform1.menuitem7.caption
+msgid "Open Configuration"
+msgstr ""
+
+#: tform1.menuitem8.caption
+msgid "Help"
+msgstr ""
+
+#: tform1.menuitem9.caption
+msgid "About ..."
+msgstr ""
+
+#: tform1.sbcontent.caption
+msgctxt "tform1.sbcontent.caption"
+msgid "  Content  "
+msgstr ""
+
+#: tform1.sbfooter.caption
+msgctxt "tform1.sbfooter.caption"
+msgid "  Footer ON  "
+msgstr ""
+
+#: tform1.sbheader.caption
+msgctxt "tform1.sbheader.caption"
+msgid "  Header: ON  "
+msgstr ""
+
+#: tform1.sbnew.caption
+msgid "L"
+msgstr ""
+
+#: tform1.sbnew.hint
+msgid "Open new Document"
+msgstr ""
+
+#: tform1.sbopen.caption
+msgid "sbOpen"
+msgstr ""
+
+#: tform1.sbopen.hint
+msgid "Open Dpocument from File Stem"
+msgstr ""
+
+#: tform1.sbsaveas.caption
+msgid "sbSaveAs"
+msgstr ""
+
+#: tform1.sbsaveas.hint
+msgid "Save Data to Disk"
+msgstr ""
+
+#: tform1.tabsheet1.caption
+msgid "TOC"
+msgstr ""
+
+#: tform1.tabsheet2.caption
+msgid "Settings"
+msgstr ""
+
+#: tform1.tabsheet3.caption
+msgid "Content"
+msgstr ""
+
+#: tform1.toolbar1.caption
+msgid "ToolBar1"
+msgstr ""
+

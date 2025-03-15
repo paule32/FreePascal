@@ -1,0 +1,116 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+msgid "Hello"
+msgstr "Hallo Welt"
+
+msgid "Add Node"
+msgstr "Hinzufügen"
+
+msgid "Del Node"
+msgstr "Löschen"
+
+msgid "Create"
+msgstr "Erstellen"
+
+msgid "Clear All"
+msgstr "Alles löschen"
+
+msgid "Form1"
+msgstr ""
+
+msgid "Topic Name:"
+msgstr "Themen Name:"
+
+msgid "Topic Reference:"
+msgstr "Themen Referenz:"
+
+msgid "Project Name:"
+msgstr "Projekt Name:"
+
+msgid "Project Autor:"
+msgstr "Projekt Autor:"
+
+msgid "Project Path:"
+msgstr "Projekt Pfad:"
+
+msgid "File"
+msgstr "Datei"
+
+msgid "Exit App"
+msgstr "Anwendung-Ende"
+
+msgid "New ..."
+msgstr "Neu ..."
+
+msgid "Open"
+msgstr "Öffnen"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Save As ..."
+msgstr "Speicher unter ..."
+
+msgid "Open Configuration"
+msgstr "Konfiguratiion öffnen"
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "About ..."
+msgstr "Über ..."
+
+msgid "Content"
+msgstr "Inhalt"
+
+msgid "Move Down"
+msgstr "Nach unten"
+
+msgid "Footer: ON"
+msgstr "Fußzeile: AN"
+
+msgid "Footer: OFF"
+msgstr "Fußzeile: AUS"
+
+msgid "Header: ON"
+msgstr "Kopfzeile: AN"
+
+msgid "Header: OFF"
+msgstr "Kopfzeile: AUS"
+
+msgid "Move Left"
+msgstr "Nach links"
+
+msgid "L"
+msgstr ""
+
+msgid "Open new Document"
+msgstr "Neues Dokument öffnen"
+
+msgid "sbOpen"
+msgstr ""
+
+msgid "Open Document from File Stem"
+msgstr ""
+
+msgid "Move Right"
+msgstr "Nach rechts"
+
+msgid "sbSaveAs"
+msgstr ""
+
+msgid "Save Data to Disk"
+msgstr "Speichern"
+
+msgid "Move Up"
+msgstr "Nach oben"
+
+msgid "TOC"
+msgstr ""
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "ToolBar1"
+msgstr ""
