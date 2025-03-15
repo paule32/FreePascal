@@ -32,15 +32,14 @@ type
 
 function HexToTColor(HexColor: String): TColor;
 function tr(AString: String): String;
-
+function IfThenStr(Condition: Boolean; TrueValue, FalseValue: String): String;
+var
+  motr: TMoTranslate;
 implementation
 uses
   {$IFDEF WINDOWS}
   Windows;
   {$ENDIF}
-
-var
-  motr: TMoTranslate;
 
 function HexToTColor(HexColor: string): TColor;
 var
@@ -57,6 +56,11 @@ begin
 
   // In TColor umwandeln (BGR statt RGB!)
   Result := RGBToColor(R, G, B);
+end;
+
+function IfThenStr(Condition: Boolean; TrueValue, FalseValue: String): String;
+begin
+  if Condition then Result := TrueValue else Result := FalseValue;
 end;
 
 function tr(AString: String): String;
@@ -117,6 +121,7 @@ begin
   {$ENDIF}
 
   filePath := ExtractFilePath(ParamStr(0)) + 'locale/' + FLangID + '.mo';
+  filePath := StringReplace(filepath, '\', '/', [rfReplaceAll]);
   if FileExists(filePath) then
   begin
     inherited Create(filePath);

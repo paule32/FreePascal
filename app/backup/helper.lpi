@@ -31,7 +31,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="2"/>
       <Attributes pvaPreRelease="True" pvaPrivateBuild="True" pvaSpecialBuild="True"/>
       <StringTable Comments="private Edition" CompanyName="kallup non-profit" FileDescription="HelpNDoc.com Project Helper" InternalName="helper" LegalCopyright="(c) 2025 by Jens Kallup - paule32" LegalTrademarks="all rights reserved." OriginalFilename="helper.exe" ProductName="HelpNDoc.com Helper Tools" ProductVersion="0.0.1" PrivateBuild="by paule32" SpecialBuild="by paule32"/>
     </VersionInfo>

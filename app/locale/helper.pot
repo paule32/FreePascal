@@ -21,14 +21,6 @@ msgstr ""
 msgid "Form1"
 msgstr ""
 
-#: tform1.label1.caption
-msgid "Topic Name:"
-msgstr ""
-
-#: tform1.label2.caption
-msgid "Topic Reference:"
-msgstr ""
-
 #: tform1.label3.caption
 msgid "Project Name:"
 msgstr ""
@@ -39,6 +31,34 @@ msgstr ""
 
 #: tform1.label5.caption
 msgid "Project Path:"
+msgstr ""
+
+#: tform1.lbcustomcss.caption
+msgctxt "tform1.lbcustomcss.caption"
+msgid "Custom CSS:"
+msgstr ""
+
+#: tform1.lbcustomjs.caption
+msgctxt "tform1.lbcustomjs.caption"
+msgid "Custom JavaScript:"
+msgstr ""
+
+#: tform1.lbfootercontent.caption
+msgid "Footer Content:"
+msgstr ""
+
+#: tform1.lbheadercontent.caption
+msgid "Header Content:"
+msgstr ""
+
+#: tform1.lbtopicname.caption
+msgctxt "tform1.lbtopicname.caption"
+msgid "Topic Name:"
+msgstr ""
+
+#: tform1.lbtopicreference.caption
+msgctxt "tform1.lbtopicreference.caption"
+msgid "Topic Reference:"
 msgstr ""
 
 #: tform1.menuitem1.caption
@@ -94,6 +114,26 @@ msgstr ""
 msgid "About ..."
 msgstr ""
 
+#: tform1.sbapplycustomcss.caption
+msgctxt "tform1.sbapplycustomcss.caption"
+msgid "Apply"
+msgstr ""
+
+#: tform1.sbapplycustomjs.caption
+msgctxt "tform1.sbapplycustomjs.caption"
+msgid "Apply"
+msgstr ""
+
+#: tform1.sbapplyfootercontent.caption
+msgctxt "tform1.sbapplyfootercontent.caption"
+msgid "Apply"
+msgstr ""
+
+#: tform1.sbapplyheadercontent.caption
+msgctxt "tform1.sbapplyheadercontent.caption"
+msgid "Apply"
+msgstr ""
+
 #: tform1.sbcontent.caption
 msgctxt "tform1.sbcontent.caption"
 msgid "Content"
@@ -113,6 +153,14 @@ msgstr ""
 
 #: tform1.sbleft.hint
 msgid "Move Left"
+msgstr ""
+
+#: tform1.sbloadfromfile.caption
+msgid "Load from File"
+msgstr ""
+
+#: tform1.sbloadfromfile1.caption
+msgid "Create Help"
 msgstr ""
 
 #: tform1.sbnew.caption

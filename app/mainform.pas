@@ -1,6 +1,6 @@
 unit MainForm;
 
-{$mode objfpc}{$H+}
+{$mode delphi}{$H+}
 
 interface
 
@@ -13,6 +13,14 @@ type
   TNodeInfo = class
     TopicText: String;
     TopicRef : String;
+
+    Header: Boolean;
+    Footer: Boolean;
+
+    CustomHeaderContent: String;
+    CustomFooterContent: String;
+    CustomCSSContent: String;
+    CustomJSContent: String;
   end;
 
 type
@@ -25,13 +33,18 @@ type
     btnAddNode: TButton;
     btnDelNode: TButton;
     checkList: TCheckListBox;
+    globalCheckList: TCheckListBox;
     edTopicName: TEdit;
     edProjectName: TEdit;
     edProjectAutor: TEdit;
     edProjectPath: TEdit;
     ImageList1: TImageList;
-    Label1: TLabel;
-    Label2: TLabel;
+    lbCustomJS: TLabel;
+    lbHeaderContent: TLabel;
+    lbFooterContent: TLabel;
+    lbCustomCSS: TLabel;
+    lbTopicName: TLabel;
+    lbTopicReference: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -54,7 +67,9 @@ type
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    Panel4: TPanel;
     ProgressBar1: TProgressBar;
+    sbLoadFromFile1: TSpeedButton;
     ScrollBar1: TScrollBar;
     ScrollBox1: TScrollBox;
     ScrollBox2: TScrollBox;
@@ -63,6 +78,8 @@ type
     Separator2: TMenuItem;
     sbHeader: TSpeedButton;
     sbLeft: TSpeedButton;
+    sbApplyHeaderContent: TSpeedButton;
+    sbLoadFromFile: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
@@ -71,10 +88,17 @@ type
     sbDown: TSpeedButton;
     sbUp: TSpeedButton;
     sbRight: TSpeedButton;
+    sbApplyFooterContent: TSpeedButton;
+    sbApplyCustomCSS: TSpeedButton;
+    sbApplyCustomJS: TSpeedButton;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     StatusBar1: TStatusBar;
     SynEdit1: TSynEdit;
+    SynEditCustomJS: TSynEdit;
+    synEditHeaderContent: TSynEdit;
+    SynEditFooterContent: TSynEdit;
+    synEditCustomCSS: TSynEdit;
     SynHTMLSyn1: TSynHTMLSyn;
     SynPopupMenu1: TSynPopupMenu;
     TabSheet1: TTabSheet;
@@ -84,9 +108,11 @@ type
     sbNew: TToolButton;
     sbOpen: TToolButton;
     sbSaveAs: TToolButton;
+    TopicTreePanel: TPanel;
     TopicTree: TTreeView;
     procedure btnAddNodeClick(Sender: TObject);
     procedure btnDelNodeClick(Sender: TObject);
+    procedure checkListClick(Sender: TObject);
     procedure checkListClickCheck(Sender: TObject);
     procedure edProjectPathChange(Sender: TObject);
     procedure edTopicNameChange(Sender: TObject);
@@ -94,10 +120,16 @@ type
     procedure edTopicRefChange(Sender: TObject);
     procedure edTopicRefKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem13Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
+    procedure PageControl1Change(Sender: TObject);
+    procedure sbApplyCustomCSSClick(Sender: TObject);
+    procedure sbApplyCustomJSClick(Sender: TObject);
+    procedure sbApplyFooterContentClick(Sender: TObject);
+    procedure sbApplyHeaderContentClick(Sender: TObject);
     procedure sbDownClick(Sender: TObject);
     procedure sbHeaderClick(Sender: TObject);
     procedure sbLeftClick(Sender: TObject);
@@ -146,35 +178,35 @@ begin
   end;
 end;
 
-function GetOrCreateRootNode(TreeView: TTreeView): TTreeNode;
+function GetOrCreateRootNode(TopicTree: TTreeView): TTreeNode;
 begin
-  if TreeView.Items.Count = 0 then
-    Result := TreeView.Items.Add(nil, 'Hauptthema') // Erstelle Root-Node
+  if TopicTree.Items.Count = 0 then
+    Result := TopicTree.Items.Add(nil, 'Hauptthema') // Erstelle Root-Node
   else
-    Result := TreeView.Items[0]; // Erste (und einzige) Root-Node abrufen
+    Result := TopicTree.Items[0]; // Erste (und einzige) Root-Node abrufen
 end;
 
 procedure AddNodeWithHiddenObject(
-  TreeView: TTreeView;
+  TopicTree: TTreeView;
   const NodeText: String;
   const TopicRef: string);
 var
   NewNode, ParentNode: TTreeNode;
   Info: TNodeInfo;
 begin
-  if Assigned(TreeView.Selected) then
-  ParentNode := TreeView.Selected
+  if Assigned(TopicTree.Selected) then
+  ParentNode := TopicTree.Selected
   else
   begin
     // Falls keine Node existiert, eine Standard-Root-Node erstellen
-    if TreeView.Items.Count = 0 then
-      ParentNode := TreeView.Items.Add(nil, '[Themen-Baum]') // Root hinzufügen
+    if TopicTree.Items.Count = 0 then
+      ParentNode := TopicTree.Items.Add(nil, tr('[Topic Tree]')) // Root hinzufügen
     else
-      ParentNode := TreeView.Items.GetFirstNode; // Erste Node als Parent verwenden
+      ParentNode := TopicTree.Items.GetFirstNode; // Erste Node als Parent verwenden
   end;
 
   // Neue Node als Child einfügen
-  NewNode := TreeView.Items.AddChild(ParentNode, NodeText);
+  NewNode := TopicTree.Items.AddChild(ParentNode, NodeText);
 
   // Datenobjekt hinzufügen
   Info := TNodeInfo.Create;
@@ -191,7 +223,7 @@ begin
   NewNode.SelectedIndex := NewNode.ImageIndex;
 
   // Neue Node auswählen
-  TreeView.Selected := NewNode;
+  TopicTree.Selected := NewNode;
 end;
 
 function GetHiddenObjectRef(Node: TTreeNode): string;
@@ -219,34 +251,73 @@ begin
   end;
 end;
 
-procedure FreeNodeObjects(TreeView: TTreeView);
+function GetHiddenObject(Node: TTreeNode): TNodeInfo;
+var
+  Info: TNodeInfo;
+begin
+  result := nil;
+  if Assigned(Node) and Assigned(Node.data) then
+  begin
+    Info := TNodeInfo(Node.Data);
+    Result := Info;
+  end;
+end;
+
+procedure FreeNodeObjects(TopicTree: TTreeView);
 var
   I: Integer;
 begin
-  for I := 0 to TreeView.Items.Count - 1 do
-    if Assigned(TreeView.Items[I].Data) then
+  for I := 0 to TopicTree.Items.Count - 1 do
+    if Assigned(TopicTree.Items[I].Data) then
     begin
-      TNodeInfo(TreeView.Items[I].Data).Free;
-      TreeView.Items[I].Data := nil;
+      TNodeInfo(TopicTree.Items[I].Data).Free;
+      TopicTree.Items[I].Data := nil;
     end;
 end;
 
 { TForm1 }
 
 procedure TForm1.UpdateAllCaptions;
-var
-  i: Integer;
-  Comp: TComponent;
 begin
-  for i := 0 to ComponentCount - 1 do
-  begin
-    Comp := Components[i];
+  sbHeader .Caption  := tr(sbHeader.Caption);
+  sbFooter .Caption  := tr(sbFooter.Caption);
+  sbContent.Caption  := tr(sbContent.Caption);
 
-    if Comp is TLabel       then TLabel      (Comp).Caption := tr(Comp.Name);
-    if Comp is TButton      then TButton     (Comp).Caption := tr(Comp.Name);
-    if Comp is TMenuItem    then TMenuItem   (Comp).Caption := tr(Comp.Name);
-    if Comp is TSpeedButton then TSpeedButton(Comp).Caption := tr(Comp.Name);
-  end;
+  lbTopicName.Caption := tr(lbTopicName.Caption);
+  lbTopicReference.Caption := tr(lbTopicReference.Caption);
+
+  checkList.Items[0] := tr(checkList.Items[0]);
+  checkList.Items[1] := tr(checkList.Items[1]);
+  checkList.Items[2] := tr(checkList.Items[2]);
+
+  checkList.Checked[0] := False;
+  checkList.Checked[1] := False;
+  checkList.Checked[2] := False;
+
+  TabSheet1.Caption := tr(TabSheet1.Caption);
+  TabSheet2.Caption := tr(TabSheet2.Caption);
+  TabSheet3.Caption := tr(TabSheet3.Caption);
+
+  btnAddNode.Caption := tr(btnAddNode.Caption);
+  btnDelNode.Caption := tr(btnDelNode.Caption);
+
+  lbHeaderContent.Caption := tr(lbHeaderContent.Caption);
+  lbFooterContent.Caption := tr(lbFooterContent.Caption);
+
+  sbApplyHeaderContent.Caption := tr(sbApplyHeaderContent.Caption);
+  sbApplyFooterContent.Caption := tr(sbApplyFooterContent.Caption);
+  sbApplyCustomCSS    .Caption := tr(sbApplyCustomCSS    .Caption);
+  sbApplyCustomJS     .Caption := tr(sbApplyCustomJS     .Caption);
+
+  lbCustomCSS.Caption := tr(lbCustomCSS.Caption);
+  lbCustomJs .Caption := tr(lbCustomJs .Caption);
+
+  sbLoadFromFile.Caption := tr(sbLoadFromFile.Caption);
+
+  globalCheckList.Items[0] := tr(globalCheckList.Items[0]);
+  globalCheckList.Items[1] := tr(globalCheckList.Items[1]);
+  globalCheckList.Items[2] := tr(globalCheckList.Items[2]);
+  globalCheckList.Items[3] := tr(globalCheckList.Items[3]);
 end;
 
 // Verschiebt die Node nach oben
@@ -342,8 +413,16 @@ begin
 end;
 
 procedure TForm1.btnAddNodeClick(Sender: TObject);
+var
+  info: TNodeInfo;
 begin
   AddNodeWithHiddenObject(TopicTree, edTopicName.Text, edTopicRef.Text);
+  info := GetHiddenObject(TopicTree.Selected);
+  if Assigned(info) then
+  begin
+    info.CustomHeaderContent := synEditHeaderContent.Lines.Text;
+    info.CustomFooterContent := synEditFooterContent.Lines.Text;
+  end;
 end;
 
 procedure TForm1.btnDelNodeClick(Sender: TObject);
@@ -368,8 +447,37 @@ begin
   end;
 end;
 
-procedure TForm1.checkListClickCheck(Sender: TObject);
+procedure TForm1.checkListClick(Sender: TObject);
 begin
+
+end;
+
+procedure TForm1.checkListClickCheck(Sender: TObject);
+var
+  index: Integer;
+begin
+  if TopicTree.Selected <> nil then
+  begin
+    index := checkList.ItemIndex;
+    if index <> -1 then
+    begin
+      if index = 1 then
+      begin
+        checkList.Items[1] := ifThenStr(
+        checkList.Items[1] = tr('All Header: ON'),
+        tr('All Header: OFF'),
+        tr('All Header: ON'));
+      end else
+      if index = 2 then
+      begin
+        checkList.Items[2] := ifThenStr(
+        checkList.Items[2] = tr('All Footer: ON'),
+        tr('All Footer: OFF'),
+        tr('All Footer: ON'));
+      end;
+    end;
+  end;
+
   UpdateTreeViewNumbers;
 end;
 
@@ -434,7 +542,7 @@ var
   info: TNodeInfo;
 begin
   if  (TopicTree.Selected <> nil)
-  and (TopicTree.Selected.Text <> '[Themen-Baum]')then
+  and (TopicTree.Selected.Text <> tr('[Topic Tree]')) then
   begin
     info := TNodeInfo(TopicTree.Selected.Data);
     info.TopicRef := edTopicRef.Text;
@@ -449,9 +557,15 @@ begin
   sbFooter .Font.Color := clNavy;
   sbContent.Font.Color := clNavy;
 
+  CheckList.Color := HexToTColor('f9f9f9');
+  globalCheckList.Color := HexToTColor('f9f9f9');
+
   motr := TMoTranslate.Create('de', false);
   UpdateAllCaptions;
-  CheckList.Color := HexToTColor('f9f9f9');
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
@@ -480,6 +594,61 @@ begin
   AboutForm.Free;
 end;
 
+procedure TForm1.PageControl1Change(Sender: TObject);
+begin
+  if TopicTree.Selected <> nil then
+  begin
+    if TopicTree.Selected.Text = tr('[Topic Tree]') then
+    begin
+      TopicTree.Selected := TopicTree.Selected.getFirstChild;
+    end;
+  end;
+end;
+
+procedure TForm1.sbApplyCustomCSSClick(Sender: TObject);
+var
+  info: TNodeInfo;
+begin
+  info := GetHiddenObject(TopicTree.Selected);
+  if info <> nil then
+  begin
+    info.CustomCSSContent := synEditCustomCSS.Lines.Text;
+  end;
+end;
+
+procedure TForm1.sbApplyCustomJSClick(Sender: TObject);
+var
+  info: TNodeInfo;
+begin
+  info := GetHiddenObject(TopicTree.Selected);
+  if info <> nil then
+  begin
+    info.CustomJSContent := synEditCustomJS.Lines.Text;
+  end;
+end;
+
+procedure TForm1.sbApplyFooterContentClick(Sender: TObject);
+var
+  info: TNodeInfo;
+begin
+  info := GetHiddenObject(TopicTree.Selected);
+  if info <> nil then
+  begin
+    info.CustomFooterContent := synEditFooterContent.Lines.Text;
+  end;
+end;
+
+procedure TForm1.sbApplyHeaderContentClick(Sender: TObject);
+var
+  info: TNodeInfo;
+begin
+  info := GetHiddenObject(TopicTree.Selected);
+  if info <> nil then
+  begin
+    info.CustomHeaderContent := synEditHeaderContent.Lines.Text;
+  end;
+end;
+
 procedure TForm1.setSpeedButtonFontColor(Sender: TObject);
 begin
   sbHeader .Font.Color := clNavy;
@@ -496,17 +665,35 @@ begin
 end;
 
 procedure TForm1.sbHeaderClick(Sender: TObject);
+var
+  info: TNodeInfo;
 begin
   setSpeedButtonFontColor(Sender);
   sbHeader.Font.Color := clGreen;
 
-  if Trim(sbHeader.Caption) = tr('Header: ON') then
+  if TopicTree.Selected <> nil then
   begin
-    sbHeader.Caption := tr('Header: OFF');
-  end else
-  if Trim(sbHeader.Caption) = tr('Header: OFF') then
-  begin
-    sbHeader.Caption := tr('Header: ON');
+    info := GetHiddenObject(TopicTree.Selected);
+    if Trim(sbHeader.Caption) = tr('Header: OFF') then
+    begin
+      sbHeader.Caption := tr('Header: ON');
+      if Assigned(info) then
+      begin
+        info.Header := True;
+        SynEditHeaderContent.Enabled := True;
+        SynEditHeaderContent.Lines.Text := info.CustomHeaderContent;
+      end;
+    end else
+    if Trim(sbHeader.Caption) = tr('Header: ON') then
+    begin
+      sbHeader.Caption := tr('Header: OFF');
+      if Assigned(info) then
+      begin
+        info.Footer := False;
+        SynEditHeaderContent.Lines.Text := '';
+        SynEditHeaderContent.Enabled := False;
+      end;
+    end;
   end;
 end;
 
@@ -561,7 +748,7 @@ begin
   end;
 end;
 
-// Aktualisiert die Nummerierung aller Nodes im TreeView
+// Aktualisiert die Nummerierung aller Nodes im TopicTree
 procedure TForm1.UpdateTreeViewNumbers;
 var
   Node: TTreeNode;
@@ -644,36 +831,75 @@ begin
 end;
 
 procedure TForm1.sbFooterClick(Sender: TObject);
+var
+  info: TNodeInfo;
 begin
   setSpeedButtonFontColor(Sender);
   sbFooter.Font.Color := clGreen;
 
-  if Trim(sbFooter.Caption) = tr('Footer: OFF') then
+  if TopicTree.Selected <> nil then
   begin
-    sbFooter.Caption := tr('Footer: ON');
-  end else
-  begin
-    sbFooter.Caption := tr('Footer: OFF');
+    info := GetHiddenObject(TopicTree.Selected);
+    if Trim(sbFooter.Caption) = tr('Footer: OFF') then
+    begin
+      sbFooter.Caption := tr('Footer: ON');
+      if Assigned(info) then
+      begin
+        info.Footer := True;
+      end;
+    end else
+    begin
+      sbFooter.Caption := tr('Footer: OFF');
+      if Assigned(info) then
+      begin
+        info.Footer := False;
+      end;
+    end;
   end;
-
 end;
 
 procedure TForm1.TopicTreeClick(Sender: TObject);
+var
+  info: TNodeInfo;
 begin
   if UpdatingNumbers > 0 then Exit; // Verhindert Endlosschleife
 
   if TopicTree.Selected <> nil then
   begin
-    if TopicTree.Selected.Text <> '[Themen-Baum]' then
+    if TopicTree.Selected.Text <> tr('[Topic Tree]') then
     begin
-      edTopicName.Text := TopicTree.Selected.Text;
-      edTopicRef.Text := GetHiddenObjectRef(TopicTree.Selected);
+      info := GetHiddenObject(TopicTree.Selected);
+      edTopicName.Text   := info.TopicText;
+      edTopicRef .Text   := info.TopicRef;
 
       btnAddNode.Enabled := true;
       btnDelNode.Enabled := true;
+
+      synEditHeaderContent.Lines.Clear;
+      synEditFooterContent.Lines.Clear;
+
+      synEditHeaderContent.Lines.Text := info.CustomHeaderContent;
+      synEditFooterContent.Lines.Text := info.CustomFooterContent;
+
+      synEditCustomCSS.Lines.Text := info.CustomCSSContent;
+      synEditCustomJS .Lines.Text := info.CustomJSContent;
+
+      if PageControl1.ActivePage <> TabSheet3 then
+      begin
+        PageControl1.ActivePage := TabSheet1;
+      end else
+      begin
+        if info.Header then
+        sbHeader.Caption := tr('Header: ON') else
+        sbHeader.Caption := tr('Header: OFF');
+
+        if info.Footer then
+        sbFooter.Caption := tr('Footer: ON') else
+        sbFooter.Caption := tr('Footer: OFF');
+      end;
     end else
     begin
-
+      PageControl1.ActivePage := TabSheet2;
     end;
   end;
 end;
