@@ -61,13 +61,44 @@ msgctxt "tform1.lbtopicreference.caption"
 msgid "Topic Reference:"
 msgstr ""
 
-#: tform1.menuitem1.caption
+#: tform1.menufile.caption
+msgctxt "tform1.menufile.caption"
 msgid "File"
 msgstr ""
 
-#: tform1.menuitem10.caption
-msgctxt "tform1.menuitem10.caption"
-msgid "Settings"
+#: tform1.menufileexitapp.caption
+msgctxt "tform1.menufileexitapp.caption"
+msgid "Exit App"
+msgstr ""
+
+#: tform1.menufilenew.caption
+msgctxt "tform1.menufilenew.caption"
+msgid "New ..."
+msgstr ""
+
+#: tform1.menufileopen.caption
+msgctxt "tform1.menufileopen.caption"
+msgid "Open"
+msgstr ""
+
+#: tform1.menufileopenconfiguration.caption
+msgctxt "tform1.menufileopenconfiguration.caption"
+msgid "Open Configuration"
+msgstr ""
+
+#: tform1.menufilesave.caption
+msgctxt "tform1.menufilesave.caption"
+msgid "Save"
+msgstr ""
+
+#: tform1.menufilesaveas.caption
+msgctxt "tform1.menufilesaveas.caption"
+msgid "Save As ..."
+msgstr ""
+
+#: tform1.menuhelp.caption
+msgctxt "tform1.menuhelp.caption"
+msgid "Help"
 msgstr ""
 
 #: tform1.menuitem11.caption
@@ -82,36 +113,21 @@ msgstr ""
 msgid "Deutsch"
 msgstr ""
 
-#: tform1.menuitem2.caption
-msgid "Exit App"
-msgstr ""
-
-#: tform1.menuitem3.caption
-msgid "New ..."
-msgstr ""
-
-#: tform1.menuitem4.caption
-msgid "Open"
-msgstr ""
-
-#: tform1.menuitem5.caption
-msgid "Save"
-msgstr ""
-
-#: tform1.menuitem6.caption
-msgid "Save As ..."
-msgstr ""
-
-#: tform1.menuitem7.caption
-msgid "Open Configuration"
-msgstr ""
-
-#: tform1.menuitem8.caption
-msgid "Help"
-msgstr ""
-
 #: tform1.menuitem9.caption
 msgid "About ..."
+msgstr ""
+
+#: tform1.menusettings.caption
+msgctxt "tform1.menusettings.caption"
+msgid "Settings"
+msgstr ""
+
+#: tform1.panel6.caption
+msgid "Panel6"
+msgstr ""
+
+#: tform1.panel7.caption
+msgid "Panel7"
 msgstr ""
 
 #: tform1.sbapplycustomcss.caption
@@ -195,6 +211,14 @@ msgstr ""
 msgid "Move Up"
 msgstr ""
 
+#: tform1.speedbutton1.caption
+msgid "Open Project"
+msgstr ""
+
+#: tform1.speedbutton5.caption
+msgid "Add to Favorites"
+msgstr ""
+
 #: tform1.tabsheet1.caption
 msgid "TOC"
 msgstr ""
@@ -207,6 +231,10 @@ msgstr ""
 #: tform1.tabsheet3.caption
 msgctxt "tform1.tabsheet3.caption"
 msgid "Content"
+msgstr ""
+
+#: tform1.tabsheet4.caption
+msgid "TabSheet4"
 msgstr ""
 
 #: tform1.toolbar1.caption

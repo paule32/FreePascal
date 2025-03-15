@@ -33,46 +33,54 @@ type
     btnAddNode: TButton;
     btnDelNode: TButton;
     checkList: TCheckListBox;
+    edProjectAutor: TEdit;
+    edProjectName: TEdit;
+    edProjectPath: TEdit;
     globalCheckList: TCheckListBox;
     edTopicName: TEdit;
-    edProjectName: TEdit;
-    edProjectAutor: TEdit;
-    edProjectPath: TEdit;
     ImageList1: TImageList;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
     lbCustomJS: TLabel;
     lbHeaderContent: TLabel;
     lbFooterContent: TLabel;
     lbCustomCSS: TLabel;
     lbTopicName: TLabel;
     lbTopicReference: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
+    ListBox1: TListBox;
+    ListBox2: TListBox;
     MainMenu1: TMainMenu;
     edTopicRef: TMaskEdit;
-    MenuItem1: TMenuItem;
-    MenuItem10: TMenuItem;
+    Memo1: TMemo;
+    MenuFile: TMenuItem;
+    MenuSettings: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
     MenuItem13: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
+    MenuFileExitApp: TMenuItem;
+    MenuFileNew: TMenuItem;
+    MenuFileOpen: TMenuItem;
+    MenuFileSave: TMenuItem;
+    MenuFileSaveAs: TMenuItem;
+    MenuFileOpenConfiguration: TMenuItem;
+    MenuHelp: TMenuItem;
     MenuItem9: TMenuItem;
     PageControl1: TPageControl;
+    PageControl2: TPageControl;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
+    Panel5: TPanel;
+    Panel6: TPanel;
+    Panel7: TPanel;
     ProgressBar1: TProgressBar;
     sbLoadFromFile1: TSpeedButton;
     ScrollBar1: TScrollBar;
     ScrollBox1: TScrollBox;
     ScrollBox2: TScrollBox;
+    ScrollBox3: TScrollBox;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
@@ -80,9 +88,6 @@ type
     sbLeft: TSpeedButton;
     sbApplyHeaderContent: TSpeedButton;
     sbLoadFromFile: TSpeedButton;
-    SpeedButton2: TSpeedButton;
-    SpeedButton3: TSpeedButton;
-    SpeedButton4: TSpeedButton;
     sbContent: TSpeedButton;
     sbFooter: TSpeedButton;
     sbDown: TSpeedButton;
@@ -91,8 +96,16 @@ type
     sbApplyFooterContent: TSpeedButton;
     sbApplyCustomCSS: TSpeedButton;
     sbApplyCustomJS: TSpeedButton;
+    SpeedButton1: TSpeedButton;
+    SpeedButton2: TSpeedButton;
+    SpeedButton3: TSpeedButton;
+    SpeedButton4: TSpeedButton;
+    SpeedButton5: TSpeedButton;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
+    Splitter3: TSplitter;
+    Splitter4: TSplitter;
+    Splitter5: TSplitter;
     StatusBar1: TStatusBar;
     SynEdit1: TSynEdit;
     SynEditCustomJS: TSynEdit;
@@ -104,6 +117,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
     ToolBar1: TToolBar;
     sbNew: TToolButton;
     sbOpen: TToolButton;
@@ -123,7 +137,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem13Click(Sender: TObject);
-    procedure MenuItem2Click(Sender: TObject);
+    procedure MenuFileExitAppClick(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
     procedure sbApplyCustomCSSClick(Sender: TObject);
@@ -318,6 +332,17 @@ begin
   globalCheckList.Items[1] := tr(globalCheckList.Items[1]);
   globalCheckList.Items[2] := tr(globalCheckList.Items[2]);
   globalCheckList.Items[3] := tr(globalCheckList.Items[3]);
+
+  menuFile.Caption := tr(menuFile.Caption);
+  menuFileNew.Caption := tr(menuFileNew.Caption);
+  menuFileOpen.Caption := tr(menuFileOpen.Caption);
+  menuFileSave.Caption := tr(menuFileSave.Caption);
+  menuFileSaveAs.Caption := tr(menuFileSaveAs.Caption);
+  menuFileExitApp.Caption := tr(menuFileExitApp.Caption);
+
+  menuSettings.Caption := tr(menuSettings.Caption);
+
+  menuHelp.Caption := tr(menuHelp.Caption);
 end;
 
 // Verschiebt die Node nach oben
@@ -582,7 +607,7 @@ begin
   UpdateAllCaptions;
 end;
 
-procedure TForm1.MenuItem2Click(Sender: TObject);
+procedure TForm1.MenuFileExitAppClick(Sender: TObject);
 begin
   Close;
 end;

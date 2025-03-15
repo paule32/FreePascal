@@ -297,6 +297,39 @@ msgstr ""
 msgid "Hello"
 msgstr "Hallo Welt"
 
+msgid "File"
+msgstr "Datei"
+
+msgid "New ..."
+msgstr "Neu ..."
+
+msgid "Open"
+msgstr "Öffnen"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Save As ..."
+msgstr "Speichern unter ..."
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "Global Header"
+msgstr "Globale Kopfzeilen"
+
+msgid "Global Footer"
+msgstr "Globale Füßzeilen"
+
+msgid "Global CSS"
+msgstr "Globales CSS"
+
+msgid "Global JavaScript"
+msgstr "Globales JavaScript"
+
 msgid "[Topic Tree]"
 msgstr "[Themen-Baum]"
 
