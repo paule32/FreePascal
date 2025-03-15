@@ -2,4 +2,4 @@
  Referenz-Hanbuch für FPC 3.2.2 - Stand: 2025
 
 Programmers Desktop - Windows 10 Pro:
-![Preview](img/desktop000.png)
+![Preview](img/screen000.png)
