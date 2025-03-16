@@ -215,8 +215,23 @@ msgstr ""
 msgid "Open Project"
 msgstr ""
 
+#: tform1.speedbutton10.caption
+msgctxt "tform1.speedbutton10.caption"
+msgid "I"
+msgstr ""
+
+#: tform1.speedbutton11.caption
+msgctxt "tform1.speedbutton11.caption"
+msgid "U"
+msgstr ""
+
 #: tform1.speedbutton5.caption
 msgid "Add to Favorites"
+msgstr ""
+
+#: tform1.speedbutton9.caption
+msgctxt "tform1.speedbutton9.caption"
+msgid "B"
 msgstr ""
 
 #: tform1.tabsheet1.caption

@@ -33,12 +33,14 @@ type
     btnAddNode: TButton;
     btnDelNode: TButton;
     checkList: TCheckListBox;
+    ControlBar1: TControlBar;
     edProjectAutor: TEdit;
     edProjectName: TEdit;
     edProjectPath: TEdit;
     globalCheckList: TCheckListBox;
     edTopicName: TEdit;
     ImageList1: TImageList;
+    ImageList2: TImageList;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -75,6 +77,7 @@ type
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
+    Panel9: TPanel;
     ProgressBar1: TProgressBar;
     sbLoadFromFile1: TSpeedButton;
     ScrollBar1: TScrollBar;
@@ -97,10 +100,13 @@ type
     sbApplyCustomCSS: TSpeedButton;
     sbApplyCustomJS: TSpeedButton;
     SpeedButton1: TSpeedButton;
+    SpeedButton10: TSpeedButton;
+    SpeedButton11: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
+    SpeedButton9: TSpeedButton;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
