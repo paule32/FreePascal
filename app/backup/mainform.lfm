@@ -2475,8 +2475,8 @@ object Form1: TForm1
           object ComboBoxEx2: TComboBoxEx
             Left = 160
             Height = 38
-            Top = 8
-            Width = 156
+            Top = 5
+            Width = 176
             Images = ImageList3
             ImagesWidth = 200
             ItemHeight = 32

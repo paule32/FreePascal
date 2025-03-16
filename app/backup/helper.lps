@@ -47,7 +47,7 @@
       <Unit>
         <Filename Value="helper.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <CursorPos X="33" Y="16"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
@@ -59,9 +59,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainForm"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="528"/>
-        <CursorPos Y="530"/>
+        <CursorPos X="59" Y="539"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -94,7 +93,7 @@
       <Unit>
         <Filename Value="globals.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="41"/>
         <CursorPos Y="68"/>
         <UsageCount Value="20"/>
@@ -107,56 +106,18 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
+      <Unit>
+        <Filename Value="xmlstream.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="13"/>
+        <CursorPos X="3" Y="30"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="186" Column="17" TopLine="171"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="187" Column="32" TopLine="171"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1084" Column="20" TopLine="1056"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1128" Column="33" TopLine="1094"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1144" Column="35" TopLine="1125"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="186" Column="30" TopLine="170"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="187" Column="32" TopLine="170"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1084" Column="20" TopLine="1056"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1132" TopLine="1107"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="555" Column="3" TopLine="540"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="587" Column="3" TopLine="585"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="561" Column="20" TopLine="549"/>
-      </Position>
       <Position>
         <Filename Value="mainform.pas"/>
         <Caret Line="573" Column="25" TopLine="556"/>
@@ -228,6 +189,53 @@
       <Position>
         <Filename Value="mainform.pas"/>
         <Caret Line="529" TopLine="527"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="137" Column="4" TopLine="133"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="23" Column="45" TopLine="2"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="89" Column="24" TopLine="70"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="27" Column="28"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="87" Column="40" TopLine="70"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="125" Column="22" TopLine="108"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="129" Column="23" TopLine="112"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="143" Column="30" TopLine="127"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="147" Column="21" TopLine="130"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="154" Column="18" TopLine="133"/>
+      </Position>
+      <Position>
+        <Filename Value="xmlstream.pas"/>
+        <Caret Line="156" Column="30" TopLine="133"/>
       </Position>
     </JumpHistory>
     <RunParams>

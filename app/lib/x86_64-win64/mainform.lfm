@@ -2501,9 +2501,9 @@ object Form1: TForm1
         Height = 509
         Top = 101
         Width = 815
-        ActivePage = TabSheet5
+        ActivePage = TabSheetTopicContent
         Align = alClient
-        TabIndex = 2
+        TabIndex = 0
         TabOrder = 2
         object TabSheetTopicContent: TTabSheet
           Caption = 'Text'
