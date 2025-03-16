@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   Menus, ExtCtrls, Buttons, MaskEdit, ButtonPanel, CheckLst, SynEdit,
-  SynPopupMenu, SynHighlighterHTML, LCLType;
+  SynPopupMenu, SynHighlighterHTML, IpHtml, IniFiles, LCLType, ValEdit, ComboEx;
 
 type
   TNodeInfo = class
@@ -21,6 +21,8 @@ type
     CustomFooterContent: String;
     CustomCSSContent: String;
     CustomJSContent: String;
+
+    TopicContentText: String;
   end;
 
 type
@@ -28,11 +30,11 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Button1: TButton;
-    Button2: TButton;
     btnAddNode: TButton;
     btnDelNode: TButton;
     checkList: TCheckListBox;
+    ComboBoxEx1: TComboBoxEx;
+    ComboBoxEx2: TComboBoxEx;
     ControlBar1: TControlBar;
     edProjectAutor: TEdit;
     edProjectName: TEdit;
@@ -41,6 +43,8 @@ type
     edTopicName: TEdit;
     ImageList1: TImageList;
     ImageList2: TImageList;
+    HtmlPanel: TIpHtmlPanel;
+    ImageList3: TImageList;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -52,6 +56,7 @@ type
     lbTopicReference: TLabel;
     ListBox1: TListBox;
     ListBox2: TListBox;
+    ListView1: TListView;
     MainMenu1: TMainMenu;
     edTopicRef: TMaskEdit;
     Memo1: TMemo;
@@ -71,12 +76,16 @@ type
     PageControl1: TPageControl;
     PageControl2: TPageControl;
     Panel1: TPanel;
+    Panel10: TPanel;
+    Panel11: TPanel;
+    Panel12: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
+    Panel8: TPanel;
     Panel9: TPanel;
     ProgressBar1: TProgressBar;
     sbLoadFromFile1: TSpeedButton;
@@ -84,6 +93,7 @@ type
     ScrollBox1: TScrollBox;
     ScrollBox2: TScrollBox;
     ScrollBox3: TScrollBox;
+    DesignPanel: TScrollBox;
     SelectDirectoryDialog1: TSelectDirectoryDialog;
     Separator1: TMenuItem;
     Separator2: TMenuItem;
@@ -102,18 +112,26 @@ type
     SpeedButton1: TSpeedButton;
     SpeedButton10: TSpeedButton;
     SpeedButton11: TSpeedButton;
+    SpeedButton12: TSpeedButton;
+    SpeedButton13: TSpeedButton;
+    SpeedButton14: TSpeedButton;
     SpeedButton2: TSpeedButton;
     SpeedButton3: TSpeedButton;
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
+    SpeedButton6: TSpeedButton;
     SpeedButton9: TSpeedButton;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
     Splitter3: TSplitter;
     Splitter4: TSplitter;
     Splitter5: TSplitter;
+    Splitter6: TSplitter;
     StatusBar1: TStatusBar;
-    SynEdit1: TSynEdit;
+    StatusBar2: TStatusBar;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
+    TopicContentSynEdit: TSynEdit;
     SynEditCustomJS: TSynEdit;
     synEditHeaderContent: TSynEdit;
     SynEditFooterContent: TSynEdit;
@@ -123,24 +141,30 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
-    TabSheet4: TTabSheet;
+    TabSheetTopicContent: TTabSheet;
     ToolBar1: TToolBar;
     sbNew: TToolButton;
     sbOpen: TToolButton;
     sbSaveAs: TToolButton;
     TopicTreePanel: TPanel;
     TopicTree: TTreeView;
+    ValueListEditor1: TValueListEditor;
     procedure btnAddNodeClick(Sender: TObject);
     procedure btnDelNodeClick(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
     procedure checkListClick(Sender: TObject);
     procedure checkListClickCheck(Sender: TObject);
+    procedure DesignPanelPaint(Sender: TObject);
+    procedure DesignPanelResize(Sender: TObject);
     procedure edProjectPathChange(Sender: TObject);
     procedure edTopicNameChange(Sender: TObject);
     procedure edTopicNameKeyPress(Sender: TObject; var Key: char);
     procedure edTopicRefChange(Sender: TObject);
     procedure edTopicRefKeyPress(Sender: TObject; var Key: char);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure ListBox2Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem13Click(Sender: TObject);
     procedure MenuFileExitAppClick(Sender: TObject);
@@ -162,7 +186,23 @@ type
     procedure TopicTreeClick(Sender: TObject);
   private
     UpdatingNumbers: Integer; // Zählt, wie oft die Nummerierung aktiv ist
+    LastTopicTreeNode: TTreeNode;
+    ini: TIniFile;
     procedure checkText;
+    procedure ReadIniProject(flag: Integer; name: String);
+
+    procedure AddNewComponent(AClass: TControlClass);
+    procedure ControlMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ControlMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure SelectComponent(Control: TControl);
+    procedure DeselectComponent;
+
+    procedure ResizeHandleMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ResizeHandleMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure PositionResizeHandles(Control: TControl);
+    procedure ResizeHandleMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure CreateResizeHandles;
+
     procedure MoveNodeUp(Node: TTreeNode);
     procedure MoveNodeDown(Node: TTreeNode);
     procedure MoveNodeLeft(Node: TTreeNode);
@@ -185,6 +225,13 @@ uses
   GetText, Translations, DefaultTranslator, LCLTranslator,
   Resource, LResources, globals,
   about;
+
+var
+  SelectionFrame: TShape;
+  ResizeHandles: array[0..7] of TShape; // 8 Griffe
+  DraggingControl: TControl;
+  ResizingHandle: TShape;
+  OffsetX, OffsetY: Integer;
 
 procedure StoreNodeText(Node: TTreeNode);
 var
@@ -478,6 +525,10 @@ begin
   end;
 end;
 
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+end;
+
 procedure TForm1.checkListClick(Sender: TObject);
 begin
 
@@ -510,6 +561,46 @@ begin
   end;
 
   UpdateTreeViewNumbers;
+end;
+
+const
+  GRID_SIZE = 20;  // Größe des Gitters (z. B. 20x20 Pixel)
+
+procedure TForm1.DesignPanelPaint(Sender: TObject);
+var
+  X, Y: Integer;
+const
+  PanHeight = 4096;
+  PanWidth  = 2048;
+begin
+  with DesignPanel.Canvas do
+  begin
+    Pen.Color := clGray;    // Gitterfarbe
+    Pen.Style := psDot;     // Punktierte Linien
+
+    // Vertikale Linien zeichnen
+    X := 0;
+    while X < 2048 do
+    begin
+      MoveTo(X, 0);
+      LineTo(X, PanHeight);
+      Inc(X, GRID_SIZE);
+    end;
+
+    // Horizontale Linien zeichnen
+    Y := 0;
+    while Y < 4096 do
+    begin
+      MoveTo(0, Y);
+      LineTo(PanWidth, Y);
+      Inc(Y, GRID_SIZE);
+    end;
+  end;
+end;
+
+procedure TForm1.DesignPanelResize(Sender: TObject);
+begin
+  DesignPanel.Invalidate;  // Gitter neu zeichnen
 end;
 
 procedure TForm1.checkText;
@@ -582,8 +673,78 @@ begin
   checkText;
 end;
 
+procedure TForm1.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  ini.Free;
+end;
+
+procedure TForm1.ReadIniProject(flag: Integer; name: String);
+var
+  sl1, sl2: TStrings;
+  idx: Integer;
+begin
+  if not Assigned(ini) then
+  ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + 'helper.ini');
+  if flag = 0 then
+  sl1 := ListBox2.Items else
+  sl1 := TStringList.Create;
+  sl2 := TStringList.Create;
+  try
+    ini.ReadSection('Projects', sl1);
+    if sl1.Count > 0 then
+    begin
+      for idx := 0 to sl1.Count - 1 do
+      begin
+        if flag = 0 then
+        ini.ReadSection(sl1.ValueFromIndex[idx], sl2) else
+        ini.ReadSection(name, sl2);
+        if sl2.Count > 0 then
+        begin
+          try
+            if flag = 0 then
+            name := sl1.ValueFromIndex[idx];
+            edProjectName .Text := name;
+            edProjectPath .Text := ini.ReadString(name, 'path' , 'default');
+            edProjectAutor.Text := ini.ReadString(name, 'autor', 'default');
+
+            if not DirectoryExists(Trim(edProjectPath.Text)) then
+            begin
+              edProjectPath.Text := '';
+              raise Exception.Create(tr('the name is not a directory or does not exists.'));
+            end;
+
+          except
+            on E: EStringListError do
+            begin
+              ShowMessage(tr('Error: ini file key could not be found.'));
+            end;
+            on E: EAccessViolation do
+            begin
+              ShowMessage(tr('Error: TStringList was not initialized.'));
+            end;
+            on E: Exception do
+            begin
+              ShowMessage(tr('Error: common exception: ') + E.Message);
+            end;
+          end;
+        end;
+      end;
+    end;
+  finally
+    sl2.Free;
+    if flag = 0 then
+    begin
+      if ListBox2.Count > 0 then
+      ListBox2.Selected[ListBox2.Items.Count - 1] := true;
+    end;
+  end;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  ReadIniProject(0,'');
+  AddNewComponent(TButton);
+
   sbHeader .Font.Color := clNavy;
   sbFooter .Font.Color := clNavy;
   sbContent.Font.Color := clNavy;
@@ -593,10 +754,31 @@ begin
 
   motr := TMoTranslate.Create('de', false);
   UpdateAllCaptions;
+
+  HtmlPanel.SetHtmlFromStr(
+  '<style>' +
+  'table { border-collapse: collapse; width: 100%; }' +
+  'th, td { border: 1px solid black; padding: 5px; text-align: left; }' +
+  'th { background-color: lightgray; }' +
+  '</style>' +
+  '<h2>Gestylte Tabelle</h2>' +
+  '<table>' +
+  '<tr><th>ID</th><th>Name</th><th>Alter</th></tr>' +
+  '<tr><td>1</td><td style="background-color: lime;">Max Mustermann</td><td>30</td></tr>' +
+  '<tr><td>2</td><td>Lisa Meier</td><td>25</td></tr>' +
+  '<tr><td>3</td><td>Tom Schmidt</td><td>40</td></tr>' +
+  '</table>');
+
 end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
+end;
+
+procedure TForm1.ListBox2Click(Sender: TObject);
+begin
+  if ListBox2.Items.Count > 0 then
+  ReadIniProject(1, ListBox2.Items[ListBox2.ItemIndex]);
 end;
 
 procedure TForm1.MenuItem12Click(Sender: TObject);
@@ -891,15 +1073,27 @@ end;
 
 procedure TForm1.TopicTreeClick(Sender: TObject);
 var
-  info: TNodeInfo;
+  info, hidden: TNodeInfo;
+  idx: Integer;
 begin
   if UpdatingNumbers > 0 then Exit; // Verhindert Endlosschleife
+
+  if LastTopicTreeNode <> nil then
+  begin
+    info := GetHiddenObject(LastTopicTreeNode);
+    info.TopicContentText := TopicContentSynEdit.Lines.Text;
+  end;
 
   if TopicTree.Selected <> nil then
   begin
     if TopicTree.Selected.Text <> tr('[Topic Tree]') then
     begin
+      LastTopicTreeNode := TopicTree.Selected;
+
       info := GetHiddenObject(TopicTree.Selected);
+      TopicContentSynEdit.Lines.Clear;
+      TopicContentSynEdit.Lines.Text := info.TopicContentText;
+
       edTopicName.Text   := info.TopicText;
       edTopicRef .Text   := info.TopicRef;
 
@@ -933,6 +1127,184 @@ begin
       PageControl1.ActivePage := TabSheet2;
     end;
   end;
+end;
+
+procedure TForm1.AddNewComponent(AClass: TControlClass);
+var
+  NewControl: TControl;
+begin
+  NewControl := AClass.Create(DesignPanel);
+  NewControl.Parent := DesignPanel;
+  NewControl.SetBounds(50, 50, 100, 30); // Standardgröße & Position
+
+  // Drag & Drop aktivieren
+  if NewControl is TButton then
+  begin
+    TButton(NewControl).OnMouseDown := ControlMouseDown;
+    TButton(NewControl).OnMouseMove := ControlMouseMove;
+  end;
+end;
+
+procedure TForm1.ControlMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+  begin
+    DraggingControl := TControl(Sender);
+    SelectComponent(DraggingControl);
+    OffsetX := X;
+    OffsetY := Y;
+  end;
+end;
+
+procedure TForm1.ControlMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+begin
+  if (ssLeft in Shift) and Assigned(DraggingControl) then
+  begin
+    DraggingControl.Left := DraggingControl.Left + X - OffsetX;
+    DraggingControl.Top := DraggingControl.Top + Y - OffsetY;
+
+    // Falls der Rahmen existiert, ihn mit der Komponente bewegen
+    if Assigned(SelectionFrame) then
+    SelectionFrame.SetBounds(
+      DraggingControl.Left   - 2,
+      DraggingControl.Top    - 2,
+      DraggingControl.Width  + 4,
+      DraggingControl.Height + 4);
+  end;
+end;
+
+procedure TForm1.SelectComponent(Control: TControl);
+begin
+  if SelectionFrame = nil then
+  begin
+    SelectionFrame := TShape.Create(Self);
+    SelectionFrame.Parent := DesignPanel;
+    SelectionFrame.Pen.Color := clRed;
+    SelectionFrame.Pen.Style := psDash;
+    SelectionFrame.Brush.Style := bsClear;
+  end;
+
+  // Rahmen um die gewählte Komponente setzen
+  SelectionFrame.SetBounds(Control.Left - 2, Control.Top - 2,
+                           Control.Width + 4, Control.Height + 4);
+  SelectionFrame.Visible := True;
+
+  if Assigned(Control) then
+  begin
+    DraggingControl := Control;
+  end;
+end;
+
+procedure TForm1.DeselectComponent;
+begin
+  if Assigned(SelectionFrame) then
+    SelectionFrame.Visible := False;
+  DraggingControl := nil;
+end;
+
+procedure TForm1.CreateResizeHandles;
+var
+  i: Integer;
+begin
+  for i := 0 to 7 do
+  begin
+    ResizeHandles[i] := TShape.Create(Self);
+    ResizeHandles[i].Parent := DesignPanel;
+    ResizeHandles[i].Width := 6;
+    ResizeHandles[i].Height := 6;
+    ResizeHandles[i].Brush.Color := clBlue;
+    ResizeHandles[i].OnMouseDown := ResizeHandleMouseDown;
+    ResizeHandles[i].OnMouseMove := ResizeHandleMouseMove;
+    ResizeHandles[i].OnMouseUp := ResizeHandleMouseUp;
+  end;
+end;
+
+procedure TForm1.PositionResizeHandles(Control: TControl);
+var
+  L, T, W, H: Integer;
+begin
+  L := Control.Left;
+  T := Control.Top;
+  W := Control.Width;
+  H := Control.Height;
+
+  // Oben-Links
+  ResizeHandles[0].SetBounds(L - 3, T - 3, 6, 6);
+  // Oben-Rechts
+  ResizeHandles[1].SetBounds(L + W - 3, T - 3, 6, 6);
+  // Unten-Links
+  ResizeHandles[2].SetBounds(L - 3, T + H - 3, 6, 6);
+  // Unten-Rechts
+  ResizeHandles[3].SetBounds(L + W - 3, T + H - 3, 6, 6);
+
+  // Oben (Mitte)
+  ResizeHandles[4].SetBounds(L + W div 2 - 3, T - 3, 6, 6);
+  // Unten (Mitte)
+  ResizeHandles[5].SetBounds(L + W div 2 - 3, T + H - 3, 6, 6);
+  // Links (Mitte)
+  ResizeHandles[6].SetBounds(L - 3, T + H div 2 - 3, 6, 6);
+  // Rechts (Mitte)
+  ResizeHandles[7].SetBounds(L + W - 3, T + H div 2 - 3, 6, 6);
+end;
+
+procedure TForm1.ResizeHandleMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if Button = mbLeft then
+  begin
+    ResizingHandle := TShape(Sender);
+    OffsetX := X;
+    OffsetY := Y;
+  end;
+end;
+
+procedure TForm1.ResizeHandleMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+begin
+  if (ssLeft in Shift) and Assigned(ResizingHandle) and Assigned(DraggingControl) then
+  begin
+    case ResizingHandle.Tag of
+      0: // Oben-Links
+      begin
+        DraggingControl.Left := DraggingControl.Left + X - OffsetX;
+        DraggingControl.Top := DraggingControl.Top + Y - OffsetY;
+        DraggingControl.Width := DraggingControl.Width - X + OffsetX;
+        DraggingControl.Height := DraggingControl.Height - Y + OffsetY;
+      end;
+      1: // Oben-Rechts
+      begin
+        DraggingControl.Top := DraggingControl.Top + Y - OffsetY;
+        DraggingControl.Width := DraggingControl.Width + X - OffsetX;
+        DraggingControl.Height := DraggingControl.Height - Y + OffsetY;
+      end;
+      2: // Unten-Links
+      begin
+        DraggingControl.Left := DraggingControl.Left + X - OffsetX;
+        DraggingControl.Width := DraggingControl.Width - X + OffsetX;
+        DraggingControl.Height := DraggingControl.Height + Y - OffsetY;
+      end;
+      3: // Unten-Rechts
+      begin
+        DraggingControl.Width := DraggingControl.Width + X - OffsetX;
+        DraggingControl.Height := DraggingControl.Height + Y - OffsetY;
+      end;
+      4: // Oben (Mitte)
+        DraggingControl.Top := DraggingControl.Top + Y - OffsetY;
+      5: // Unten (Mitte)
+        DraggingControl.Height := DraggingControl.Height + Y - OffsetY;
+      6: // Links (Mitte)
+        DraggingControl.Left := DraggingControl.Left + X - OffsetX;
+      7: // Rechts (Mitte)
+        DraggingControl.Width := DraggingControl.Width + X - OffsetX;
+    end;
+    PositionResizeHandles(DraggingControl);
+  end;
+end;
+
+procedure TForm1.ResizeHandleMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  ResizingHandle := nil;
 end;
 
 end.

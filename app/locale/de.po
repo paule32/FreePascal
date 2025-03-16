@@ -297,6 +297,21 @@ msgstr ""
 msgid "Hello"
 msgstr "Hallo Welt"
 
+msgid "the name is not a directory or does not exists."
+msgstr "das angegebene Verzeichnis existiert nicht oder ist kein Verzeichnis."
+
+msgid "the directory does not exists."
+msgstr "das Verzeichnis existiert nicht."
+
+msgid "Error: ini file key could not be found."
+msgstr "Fehler: Schlüßel in *.ini Datei konnte nicht gefunden werden."
+
+msgid "Error: TStringList was not initialized."
+msgstr "Fehler: TStringList wurde nicht initializiert."
+
+msgid "Error: common exception: "
+msgstr "Fehler: allgemeine Ausnahme: "
+
 msgid "Global Header"
 msgstr "Globale Kopfzeilen"
 

@@ -9,16 +9,20 @@ msgstr ""
 msgid "Del Node"
 msgstr ""
 
-#: tform1.button1.caption
-msgid "Create"
-msgstr ""
-
-#: tform1.button2.caption
-msgid "Clear All"
-msgstr ""
-
 #: tform1.caption
 msgid "Form1"
+msgstr ""
+
+#: tform1.comboboxex2.itemsex[0].caption
+msgid "ItemEx0"
+msgstr ""
+
+#: tform1.comboboxex2.itemsex[1].caption
+msgid "ItemEx1"
+msgstr ""
+
+#: tform1.comboboxex2.itemsex[2].caption
+msgid "ItemEx2"
 msgstr ""
 
 #: tform1.label3.caption
@@ -122,12 +126,28 @@ msgctxt "tform1.menusettings.caption"
 msgid "Settings"
 msgstr ""
 
+#: tform1.panel10.caption
+msgid "Panel10"
+msgstr ""
+
+#: tform1.panel11.caption
+msgid "Panel11"
+msgstr ""
+
+#: tform1.panel12.caption
+msgid "Panel12"
+msgstr ""
+
 #: tform1.panel6.caption
 msgid "Panel6"
 msgstr ""
 
 #: tform1.panel7.caption
 msgid "Panel7"
+msgstr ""
+
+#: tform1.panel8.caption
+msgid "Panel8"
 msgstr ""
 
 #: tform1.sbapplycustomcss.caption
@@ -229,6 +249,10 @@ msgstr ""
 msgid "Add to Favorites"
 msgstr ""
 
+#: tform1.speedbutton6.caption
+msgid "Show CHM"
+msgstr ""
+
 #: tform1.speedbutton9.caption
 msgctxt "tform1.speedbutton9.caption"
 msgid "B"
@@ -249,7 +273,15 @@ msgid "Content"
 msgstr ""
 
 #: tform1.tabsheet4.caption
-msgid "TabSheet4"
+msgid "Designer"
+msgstr ""
+
+#: tform1.tabsheet5.caption
+msgid "Preview"
+msgstr ""
+
+#: tform1.tabsheettopiccontent.caption
+msgid "Text"
 msgstr ""
 
 #: tform1.toolbar1.caption

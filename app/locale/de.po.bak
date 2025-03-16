@@ -297,26 +297,14 @@ msgstr ""
 msgid "Hello"
 msgstr "Hallo Welt"
 
-msgid "File"
-msgstr "Datei"
+msgid "Error: ini file key could not be found."
+msgstr "Fehler: Schlüßel in *.ini Datei konnte nicht gefunden werden."
 
-msgid "New ..."
-msgstr "Neu ..."
+msgid "Error: TStringList was not initialized."
+msgstr "Fehler: TStringList wurde nicht initializiert."
 
-msgid "Open"
-msgstr "Öffnen"
-
-msgid "Save"
-msgstr "Speichern"
-
-msgid "Save As ..."
-msgstr "Speichern unter ..."
-
-msgid "Settings"
-msgstr "Einstellungen"
-
-msgid "Help"
-msgstr "Hilfe"
+msgid "Error: common exception: "
+msgstr "Fehler: allgemeine Ausnahme: "
 
 msgid "Global Header"
 msgstr "Globale Kopfzeilen"
