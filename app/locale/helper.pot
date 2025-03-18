@@ -1,6 +1,10 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
+#: htmlparser.err_scanner_unexpected_char
+msgid "Error 0: Scanner: Unexpected char found in stream"
+msgstr ""
+
 #: tform1.btnaddnode.caption
 msgid "Add Node"
 msgstr ""

@@ -3,7 +3,7 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="12"/>
-    <BuildModes Active="Release">
+    <BuildModes Active="Debug">
       <Item Name="Release">
         <CompilerOptions>
           <Version Value="11"/>
@@ -26,6 +26,7 @@
             <Debugging>
               <GenerateDebugInfo Value="False"/>
               <RunWithoutDebug Value="True"/>
+              <DebugInfoType Value="dsDwarf3"/>
             </Debugging>
             <LinkSmart Value="True"/>
             <Options>
@@ -39,6 +40,8 @@
               <ShowNotes Value="False"/>
               <ShowHints Value="False"/>
             </Verbosity>
+            <CustomOptions Value="-Xs
+-CaDEFAULT"/>
           </Other>
         </CompilerOptions>
       </Item>
@@ -47,10 +50,9 @@
       <Unit>
         <Filename Value="helper.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="2"/>
-        <CursorPos X="33" Y="16"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="24"/>
+        <UsageCount Value="32"/>
       </Unit>
       <Unit>
         <Filename Value="mainform.pas"/>
@@ -59,9 +61,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainForm"/>
-        <TopLine Value="528"/>
-        <CursorPos X="59" Y="539"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="953"/>
+        <CursorPos X="15" Y="961"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -74,21 +76,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
         <CursorPos X="9" Y="37"/>
-        <UsageCount Value="20"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-base\src\gettext.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="369"/>
-        <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\lcl\lcltranslator.pas"/>
-        <UnitName Value="LCLTranslator"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="581"/>
-        <CursorPos X="36" Y="598"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="32"/>
       </Unit>
       <Unit>
         <Filename Value="globals.pas"/>
@@ -96,151 +84,205 @@
         <EditorIndex Value="3"/>
         <TopLine Value="41"/>
         <CursorPos Y="68"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="xmlstream.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="131"/>
+        <CursorPos Y="165"/>
+        <UsageCount Value="32"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="htmlParser.y"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="52"/>
+        <CursorPos X="6" Y="14"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit>
+      <Unit>
+        <Filename Value="htmlLexer.l"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="23" Y="8"/>
+        <UsageCount Value="32"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit>
+      <Unit>
+        <Filename Value="htmlParser.pas"/>
+        <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="180"/>
+        <CursorPos X="12" Y="207"/>
+        <UsageCount Value="32"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-base\src\gettext.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="369"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\lcltranslator.pas"/>
+        <UnitName Value="LCLTranslator"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="581"/>
+        <CursorPos X="36" Y="598"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="mainform.lfm"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="769"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
       <Unit>
-        <Filename Value="xmlstream.pas"/>
-        <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="13"/>
-        <CursorPos X="3" Y="30"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <Filename Value="htmlLexer.l.txt"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="17" Y="11"/>
+        <UsageCount Value="19"/>
+        <DefaultSyntaxHighlighter Value="Text"/>
+      </Unit>
+      <Unit>
+        <Filename Value="htmlLexer.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="4"/>
+        <CursorPos X="3" Y="21"/>
+        <UsageCount Value="15"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\tplylib\src\yacclib.pas"/>
+        <UnitName Value="YaccLib"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="35"/>
+        <CursorPos Y="50"/>
+        <UsageCount Value="15"/>
+      </Unit>
+      <Unit>
+        <Filename Value="lexlib.pas"/>
+        <UnitName Value="LexLib"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="299"/>
+        <CursorPos Y="299"/>
+        <UsageCount Value="15"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\synedit\syneditlines.pas"/>
+        <UnitName Value="SynEditLines"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="247"/>
+        <CursorPos Y="264"/>
+        <UsageCount Value="15"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\lazutils\translations.pas"/>
+        <UnitName Value="Translations"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1089"/>
+        <CursorPos Y="1106"/>
+        <UsageCount Value="11"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <Debugger>
+      <ClassConfig Version="1">
+        <Config ConfigName="Neu" ConfigClass="TFpDebugDebugger" Active="True" UID="{3D876167-46CD-4CFF-8FB0-81D9AAC8283D}"/>
+      </ClassConfig>
+    </Debugger>
+    <JumpHistory HistoryIndex="18">
       <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="573" Column="25" TopLine="556"/>
+        <Filename Value="htmlParser.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="511" Column="3" TopLine="487"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="516" Column="3" TopLine="487"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="574" Column="25" TopLine="557"/>
+        <Caret Line="958" TopLine="932"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="10" Column="24"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="575" Column="25" TopLine="558"/>
+        <Caret Line="968" Column="10" TopLine="951"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="16" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="66" Column="41" TopLine="47"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="12" Column="24"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="8" Column="12"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="70" Column="19" TopLine="54"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="137" Column="46" TopLine="120"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="180" Column="13" TopLine="159"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="576" Column="25" TopLine="559"/>
+        <Caret Line="996" TopLine="963"/>
       </Position>
       <Position>
         <Filename Value="mainform.pas"/>
-        <Caret Line="577" Column="25" TopLine="560"/>
+        <Caret Line="997" TopLine="964"/>
       </Position>
       <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="578" Column="25" TopLine="561"/>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="10"/>
       </Position>
       <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="759" Column="51" TopLine="735"/>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="15"/>
       </Position>
       <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="762" Column="51" TopLine="738"/>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="25" Column="49"/>
       </Position>
       <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="761" Column="51" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="760" Column="51" TopLine="736"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="761" Column="51" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="762" Column="51" TopLine="738"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="761" Column="51" TopLine="737"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="768" Column="51" TopLine="744"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="530" TopLine="528"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="529" TopLine="527"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="528" TopLine="526"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="529" TopLine="527"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="137" Column="4" TopLine="133"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="23" Column="45" TopLine="2"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="89" Column="24" TopLine="70"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="27" Column="28"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="87" Column="40" TopLine="70"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="125" Column="22" TopLine="108"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="129" Column="23" TopLine="112"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="143" Column="30" TopLine="127"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="147" Column="21" TopLine="130"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="154" Column="18" TopLine="133"/>
-      </Position>
-      <Position>
-        <Filename Value="xmlstream.pas"/>
-        <Caret Line="156" Column="30" TopLine="133"/>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="33" Column="54" TopLine="5"/>
       </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes ActiveMode=""/>
+      <Modes ActiveMode="default">
+        <Mode Name="default"/>
+      </Modes>
     </RunParams>
+    <HistoryLists>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="C:\Windows\system32\cmd.exe /C ${TargetCmdLine}"/>
+      </List>
+    </HistoryLists>
   </ProjectSession>
 </CONFIG>

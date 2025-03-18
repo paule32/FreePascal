@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 252
+  Left = 218
   Height = 706
-  Top = 118
-  Width = 1036
+  Top = 114
+  Width = 1167
   Caption = 'Form1'
   ClientHeight = 706
-  ClientWidth = 1036
+  ClientWidth = 1167
   Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
@@ -15,14 +15,14 @@ object Form1: TForm1
     Left = 0
     Height = 23
     Top = 683
-    Width = 1036
+    Width = 1167
     Panels = <>
   end
   object ToolBar1: TToolBar
     Left = 0
     Height = 24
     Top = 0
-    Width = 1036
+    Width = 1167
     Caption = 'ToolBar1'
     Images = ImageList1
     TabOrder = 1
@@ -54,7 +54,7 @@ object Form1: TForm1
     Left = 0
     Height = 20
     Top = 663
-    Width = 1036
+    Width = 1167
     Align = alBottom
     TabOrder = 2
     Visible = False
@@ -70,15 +70,16 @@ object Form1: TForm1
     Height = 639
     Top = 24
     Width = 823
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Align = alLeft
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Arial'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 4
     OnChange = PageControl1Change
     object TabSheet1: TTabSheet
@@ -262,6 +263,7 @@ object Form1: TForm1
           Gutter.MouseActions = <>
           RightGutter.Width = 0
           RightGutter.MouseActions = <>
+          Highlighter = SynHTMLSyn1
           Keystrokes = <          
             item
               Command = ecUp
@@ -771,6 +773,7 @@ object Form1: TForm1
           Gutter.MouseActions = <>
           RightGutter.Width = 0
           RightGutter.MouseActions = <>
+          Highlighter = SynHTMLSyn1
           Keystrokes = <          
             item
               Command = ecUp
@@ -1280,6 +1283,7 @@ object Form1: TForm1
           Gutter.MouseActions = <>
           RightGutter.Width = 0
           RightGutter.MouseActions = <>
+          Highlighter = SynCssSyn1
           Keystrokes = <          
             item
               Command = ecUp
@@ -1789,6 +1793,7 @@ object Form1: TForm1
           Gutter.MouseActions = <>
           RightGutter.Width = 0
           RightGutter.MouseActions = <>
+          Highlighter = SynJScriptSyn1
           Keystrokes = <          
             item
               Command = ecUp
@@ -2526,6 +2531,7 @@ object Form1: TForm1
             Gutter.MouseActions = <>
             RightGutter.Width = 0
             RightGutter.MouseActions = <>
+            Highlighter = SynHTMLSyn1
             Keystrokes = <            
               item
                 Command = ecUp
@@ -3014,50 +3020,36 @@ object Form1: TForm1
             Left = 0
             Height = 480
             Top = 0
-            Width = 153
+            Width = 205
             Align = alLeft
             Caption = 'Panel8'
             ClientHeight = 480
-            ClientWidth = 153
+            ClientWidth = 205
             TabOrder = 0
-            object ValueListEditor1: TValueListEditor
-              Left = 1
-              Height = 247
-              Top = 24
-              Width = 151
-              Align = alTop
-              FixedCols = 0
-              RowCount = 2
-              TabOrder = 0
-              ColWidths = (
-                64
-                83
-              )
-            end
             object Panel10: TPanel
               Left = 1
               Height = 23
               Top = 1
-              Width = 151
+              Width = 203
               Align = alTop
               Caption = 'Panel10'
-              TabOrder = 1
+              TabOrder = 0
             end
             object Panel11: TPanel
               Left = 1
               Height = 25
-              Top = 271
-              Width = 151
-              Align = alTop
+              Top = 255
+              Width = 203
+              Align = alBottom
               Caption = 'Panel11'
-              TabOrder = 2
+              TabOrder = 1
             end
             object ListView1: TListView
               Left = 1
-              Height = 183
-              Top = 296
-              Width = 151
-              Align = alClient
+              Height = 199
+              Top = 280
+              Width = 203
+              Align = alBottom
               Columns = <>
               Items.LazData = {
                 8A0000000500000000000000FFFFFFFFFFFFFFFF000000000400000054657874
@@ -3069,21 +3061,78 @@ object Form1: TForm1
               LargeImages = ImageList2
               ReadOnly = True
               ShowColumnHeaders = False
-              TabOrder = 3
+              TabOrder = 2
               ViewStyle = vsIcon
+            end
+            object ValueListEditor: TStringGrid
+              Left = 1
+              Height = 231
+              Top = 24
+              Width = 203
+              Align = alClient
+              ColCount = 3
+              FixedCols = 0
+              Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goColSizing, goSmoothScroll]
+              RowCount = 7
+              TabOrder = 3
+              OnColRowMoved = ValueListEditorColRowMoved
+              OnDrawCell = ValueListEditorDrawCell
+              OnHeaderSized = ValueListEditorHeaderSized
+              OnHeaderSizing = ValueListEditorHeaderSizing
+              OnMouseDown = ValueListEditorMouseDown
+              OnMouseUp = ValueListEditorMouseUp
+              OnSelectCell = ValueListEditorSelectCell
+              ColWidths = (
+                81
+                74
+                24
+              )
+              RowHeights = (
+                23
+                23
+                23
+                23
+                23
+                22
+                22
+              )
+              Cells = (
+                7
+                0
+                0
+                'Property'
+                0
+                1
+                'BackGround'
+                0
+                3
+                'Top'
+                0
+                4
+                'Left'
+                0
+                5
+                'Width'
+                0
+                6
+                'Height'
+                1
+                0
+                'Value'
+              )
             end
           end
           object Splitter6: TSplitter
-            Left = 153
+            Left = 205
             Height = 480
             Top = 0
             Width = 5
           end
           object DesignPanel: TScrollBox
-            Left = 158
+            Left = 210
             Height = 480
             Top = 0
-            Width = 649
+            Width = 597
             HorzScrollBar.Page = 1
             VertScrollBar.Page = 1
             Align = alClient
@@ -3098,8 +3147,8 @@ object Form1: TForm1
           ClientWidth = 807
           object HtmlPanel: TIpHtmlPanel
             Left = 0
-            Height = 378
-            Top = 79
+            Height = 380
+            Top = 77
             Width = 807
             Align = alClient
             FixedTypeface = 'Courier New'
@@ -3125,7 +3174,7 @@ object Form1: TForm1
           end
           object ComboBoxEx1: TComboBoxEx
             Left = 0
-            Height = 24
+            Height = 22
             Top = 55
             Width = 807
             Align = alTop
@@ -4297,8 +4346,9 @@ object Form1: TForm1
     Left = 1022
     Height = 639
     Top = 24
-    Width = 14
+    Width = 145
     Align = alClient
+    Anchors = [akTop, akRight, akBottom]
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Arial'
@@ -4358,6 +4408,21 @@ object Form1: TForm1
       Width = 187
       Align = alTop
       Caption = 'Create Help'
+      OnClick = sbLoadFromFile1Click
+    end
+    object Memo2: TMemo
+      Left = 1
+      Height = 128
+      Top = 510
+      Width = 187
+      Align = alClient
+      Lines.Strings = (
+        'Memo2'
+      )
+      ScrollBars = ssAutoBoth
+      TabOrder = 2
+      WantTabs = True
+      WordWrap = False
     end
   end
   object MainMenu1: TMainMenu
@@ -4682,5 +4747,16 @@ object Form1: TForm1
       F9187B918BE1F3D034BA62AC6CC62D83C16030180C0683C16030180C0683C160
       30AC7BF80FA27A3CE8
     }
+  end
+  object SynJScriptSyn1: TSynJScriptSyn
+    Enabled = False
+    Left = 687
+    Top = 542
+  end
+  object SynCssSyn1: TSynCssSyn
+    DefaultFilter = 'Cascading Stylesheets (*.css)|*.css'
+    Enabled = False
+    Left = 682
+    Top = 368
   end
 end

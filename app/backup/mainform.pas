@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   Menus, ExtCtrls, Buttons, MaskEdit, ButtonPanel, CheckLst, SynEdit,
-  SynPopupMenu, SynHighlighterHTML, IpHtml, IniFiles, LCLType, ValEdit, ComboEx;
+  SynPopupMenu, SynHighlighterHTML, SynHighlighterJScript, SynHighlighterCss,
+  IpHtml, IniFiles, LCLType, ValEdit, ComboEx, Grids, Types;
 
 type
   TNodeInfo = class
@@ -60,6 +61,7 @@ type
     MainMenu1: TMainMenu;
     edTopicRef: TMaskEdit;
     Memo1: TMemo;
+    Memo2: TMemo;
     MenuFile: TMenuItem;
     MenuSettings: TMenuItem;
     MenuItem11: TMenuItem;
@@ -129,6 +131,9 @@ type
     Splitter6: TSplitter;
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
+    ValueListEditor: TStringGrid;
+    SynCssSyn1: TSynCssSyn;
+    SynJScriptSyn1: TSynJScriptSyn;
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
     TopicContentSynEdit: TSynEdit;
@@ -148,7 +153,6 @@ type
     sbSaveAs: TToolButton;
     TopicTreePanel: TPanel;
     TopicTree: TTreeView;
-    ValueListEditor1: TValueListEditor;
     procedure btnAddNodeClick(Sender: TObject);
     procedure btnDelNodeClick(Sender: TObject);
     procedure Button2Click(Sender: TObject);
@@ -177,6 +181,7 @@ type
     procedure sbDownClick(Sender: TObject);
     procedure sbHeaderClick(Sender: TObject);
     procedure sbLeftClick(Sender: TObject);
+    procedure sbLoadFromFile1Click(Sender: TObject);
     procedure sbRightClick(Sender: TObject);
     procedure sbUpClick(Sender: TObject);
     procedure setSpeedButtonFontColor(Sender: TObject);
@@ -184,6 +189,14 @@ type
     procedure SpeedButton2Click(Sender: TObject);
     procedure sbFooterClick(Sender: TObject);
     procedure TopicTreeClick(Sender: TObject);
+    procedure ValueListEditorColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
+    procedure ValueListEditorDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
+    procedure ValueListEditorHeaderSized(Sender: TObject; IsColumn: Boolean; Index: Integer);
+    procedure ValueListEditorHeaderSizing(Sender: TObject; const IsColumn: boolean; const aIndex, aSize: Integer);
+    procedure ValueListEditorMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ValueListEditorMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ValueListEditorSelectCell(Sender: TObject; aCol, aRow: Integer;
+      var CanSelect: Boolean);
   private
     UpdatingNumbers: Integer; // Zählt, wie oft die Nummerierung aktiv ist
     LastTopicTreeNode: TTreeNode;
@@ -223,9 +236,11 @@ implementation
 uses
   {$IFDEF WINDOWS} Windows {$ENDIF},
   GetText, Translations, DefaultTranslator, LCLTranslator,
-  Resource, LResources, globals,
+  Resource, LResources, globals, htmlParser,
   about;
 
+var
+  ToolSpeedButton: array of TSpeedButton;
 var
   SelectionFrame: TShape;
   ResizeHandles: array[0..7] of TShape; // 8 Griffe
@@ -741,9 +756,23 @@ begin
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);
+var
+  arow, i: Integer;
 begin
   ReadIniProject(0,'');
   AddNewComponent(TButton);
+
+  SetLength(ToolSpeedButton, 10);
+  for i := 0 to 10 - 1 do
+  begin
+    ToolSpeedButton[i] := TSpeedButton.Create(self);
+    with ToolSpeedButton[i] do
+    begin
+      Parent := ValueListEditor;
+      Glyph.LoadFromFile('tool.bmp');
+      Visible := false;
+    end;
+  end;
 
   sbHeader .Font.Color := clNavy;
   sbFooter .Font.Color := clNavy;
@@ -754,6 +783,10 @@ begin
 
   motr := TMoTranslate.Create('de', false);
   UpdateAllCaptions;
+
+  with ValueListEditor do
+  begin
+  end;
 
   HtmlPanel.SetHtmlFromStr(
   '<style>' +
@@ -916,6 +949,52 @@ begin
   begin
     MoveNodeLeft(TopicTree.Selected);
   end;
+end;
+
+procedure TForm1.sbLoadFromFile1Click(Sender: TObject);
+var
+  TempFile: TextFile;
+  TempName: String;
+  Err : Integer;
+  ErrorMsg: String;
+begin
+  Memo2.Clear;
+  TempName := 'mytemp_' + IntToStr(Random(100000)) + '.tmp';
+  showmessage(TempName);
+
+  {$I-}
+  AssignFile(TempFile, TempName);
+  Rewrite(TempFile);
+  WriteLn(TempFile, synEditHeaderContent.Lines.Text);
+  CloseFile(TempFile);
+  {$I+}
+
+  System.Assign(yyinput, TempName);
+  {$push}{$I-}
+  filemode := 0;
+  Reset(yyinput);
+  Err := IOResult; // Fehler merken
+  {$pop}
+
+  Case Err of
+    0  : ErrorMsg := 'Success';
+    2  : ErrorMsg := 'File not found';
+    3  : ErrorMsg := 'Path not found';
+    4  : ErrorMsg := 'Too many open files';
+    5  : ErrorMsg := 'File access denied';
+    6  : ErrorMsg := 'Invalid file handle';
+    12 : ErrorMsg := 'Invalid file access code';
+    102: ErrorMsg := 'File not assigned';
+    103: ErrorMsg := 'File not open';
+    104: ErrorMsg := 'File not open for input';
+    105: ErrorMsg := 'File not open for output';
+  else
+    ErrorMsg := Format('Error %d occurred', [Err]);
+  end;
+  if Err <> 0 then
+  raise Exception.Create(ErrorMsg);
+
+  yymain(TempName);
 end;
 
 procedure TForm1.sbRightClick(Sender: TObject);
@@ -1127,6 +1206,122 @@ begin
       PageControl1.ActivePage := TabSheet2;
     end;
   end;
+end;
+
+procedure TForm1.ValueListEditorColRowMoved(Sender: TObject; IsColumn: Boolean;
+  sIndex, tIndex: Integer);
+begin
+  ValueListEditor.Repaint;
+end;
+
+procedure TForm1.ValueListEditorDrawCell(Sender: TObject; aCol, aRow: Integer;
+  aRect: TRect; aState: TGridDrawState);
+var
+  Grid: TStringGrid;
+  FullRect: TRect;
+  CellRect: TRect;
+  w1, w2, w3: Integer;
+begin
+  Grid := Sender as TStringGrid;
+
+  ToolSpeedButton[0].Visible := true; // In anderen Spalten nicht anzeigen
+  if (ARow = Grid.Row) and (Grid.Col = 2) then
+  begin
+    CellRect := ValueListEditor.CellRect(ACol, ARow);
+
+    w1 := ValueListEditor.ColWidths[0];
+    w2 := ValueListEditor.ColWidths[1];
+    w3 := w1 + w2;
+
+    // Button anpassen
+    ToolSpeedButton[0].Left    := Grid.CellRect(2, ARow).Left;
+    ToolSpeedButton[0].Top     := Grid.CellRect(2, ARow).Top;
+    ToolSpeedButton[0].Visible := True;
+  end else
+  if ARow = 2 then // Dritte Zeile
+  begin
+    // Bereich von Spalte 0 bis Spalte 2 berechnen
+    FullRect := aRect;
+    FullRect.Left  := Grid.CellRect(0, ARow).Left;
+    FullRect.Right := Grid.CellRect(2, ARow).Right;
+
+    with Grid.Canvas do
+    begin
+      Brush.Color := clYellow; // Hintergrundfarbe setzen
+      FillRect(FullRect);      // Rechteck mit Farbe füllen
+
+      Font.Style := [fsBold];  // Fett für den Text
+      Font.Color := clBlack;   // Schwarze Schrift
+
+      // Zentrierter Text
+      TextOut(
+      FullRect.Left + (FullRect.Right  - FullRect.Left) div 2 - TextWidth ('Object Position') div 2,
+      FullRect.Top  + (FullRect.Bottom - FullRect.Top)  div 2 - TextHeight('Object Position') div 2,
+      'Object Position');
+    end;
+  end;
+end;
+
+procedure TForm1.ValueListEditorHeaderSized(Sender: TObject; IsColumn: Boolean;
+  Index: Integer);
+begin
+  ValueListEditor.Invalidate;
+end;
+
+procedure TForm1.ValueListEditorHeaderSizing(Sender: TObject;
+  const IsColumn: boolean; const aIndex, aSize: Integer);
+begin
+  ValueListEditor.Repaint;
+end;
+
+procedure TForm1.ValueListEditorMouseDown(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  Grid: TStringGrid;
+  Col, Row: Integer;
+begin
+  Grid := Sender as TStringGrid;
+  Grid.MouseToCell(X, Y, Col, Row); // Spalte & Zeile anhand der Mausposition bestimmen
+
+  // Prüfen, ob Maus sich an der Trennlinie zur dritten Spalte befindet
+  if (Col = 2) then
+    MessageBeep(0); // Signalton als Hinweis, dass die Spalte nicht verschiebbar ist
+end;
+
+procedure TForm1.ValueListEditorMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  ValueListEditor.Invalidate;
+end;
+
+procedure TForm1.ValueListEditorSelectCell(Sender: TObject; aCol,
+  aRow: Integer; var CanSelect: Boolean);
+var
+  CellRect: TRect;
+  w1, w2, w3: Integer;
+begin
+  if (ACol >= 0) and (ARow = 2) then
+  begin
+    CanSelect := false;
+    exit;
+  end else
+  // Prüfen, ob wir in der dritten Spalte sind
+  if (ACol >= 0) and (ARow <> 2) then
+  begin
+    CellRect := ValueListEditor.CellRect(ACol, ARow);
+
+    w1 := ValueListEditor.ColWidths[0];
+    w2 := ValueListEditor.ColWidths[1];
+    w3 := w1 + w2;
+
+    // Button anpassen
+    ToolSpeedButton[0].Left    := w3;
+    ToolSpeedButton[0].Top     := ValueListEditor.Top  + CellRect.Top  - 24;
+    ToolSpeedButton[0].Visible := True;
+  end;
+  //else
+//  end;
+//  ToolSpeedButton[0].Visible := False; // In anderen Spalten nicht anzeigen
 end;
 
 procedure TForm1.AddNewComponent(AClass: TControlClass);

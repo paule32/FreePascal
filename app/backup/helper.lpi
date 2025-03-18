@@ -16,7 +16,6 @@
         <TextName Value="kallup non-profit"/>
         <TextDesc Value="HelpNDoc.com Helper Tool"/>
       </XPManifest>
-      <Icon Value="0"/>
       <Resources Count="4">
         <Resource_0 FileName="T:\images\document.png" Type="RCDATA" ResourceName="DOCUMENT"/>
         <Resource_1 FileName="T:\images\folder.png" Type="RCDATA" ResourceName="FOLDER"/>
@@ -127,7 +126,22 @@
         <Filename Value="xmlstream.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="htmlParser.y"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="htmlLexer.l"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="htmlParser.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
+    <Debugger>
+      <StoreDebuggerClassConfInSession Value="True"/>
+    </Debugger>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
