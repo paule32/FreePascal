@@ -297,6 +297,42 @@ msgstr ""
 msgid "Hello"
 msgstr "Hallo Welt"
 
+msgid "Success"
+msgstr "Erfolgreich"
+
+msgid "File not found"
+msgstr "Datei nicht gefunden"
+
+msgid "Path not found"
+msgstr "Pfad zur Datei nicht gefunden"
+
+msgid "Too many open files"
+msgstr "Zu viele offene Dateien"
+
+msgid "File access denied"
+msgstr "Dateizugriff abgelehnt"
+
+msgid "Invalid file handle"
+msgstr "Falscher Datei-Handle"
+
+msgid "Invalid file access code"
+msgstr "Falscher Datei-Zugriffs-Code"
+
+msgid "File not assigned"
+msgstr "Dateie nicht zugewiesen"
+
+msgid "File not open"
+msgstr "Datei nicht geöffnet"
+
+msgid "File not open for input"
+msgstr "Datei für Eingabe nicht geöffnet"
+
+msgid "File not open for output"
+msgstr "Datei für Ausgabe nicht geöffnet"
+
+msgid "Error %d occurred"
+msgstr "Fehler %d aufgetretten"
+
 msgid "the name is not a directory or does not exists."
 msgstr "das angegebene Verzeichnis existiert nicht oder ist kein Verzeichnis."
 
