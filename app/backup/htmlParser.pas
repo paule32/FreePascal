@@ -49,7 +49,7 @@ procedure GetSym;
     if not EoF(yyinput) then
       BlockRead(yyinput, Ch, 1)
     else
-      Ch := ' ';
+      raise Exception.Create('done.');
     //Case in-sensitive
     Ch := UpCase(Ch);
 
@@ -60,7 +60,10 @@ procedure GetSym;
   end (*GetCh*);
 var
   I : TSymbol;
+  start_comment: Boolean = false;
 begin
+  start_comment := false;
+
   //Überspringen von Kommentaren
   while true do
   begin
@@ -93,7 +96,7 @@ begin
       Exit
     end; (*Ident/Reserved Word*)
 
-    ';','+','-','=','#',',','.', '*', '/':
+    ';','+','=','#',',','.', '*', '/':
     begin (*Symbole die nur aus 1 Zeichen bestehen können*)
       Str := Ch;
       Symbol := sUnknown;
@@ -107,20 +110,59 @@ begin
       Exit
     end; (*Symbole die nur aus 1 Zeichen bestehen können*)
 
-    ':','<','>': (* Zeichen die ein nachfolgendes Zeichen haben können(in diesm Falle ein = )*)
+    '<':
     begin
-      Str := Ch;
-      GetCh;
-      if Ch = '=' then Str := Str + Ch;
-      GetCh;
-      Symbol := sUnknown;
-      for i := sUnknown to sNone do
-        if Str = cSymbols[i] then
+      while True do
+      begin
+        GetCh;
+        if Ch = '!' then
         begin
-          Symbol := i;
-          Break
+          GetCh;
+          if ch = '-' then
+          begin
+            GetCh;
+            if ch = '-' then
+            begin
+              start_comment := true;
+              while True do
+              begin
+                GetCh;
+                if ch = '-' then
+                begin
+                  GetCh;
+                  if ch = '-' then continue else
+                  if ch = '>' then
+                  begin
+                    break;
+                  end else
+                  begin
+                    continue
+                  end;
+                end else
+                begin
+                  continue
+                end;
+              end;
+              if ch = '>' then
+              begin
+                break;
+              end else
+              begin
+                Error(ERR_SCANNER_UNEXPECTED_CHAR);
+              end;
+            end else
+            begin
+              Error(ERR_SCANNER_UNEXPECTED_CHAR);
+            end;
+          end else
+          begin
+            Error(ERR_SCANNER_UNEXPECTED_CHAR);
+          end;
+        end else
+        begin
+          Error(ERR_SCANNER_UNEXPECTED_CHAR);
         end;
-      Exit
+      end;
     end;
 
     '(', ')':
@@ -187,7 +229,7 @@ begin
     end; (*Zahlen*)
 
     else
-      Error(ERR_SCANNER_UNEXPECTED_CHAR)
+      Error(Format('%s%s%c',[ERR_SCANNER_UNEXPECTED_CHAR, #10,ch]));
     end;
     Assert(Symbol <> SUnknown);
   end
@@ -204,7 +246,7 @@ begin
   while Symbol <> sNone do
   begin
     Form1.Memo2.Lines.Add(str);
-    GetSym
+    GetSym;
   end;
   Form1.Memo2.Lines.Add('Done...');
   CloseFile(yyinput)

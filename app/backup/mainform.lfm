@@ -4419,7 +4419,10 @@ object Form1: TForm1
       Lines.Strings = (
         'Memo2'
       )
+      ScrollBars = ssAutoBoth
       TabOrder = 2
+      WantTabs = True
+      WordWrap = False
     end
   end
   object MainMenu1: TMainMenu

@@ -977,19 +977,19 @@ begin
   {$pop}
 
   Case Err of
-    0  : ErrorMsg := 'Success';
-    2  : ErrorMsg := 'File not found';
-    3  : ErrorMsg := 'Path not found';
-    4  : ErrorMsg := 'Too many open files';
-    5  : ErrorMsg := 'File access denied';
-    6  : ErrorMsg := 'Invalid file handle';
-    12 : ErrorMsg := 'Invalid file access code';
-    102: ErrorMsg := 'File not assigned';
-    103: ErrorMsg := 'File not open';
-    104: ErrorMsg := 'File not open for input';
-    105: ErrorMsg := 'File not open for output';
+    0  : ErrorMsg := tr('Success');
+    2  : ErrorMsg := tr('File not found');
+    3  : ErrorMsg := tr('Path not found');
+    4  : ErrorMsg := tr('Too many open files');
+    5  : ErrorMsg := tr('File access denied');
+    6  : ErrorMsg := tr('Invalid file handle');
+    12 : ErrorMsg := tr('Invalid file access code');
+    102: ErrorMsg := tr('File not assigned');
+    103: ErrorMsg := tr('File not open');
+    104: ErrorMsg := tr('File not open for input');
+    105: ErrorMsg := tr('File not open for output');
   else
-    ErrorMsg := Format('Error %d occurred', [Err]);
+    ErrorMsg := Format(tr('Error %d occurred'), [Err]);
   end;
   if Err <> 0 then
   raise Exception.Create(ErrorMsg);
