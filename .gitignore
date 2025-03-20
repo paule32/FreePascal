@@ -7,3 +7,6 @@ py/bnf.py
 FreePascal.lck
 FreePascal.hnd-journal
 app/locale/de.po.bak
+*.ppu
+*.o
+*.tmp

@@ -86,6 +86,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="CEF4Delphi_Lazarus"/>
+      </Item>
+      <Item>
         <PackageName Value="TurboPowerIPro"/>
       </Item>
       <Item>
@@ -137,6 +140,11 @@
       <Unit>
         <Filename Value="htmlParser.pas"/>
         <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commentpreprocessor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="CommentPreprocessor"/>
       </Unit>
     </Units>
     <Debugger>

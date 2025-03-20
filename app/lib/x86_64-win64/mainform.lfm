@@ -70,7 +70,7 @@ object Form1: TForm1
     Height = 639
     Top = 24
     Width = 823
-    ActivePage = TabSheet1
+    ActivePage = TabSheet3
     Align = alLeft
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = ANSI_CHARSET
@@ -79,7 +79,7 @@ object Form1: TForm1
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 4
     OnChange = PageControl1Change
     object TabSheet1: TTabSheet
@@ -252,6 +252,7 @@ object Form1: TForm1
           Height = 150
           Top = 226
           Width = 376
+          Color = clBtnFace
           Font.Height = -13
           Font.Name = 'Courier New'
           Font.Pitch = fpFixed
@@ -762,6 +763,7 @@ object Form1: TForm1
           Height = 150
           Top = 413
           Width = 376
+          Color = clBtnFace
           Font.Height = -13
           Font.Name = 'Courier New'
           Font.Pitch = fpFixed
@@ -1272,6 +1274,7 @@ object Form1: TForm1
           Height = 150
           Top = 226
           Width = 376
+          Color = clBtnFace
           Font.Height = -13
           Font.Name = 'Courier New'
           Font.Pitch = fpFixed
@@ -1782,6 +1785,7 @@ object Form1: TForm1
           Height = 150
           Top = 413
           Width = 376
+          Color = clBtnFace
           Font.Height = -13
           Font.Name = 'Courier New'
           Font.Pitch = fpFixed
@@ -2506,10 +2510,11 @@ object Form1: TForm1
         Height = 509
         Top = 101
         Width = 815
-        ActivePage = TabSheetTopicContent
+        ActivePage = TabSheet6
         Align = alClient
-        TabIndex = 0
+        TabIndex = 3
         TabOrder = 2
+        OnResize = PageControl2Resize
         object TabSheetTopicContent: TTabSheet
           Caption = 'Text'
           ClientHeight = 480
@@ -3145,26 +3150,6 @@ object Form1: TForm1
           Caption = 'Preview'
           ClientHeight = 480
           ClientWidth = 807
-          object HtmlPanel: TIpHtmlPanel
-            Left = 0
-            Height = 380
-            Top = 77
-            Width = 807
-            Align = alClient
-            FixedTypeface = 'Courier New'
-            DefaultTypeFace = 'default'
-            DefaultFontSize = 12
-            FlagErrors = False
-            PrintSettings.MarginLeft = 0.5
-            PrintSettings.MarginTop = 0.5
-            PrintSettings.MarginRight = 0.5
-            PrintSettings.MarginBottom = 0.5
-            PrintSettings.Preview.Left = 480
-            PrintSettings.Preview.Top = 270
-            PrintSettings.Preview.Width = 1440
-            PrintSettings.Preview.Height = 810
-            TabOrder = 0
-          end
           object StatusBar2: TStatusBar
             Left = 0
             Height = 23
@@ -3180,7 +3165,7 @@ object Form1: TForm1
             Align = alTop
             ItemHeight = 16
             ItemsEx = <>
-            TabOrder = 2
+            TabOrder = 1
           end
           object Panel12: TPanel
             Left = 0
@@ -3191,7 +3176,7 @@ object Form1: TForm1
             Caption = 'Panel12'
             ClientHeight = 55
             ClientWidth = 807
-            TabOrder = 3
+            TabOrder = 2
             object SpeedButton12: TSpeedButton
               Left = 1
               Height = 51
@@ -4104,6 +4089,48 @@ object Form1: TForm1
               }
               ParentFont = False
             end
+          end
+          object Panel13: TPanel
+            Left = 0
+            Height = 380
+            Top = 77
+            Width = 807
+            Align = alClient
+            Caption = 'Panel13'
+            ClientHeight = 380
+            ClientWidth = 807
+            TabOrder = 3
+            object ChromiumWindow1: TChromiumWindow
+              Left = 8
+              Height = 376
+              Top = 16
+              Width = 804
+              Color = clWhite
+              TabOrder = 0
+              OnAfterCreated = ChromiumWindow1AfterCreated
+            end
+          end
+        end
+        object TabSheet6: TTabSheet
+          Caption = 'WYSIWYG'
+          ClientHeight = 480
+          ClientWidth = 807
+          object Panel14: TPanel
+            Left = 0
+            Height = 480
+            Top = 0
+            Width = 807
+            Align = alClient
+            Caption = 'Panel14'
+            TabOrder = 1
+          end
+          object ChromiumWindow2: TChromiumWindow
+            Left = 0
+            Height = 386
+            Top = 0
+            Width = 690
+            TabOrder = 0
+            OnAfterCreated = ChromiumWindow2AfterCreated
           end
         end
       end

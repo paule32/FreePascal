@@ -8,7 +8,9 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   Menus, ExtCtrls, Buttons, MaskEdit, ButtonPanel, CheckLst, SynEdit,
   SynPopupMenu, SynHighlighterHTML, SynHighlighterJScript, SynHighlighterCss,
-  IpHtml, IniFiles, LCLType, ValEdit, ComboEx, Grids, Types;
+  IpHtml, IniFiles, LCLType, ValEdit, ComboEx, Grids, uCEFChromium,
+  uCEFWindowParent, uCEFChromiumWindow, uCEFBrowserWindow,
+  uCEFLabelButtonComponent, uCEFOsrBrowserWindow, Types;
 
 type
   TNodeInfo = class
@@ -34,6 +36,8 @@ type
     btnAddNode: TButton;
     btnDelNode: TButton;
     checkList: TCheckListBox;
+    ChromiumWindow1: TChromiumWindow;
+    ChromiumWindow2: TChromiumWindow;
     ComboBoxEx1: TComboBoxEx;
     ComboBoxEx2: TComboBoxEx;
     ControlBar1: TControlBar;
@@ -44,7 +48,6 @@ type
     edTopicName: TEdit;
     ImageList1: TImageList;
     ImageList2: TImageList;
-    HtmlPanel: TIpHtmlPanel;
     ImageList3: TImageList;
     Label3: TLabel;
     Label4: TLabel;
@@ -81,6 +84,8 @@ type
     Panel10: TPanel;
     Panel11: TPanel;
     Panel12: TPanel;
+    Panel13: TPanel;
+    Panel14: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -131,6 +136,7 @@ type
     Splitter6: TSplitter;
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
+    TabSheet6: TTabSheet;
     ValueListEditor: TStringGrid;
     SynCssSyn1: TSynCssSyn;
     SynJScriptSyn1: TSynJScriptSyn;
@@ -158,6 +164,8 @@ type
     procedure Button2Click(Sender: TObject);
     procedure checkListClick(Sender: TObject);
     procedure checkListClickCheck(Sender: TObject);
+    procedure ChromiumWindow1AfterCreated(Sender: TObject);
+    procedure ChromiumWindow2AfterCreated(Sender: TObject);
     procedure DesignPanelPaint(Sender: TObject);
     procedure DesignPanelResize(Sender: TObject);
     procedure edProjectPathChange(Sender: TObject);
@@ -174,6 +182,7 @@ type
     procedure MenuFileExitAppClick(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
+    procedure PageControl2Resize(Sender: TObject);
     procedure sbApplyCustomCSSClick(Sender: TObject);
     procedure sbApplyCustomJSClick(Sender: TObject);
     procedure sbApplyFooterContentClick(Sender: TObject);
@@ -236,7 +245,7 @@ implementation
 uses
   {$IFDEF WINDOWS} Windows {$ENDIF},
   GetText, Translations, DefaultTranslator, LCLTranslator,
-  Resource, LResources, globals, htmlParser,
+  Resource, LResources, globals, htmlParser, commentPreprocessor,
   about;
 
 var
@@ -510,11 +519,27 @@ var
   info: TNodeInfo;
 begin
   AddNodeWithHiddenObject(TopicTree, edTopicName.Text, edTopicRef.Text);
+
+  if (TopicTree.Items.Count-1) >= 1 then
+  begin
+    synEditHeaderContent.Enabled := true;
+    synEditFooterContent.Enabled := true;
+    //
+    synEditHeaderContent.Color := clWhite;
+    synEditFooterContent.Color := clWhite;
+
+    synEditCustomCSS.Enabled := true;
+    synEditCustomJS .Enabled := true;
+    //
+    synEditCustomCSS.Color := clWhite;
+    synEditCustomJS .Color := clWhite;
+  end;
+
   info := GetHiddenObject(TopicTree.Selected);
   if Assigned(info) then
   begin
-    info.CustomHeaderContent := synEditHeaderContent.Lines.Text;
-    info.CustomFooterContent := synEditFooterContent.Lines.Text;
+    info.CustomHeaderContent := '';
+    info.CustomFooterContent := '';
   end;
 end;
 
@@ -576,6 +601,49 @@ begin
   end;
 
   UpdateTreeViewNumbers;
+end;
+
+procedure TForm1.ChromiumWindow1AfterCreated(Sender: TObject);
+begin
+  if Assigned(ChromiumWindow1.ChromiumBrowser) then
+  ChromiumWindow1.LoadURL('https://www.google.de');
+end;
+
+procedure TForm1.ChromiumWindow2AfterCreated(Sender: TObject);
+begin
+  if Assigned(ChromiumWindow2.ChromiumBrowser) then
+  ChromiumWindow2.ChromiumBrowser.LoadString(
+'<style>'+
+'body { background-color:white;}'+
+'</style>'+
+'  <!-- Include Quill stylesheet -->'+
+'  <link'+
+'    href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"'+
+'    rel="stylesheet"'+
+'  />'+
+''+
+'  <!-- Create the toolbar container -->'+
+'  <div id="toolbar">'+
+'    <button class="ql-bold">Bold</button>'+
+'    <button class="ql-italic">Italic</button>'+
+'  </div>'+
+''+
+'  <!-- Create the editor container -->'+
+'  <div id="editor">'+
+'    <p>Hello World!</p>'+
+'    <p>Some initial <strong>bold</strong> text</p>'+
+'    <p><br /></p>'+
+'  </div>'+
+''+
+'  <!-- Include the Quill library -->'+
+'  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>'+
+''+
+'  <!-- Initialize Quill editor -->'+
+'  <script>'+
+'    const quill = new Quill("#editor", {'+
+'      theme: "snow",'+
+'    });'+
+'  </script>');
 end;
 
 const
@@ -784,28 +852,23 @@ begin
   motr := TMoTranslate.Create('de', false);
   UpdateAllCaptions;
 
-  with ValueListEditor do
+  if TopicTree.Items.Count - 1 < 0 then
   begin
+    synEditHeaderContent.Enabled := false;
+    synEditFooterContent.Enabled := false;
+
+    synEditCustomCSS.Enabled := false;
+    synEditCustomJS.Enabled := false;
   end;
-
-  HtmlPanel.SetHtmlFromStr(
-  '<style>' +
-  'table { border-collapse: collapse; width: 100%; }' +
-  'th, td { border: 1px solid black; padding: 5px; text-align: left; }' +
-  'th { background-color: lightgray; }' +
-  '</style>' +
-  '<h2>Gestylte Tabelle</h2>' +
-  '<table>' +
-  '<tr><th>ID</th><th>Name</th><th>Alter</th></tr>' +
-  '<tr><td>1</td><td style="background-color: lime;">Max Mustermann</td><td>30</td></tr>' +
-  '<tr><td>2</td><td>Lisa Meier</td><td>25</td></tr>' +
-  '<tr><td>3</td><td>Tom Schmidt</td><td>40</td></tr>' +
-  '</table>');
-
 end;
 
 procedure TForm1.FormShow(Sender: TObject);
 begin
+  if not ChromiumWindow1.Initialized then
+  ChromiumWindow1.CreateBrowser;
+
+  if not ChromiumWindow2.Initialized then
+  ChromiumWindow2.CreateBrowser;
 end;
 
 procedure TForm1.ListBox2Click(Sender: TObject);
@@ -848,6 +911,26 @@ begin
     begin
       TopicTree.Selected := TopicTree.Selected.getFirstChild;
     end;
+  end;
+end;
+
+procedure TForm1.PageControl2Resize(Sender: TObject);
+begin
+  with ChromiumWindow1 do
+  begin
+    Parent := Panel13;
+    Width := Panel13.Width;
+    Height := Panel13.Height;
+    Top := 0;
+    Left := 0;
+  end;
+  with ChromiumWindow2 do
+  begin
+    Parent := Panel14;
+    Width := Panel14.Width;
+    Height := Panel14.Height;
+    Top := 0;
+    Left := 0;
   end;
 end;
 
@@ -954,18 +1037,20 @@ end;
 procedure TForm1.sbLoadFromFile1Click(Sender: TObject);
 var
   TempFile: TextFile;
+  TempSrc: String;
   TempName: String;
   Err : Integer;
   ErrorMsg: String;
 begin
   Memo2.Clear;
+
   TempName := 'mytemp_' + IntToStr(Random(100000)) + '.tmp';
-  showmessage(TempName);
+  TempSrc  := CommentLexer(synEditHeaderContent.Lines.Text).Text;
 
   {$I-}
   AssignFile(TempFile, TempName);
   Rewrite(TempFile);
-  WriteLn(TempFile, synEditHeaderContent.Lines.Text);
+  WriteLn(TempFile, TempSrc);
   CloseFile(TempFile);
   {$I+}
 
