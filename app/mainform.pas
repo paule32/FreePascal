@@ -612,38 +612,7 @@ end;
 procedure TForm1.ChromiumWindow2AfterCreated(Sender: TObject);
 begin
   if Assigned(ChromiumWindow2.ChromiumBrowser) then
-  ChromiumWindow2.ChromiumBrowser.LoadString(
-'<style>'+
-'body { background-color:white;}'+
-'</style>'+
-'  <!-- Include Quill stylesheet -->'+
-'  <link'+
-'    href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"'+
-'    rel="stylesheet"'+
-'  />'+
-''+
-'  <!-- Create the toolbar container -->'+
-'  <div id="toolbar">'+
-'    <button class="ql-bold">Bold</button>'+
-'    <button class="ql-italic">Italic</button>'+
-'  </div>'+
-''+
-'  <!-- Create the editor container -->'+
-'  <div id="editor">'+
-'    <p>Hello World!</p>'+
-'    <p>Some initial <strong>bold</strong> text</p>'+
-'    <p><br /></p>'+
-'  </div>'+
-''+
-'  <!-- Include the Quill library -->'+
-'  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>'+
-''+
-'  <!-- Initialize Quill editor -->'+
-'  <script>'+
-'    const quill = new Quill("#editor", {'+
-'      theme: "snow",'+
-'    });'+
-'  </script>');
+  ChromiumWindow2.ChromiumBrowser.LoadString(tr('html_content'));
 end;
 
 const

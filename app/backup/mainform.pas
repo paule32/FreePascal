@@ -613,6 +613,9 @@ procedure TForm1.ChromiumWindow2AfterCreated(Sender: TObject);
 begin
   if Assigned(ChromiumWindow2.ChromiumBrowser) then
   ChromiumWindow2.ChromiumBrowser.LoadString(
+'<style>'+
+'body { background-color:white;}'+
+'</style>'+
 '  <!-- Include Quill stylesheet -->'+
 '  <link'+
 '    href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css"'+
