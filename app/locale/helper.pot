@@ -17,6 +17,10 @@ msgstr ""
 msgid "Form1"
 msgstr ""
 
+#: tform1.combobox1.text
+msgid "Help Autoring"
+msgstr ""
+
 #: tform1.comboboxex2.itemsex[0].caption
 msgid "ItemEx0"
 msgstr ""
@@ -150,6 +154,10 @@ msgstr ""
 msgid "Panel14"
 msgstr ""
 
+#: tform1.panel15.caption
+msgid "Panel15"
+msgstr ""
+
 #: tform1.panel6.caption
 msgid "Panel6"
 msgstr ""
@@ -265,6 +273,10 @@ msgstr ""
 msgid "Show CHM"
 msgstr ""
 
+#: tform1.speedbutton7.caption
+msgid "CONSOLE"
+msgstr ""
+
 #: tform1.speedbutton9.caption
 msgctxt "tform1.speedbutton9.caption"
 msgid "B"
@@ -294,6 +306,14 @@ msgstr ""
 
 #: tform1.tabsheet6.caption
 msgid "WYSIWYG"
+msgstr ""
+
+#: tform1.tabsheet7.caption
+msgid "default"
+msgstr ""
+
+#: tform1.tabsheet8.caption
+msgid "Console"
 msgstr ""
 
 #: tform1.tabsheettopiccontent.caption

@@ -33,6 +33,17 @@ type
 function HexToTColor(HexColor: String): TColor;
 function tr(AString: String): String;
 function IfThenStr(Condition: Boolean; TrueValue, FalseValue: String): String;
+
+procedure OpenFileToWrite(var
+  FileHandle: TextFile;
+  AFileName: String;
+  AContent: String);
+
+procedure OpenFileToRead(var
+  FileHandle: TextFile;
+  AFileName: String; var
+  AContent: String);
+
 var
   motr: TMoTranslate;
 implementation
@@ -40,6 +51,66 @@ uses
   {$IFDEF WINDOWS}
   Windows;
   {$ENDIF}
+
+procedure CheckError(Err: Integer);
+var
+  ErrorMsg: String;
+begin
+  case Err of
+    0  : ErrorMsg := tr('Success');
+    2  : ErrorMsg := tr('File not found');
+    3  : ErrorMsg := tr('Path not found');
+    4  : ErrorMsg := tr('Too many open files');
+    5  : ErrorMsg := tr('File access denied');
+    6  : ErrorMsg := tr('Invalid file handle');
+    12 : ErrorMsg := tr('Invalid file access code');
+    102: ErrorMsg := tr('File not assigned');
+    103: ErrorMsg := tr('File not open');
+    104: ErrorMsg := tr('File not open for input');
+    105: ErrorMsg := tr('File not open for output');
+  else
+    ErrorMsg := Format(tr('Error %d occurred'), [Err]);
+  end;
+  if Err <> 0 then
+  raise Exception.Create(ErrorMsg);
+end;
+
+procedure OpenFileToWrite(var
+  FileHandle: TextFile;
+  AFileName: String;
+  AContent: String);
+begin
+  {$push}{$I-}
+  AssignFile(FileHandle, AFileName);
+  Rewrite(FileHandle);
+  CheckError(IOResult);
+
+  WriteLn(FileHandle, AContent);
+  CloseFile(FileHandle);
+  {$pop}
+end;
+
+procedure OpenFileToRead(var
+  FileHandle: TextFile;
+  AFileName: String; var
+  AContent: String);
+var
+  ALine: String;
+begin
+  System.Assign(FileHandle, AFileName);
+  {$push}{$I-}
+  filemode := 0;
+  Reset(FileHandle);
+  CheckError(IOResult);
+  {$pop}
+
+  AContent := '';
+  while not Eof(FileHandle) do
+  begin
+    ReadLn(FileHandle, ALine);
+    AContent := AContent + ALine + sLineBreak;
+  end;
+end;
 
 function HexToTColor(HexColor: string): TColor;
 var

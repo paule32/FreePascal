@@ -31,7 +31,7 @@ begin
   Application.CreateForm(TForm1, Form1);
   Application.Run;
 
-  GlobalCEFApp.Free;
+//  GlobalCEFApp.Free;
   Halt(0);
 end.
 

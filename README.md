@@ -21,3 +21,6 @@ Programmers Desktop - Screen 5:
 
 Programmers Desktop - Screen 6:
 ![Preview](img/screen005.png)
+
+Programmers Desktop - Screen 7:
+![Preview](img/screen006.png)

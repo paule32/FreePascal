@@ -27,3 +27,6 @@ app/v8_context_snapshot.bin
 app/packed.zip
 app/locale/de.po.bak
 app/icudtl.dat
+*.exe
+/app/lib
+*.ppu

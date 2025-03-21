@@ -10,7 +10,7 @@ uses
   SynPopupMenu, SynHighlighterHTML, SynHighlighterJScript, SynHighlighterCss,
   IpHtml, IniFiles, LCLType, ValEdit, ComboEx, Grids, uCEFChromium,
   uCEFWindowParent, uCEFChromiumWindow, uCEFBrowserWindow,
-  uCEFLabelButtonComponent, uCEFOsrBrowserWindow, Types;
+  uCEFLabelButtonComponent, uCEFOsrBrowserWindow, Types, SynEditTypes;
 
 type
   TNodeInfo = class
@@ -28,6 +28,10 @@ type
     TopicContentText: String;
   end;
 
+const
+  MAX_SPALTEN = 80;
+  MAX_ZEILEN = 25;
+
 type
 
   { TForm1 }
@@ -38,6 +42,7 @@ type
     checkList: TCheckListBox;
     ChromiumWindow1: TChromiumWindow;
     ChromiumWindow2: TChromiumWindow;
+    ComboBox1: TComboBox;
     ComboBoxEx1: TComboBoxEx;
     ComboBoxEx2: TComboBoxEx;
     ControlBar1: TControlBar;
@@ -49,6 +54,7 @@ type
     ImageList1: TImageList;
     ImageList2: TImageList;
     ImageList3: TImageList;
+    ImageList4: TImageList;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -61,6 +67,7 @@ type
     ListBox1: TListBox;
     ListBox2: TListBox;
     ListView1: TListView;
+    ListView2: TListView;
     MainMenu1: TMainMenu;
     edTopicRef: TMaskEdit;
     Memo1: TMemo;
@@ -80,12 +87,16 @@ type
     MenuItem9: TMenuItem;
     PageControl1: TPageControl;
     PageControl2: TPageControl;
+    PageControl3: TPageControl;
     Panel1: TPanel;
     Panel10: TPanel;
     Panel11: TPanel;
     Panel12: TPanel;
     Panel13: TPanel;
     Panel14: TPanel;
+    Panel15: TPanel;
+    Panel16: TPanel;
+    Panel17: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -127,6 +138,8 @@ type
     SpeedButton4: TSpeedButton;
     SpeedButton5: TSpeedButton;
     SpeedButton6: TSpeedButton;
+    SpeedButton7: TSpeedButton;
+    SpeedButton8: TSpeedButton;
     SpeedButton9: TSpeedButton;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
@@ -134,15 +147,20 @@ type
     Splitter4: TSplitter;
     Splitter5: TSplitter;
     Splitter6: TSplitter;
+    Splitter7: TSplitter;
+    Splitter8: TSplitter;
     StatusBar1: TStatusBar;
     StatusBar2: TStatusBar;
+    SynEdit1: TSynEdit;
     TabSheet6: TTabSheet;
+    TabSheet7: TTabSheet;
+    TabSheet8: TTabSheet;
+    TopicContentSynEdit: TSynEdit;
     ValueListEditor: TStringGrid;
     SynCssSyn1: TSynCssSyn;
     SynJScriptSyn1: TSynJScriptSyn;
     TabSheet4: TTabSheet;
     TabSheet5: TTabSheet;
-    TopicContentSynEdit: TSynEdit;
     SynEditCustomJS: TSynEdit;
     synEditHeaderContent: TSynEdit;
     SynEditFooterContent: TSynEdit;
@@ -197,6 +215,11 @@ type
     procedure sbContentClick(Sender: TObject);
     procedure SpeedButton2Click(Sender: TObject);
     procedure sbFooterClick(Sender: TObject);
+    procedure SynEdit1Change(Sender: TObject);
+    procedure SynEdit1KeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+      );
+    procedure SynEdit1KeyPress(Sender: TObject; var Key: char);
+    procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
     procedure TopicTreeClick(Sender: TObject);
     procedure ValueListEditorColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
     procedure ValueListEditorDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
@@ -1016,37 +1039,10 @@ begin
   TempName := 'mytemp_' + IntToStr(Random(100000)) + '.tmp';
   TempSrc  := CommentLexer(synEditHeaderContent.Lines.Text).Text;
 
-  {$I-}
-  AssignFile(TempFile, TempName);
-  Rewrite(TempFile);
-  WriteLn(TempFile, TempSrc);
+  OpenFileToWrite(TempFile, TempName, TempSrc);
+  OpenFileToRead (TempFile, TempName, TempSrc);
+
   CloseFile(TempFile);
-  {$I+}
-
-  System.Assign(yyinput, TempName);
-  {$push}{$I-}
-  filemode := 0;
-  Reset(yyinput);
-  Err := IOResult; // Fehler merken
-  {$pop}
-
-  Case Err of
-    0  : ErrorMsg := tr('Success');
-    2  : ErrorMsg := tr('File not found');
-    3  : ErrorMsg := tr('Path not found');
-    4  : ErrorMsg := tr('Too many open files');
-    5  : ErrorMsg := tr('File access denied');
-    6  : ErrorMsg := tr('Invalid file handle');
-    12 : ErrorMsg := tr('Invalid file access code');
-    102: ErrorMsg := tr('File not assigned');
-    103: ErrorMsg := tr('File not open');
-    104: ErrorMsg := tr('File not open for input');
-    105: ErrorMsg := tr('File not open for output');
-  else
-    ErrorMsg := Format(tr('Error %d occurred'), [Err]);
-  end;
-  if Err <> 0 then
-  raise Exception.Create(ErrorMsg);
 
   yymain(TempName);
 end;
@@ -1202,6 +1198,104 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TForm1.SynEdit1Change(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := 0 to SynEdit1.Lines.Count - 1 do
+    if Length(SynEdit1.Lines[i]) > MAX_SPALTEN then
+    begin
+      SynEdit1.Lines[i] := Copy(SynEdit1.Lines[i], 1, MAX_SPALTEN);
+    end;
+
+  while SynEdit1.Lines.Count > MAX_ZEILEN do
+  begin
+    SynEdit1.Lines.Delete(SynEdit1.Lines.Count - 1);
+  end;
+end;
+
+procedure TForm1.SynEdit1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  CurX, CurY: Integer;
+begin
+  CurX := SynEdit1.CaretX;
+  CurY := SynEdit1.CaretY;
+
+  case Key of
+    VK_RETURN:
+      if CurY >= MAX_ZEILEN then
+      begin
+        Key := 0;
+      end;
+
+    VK_DOWN:
+      if CurY >= MAX_ZEILEN then
+      begin
+        Key := 0;
+      end;
+
+    VK_RIGHT:
+      if (CurX >= MAX_SPALTEN) and (CurY >= MAX_ZEILEN) then
+      begin
+        Key := 0;
+      end;
+  end;
+end;
+
+procedure TForm1.SynEdit1KeyPress(Sender: TObject; var Key: char);
+var
+  CurX, CurY: Integer;
+  AktuelleZeile: string;
+begin
+  CurX := SynEdit1.CaretX;
+  CurY := SynEdit1.CaretY;
+
+  // Aktuelle Zeile
+  if CurY <= SynEdit1.Lines.Count then
+    AktuelleZeile := SynEdit1.Lines[CurY - 1]
+  else
+    AktuelleZeile := '';
+
+  // Wenn Zeile 25 UND Spalte 80: blockieren
+  if (CurY = MAX_ZEILEN) and (Length(AktuelleZeile) >= MAX_SPALTEN) then
+  begin
+    Key := #0;
+    Exit;
+  end;
+
+  // Wenn Spalte 80 erreicht → neue Zeile (wenn erlaubt)
+  if (Length(AktuelleZeile) >= MAX_SPALTEN) then
+  begin
+    if SynEdit1.Lines.Count < MAX_ZEILEN then
+    begin
+      SynEdit1.Lines.Insert(CurY, '');
+      SynEdit1.CaretY := CurY + 1;
+      SynEdit1.CaretX := 1;
+    end
+    else
+    begin
+      Key := #0;
+      Exit;
+    end;
+  end;
+end;
+
+procedure TForm1.SynEdit1StatusChange(Sender: TObject;
+  Changes: TSynStatusChanges);
+var
+  CurX, CurY: Integer;
+begin
+  CurX := SynEdit1.CaretX;
+  CurY := SynEdit1.CaretY;
+
+  if CurY > MAX_ZEILEN then
+    SynEdit1.CaretY := MAX_ZEILEN;
+
+  if CurX > MAX_SPALTEN then
+    SynEdit1.CaretX := 1; //MAX_SPALTEN;
 end;
 
 procedure TForm1.TopicTreeClick(Sender: TObject);
