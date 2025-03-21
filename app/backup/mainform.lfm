@@ -4157,17 +4157,17 @@ object Form1: TForm1
             Left = 0
             Height = 480
             Top = 0
-            Width = 112
+            Width = 103
             Align = alLeft
             Caption = 'Panel15'
             ClientHeight = 480
-            ClientWidth = 112
+            ClientWidth = 103
             TabOrder = 0
             object ListView2: TListView
               Left = 1
-              Height = 423
+              Height = 409
               Top = 1
-              Width = 110
+              Width = 101
               Align = alTop
               Columns = <>
               Items.LazData = {
@@ -4183,23 +4183,23 @@ object Form1: TForm1
               Cursor = crVSplit
               Left = 1
               Height = 5
-              Top = 424
-              Width = 110
+              Top = 410
+              Width = 101
               Align = alTop
               ResizeAnchor = akTop
             end
             object SpeedButton8: TSpeedButton
               Left = 1
               Height = 27
-              Top = 429
-              Width = 110
+              Top = 415
+              Width = 101
               Align = alTop
             end
           end
           inline SynEdit1: TSynEdit
-            Left = 120
+            Left = 112
             Height = 415
-            Top = 8
+            Top = 6
             Width = 662
             Color = clBlack
             Font.CharSet = ANSI_CHARSET
@@ -4716,15 +4716,15 @@ object Form1: TForm1
             end
           end
           object Panel16: TPanel
-            Left = 767
+            Left = 752
             Height = 418
-            Top = 6
+            Top = 3
             Width = 31
             BevelOuter = bvNone
             TabOrder = 2
           end
           object Panel17: TPanel
-            Left = 120
+            Left = 110
             Height = 33
             Top = 408
             Width = 656

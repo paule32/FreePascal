@@ -70,7 +70,7 @@ object Form1: TForm1
     Height = 639
     Top = 24
     Width = 823
-    ActivePage = TabSheet3
+    ActivePage = TabSheet2
     Align = alLeft
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.CharSet = ANSI_CHARSET
@@ -79,7 +79,7 @@ object Form1: TForm1
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
-    TabIndex = 1
+    TabIndex = 2
     TabOrder = 4
     OnChange = PageControl1Change
     object TabSheet1: TTabSheet
@@ -4805,7 +4805,11 @@ object Form1: TForm1
               Top = 1
               Width = 168
               Align = alClient
-              ItemHeight = 0
+              Items.Strings = (
+                'Optimized for ...'
+                'Output'
+              )
+              ItemHeight = 16
               TabOrder = 0
             end
           end
@@ -4820,10 +4824,43 @@ object Form1: TForm1
             Height = 329
             Top = 1
             Width = 634
-            HorzScrollBar.Page = 1
-            VertScrollBar.Page = 1
+            HorzScrollBar.Page = 368
+            VertScrollBar.Page = 168
             Align = alClient
+            ClientHeight = 325
+            ClientWidth = 630
             TabOrder = 2
+            object RadioGroup1: TRadioGroup
+              Left = 8
+              Height = 160
+              Top = 8
+              Width = 360
+              AutoFill = True
+              Caption = ' Target: '
+              ChildSizing.LeftRightSpacing = 6
+              ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+              ChildSizing.EnlargeVertical = crsHomogenousChildResize
+              ChildSizing.ShrinkHorizontal = crsScaleChilds
+              ChildSizing.ShrinkVertical = crsScaleChilds
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 137
+              ClientWidth = 356
+              Font.CharSet = ANSI_CHARSET
+              Font.Height = -15
+              Font.Name = 'Consolas'
+              Font.Pitch = fpFixed
+              Font.Quality = fqDraft
+              Items.Strings = (
+                ' Optimized for PASCAL'
+                ' Optimized for dBASE'
+                ' Optimized for C / C++'
+                ' Optimized for Java'
+                ' Optimized for Python'
+              )
+              ParentFont = False
+              TabOrder = 0
+            end
           end
         end
         object Splitter5: TSplitter
@@ -5189,8 +5226,8 @@ object Form1: TForm1
     }
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    Left = 464
-    Top = 208
+    Left = 472
+    Top = 184
   end
   object SynPopupMenu1: TSynPopupMenu
     Left = 456

@@ -170,6 +170,10 @@ msgstr ""
 msgid "Panel8"
 msgstr ""
 
+#: tform1.radiogroup1.caption
+msgid " Target: "
+msgstr ""
+
 #: tform1.sbapplycustomcss.caption
 msgctxt "tform1.sbapplycustomcss.caption"
 msgid "Apply"

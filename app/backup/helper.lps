@@ -53,7 +53,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="3"/>
         <CursorPos X="3" Y="34"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -64,9 +64,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainForm"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="1272"/>
-        <CursorPos X="29" Y="1298"/>
-        <UsageCount Value="147"/>
+        <TopLine Value="1273"/>
+        <CursorPos X="29" Y="1299"/>
+        <UsageCount Value="148"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -79,7 +79,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
         <CursorPos X="9" Y="37"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="globals.pas"/>
@@ -87,7 +87,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="85"/>
         <CursorPos Y="55"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -96,7 +96,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="131"/>
         <CursorPos Y="165"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -105,7 +105,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="6" Y="14"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
       <Unit>
@@ -113,7 +113,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="23" Y="8"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
       <Unit>
@@ -121,7 +121,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos X="3"/>
-        <UsageCount Value="147"/>
+        <UsageCount Value="148"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -130,7 +130,7 @@
         <UnitName Value="CommentPreprocessor"/>
         <EditorIndex Value="2"/>
         <CursorPos X="6" Y="223"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -186,10 +186,6 @@
       </ClassConfig>
     </Debugger>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1023" Column="18" TopLine="1009"/>
-      </Position>
       <Position>
         <Filename Value="mainform.pas"/>
         <Caret Line="1024" Column="18" TopLine="1010"/>
@@ -305,6 +301,10 @@
       <Position>
         <Filename Value="mainform.pas"/>
         <Caret Line="1297" Column="29" TopLine="1271"/>
+      </Position>
+      <Position>
+        <Filename Value="mainform.pas"/>
+        <Caret Line="1298" Column="29" TopLine="1272"/>
       </Position>
     </JumpHistory>
     <RunParams>

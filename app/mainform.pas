@@ -106,6 +106,7 @@ type
     Panel8: TPanel;
     Panel9: TPanel;
     ProgressBar1: TProgressBar;
+    RadioGroup1: TRadioGroup;
     sbLoadFromFile1: TSpeedButton;
     ScrollBar1: TScrollBar;
     ScrollBox1: TScrollBox;
