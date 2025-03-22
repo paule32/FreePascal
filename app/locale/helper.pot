@@ -158,6 +158,10 @@ msgstr ""
 msgid "Panel15"
 msgstr ""
 
+#: tform1.panel18.caption
+msgid "Your Ads here"
+msgstr ""
+
 #: tform1.panel6.caption
 msgid "Panel6"
 msgstr ""

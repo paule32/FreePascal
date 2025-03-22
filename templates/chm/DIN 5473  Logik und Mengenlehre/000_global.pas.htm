@@ -1,0 +1,22 @@
+<%
+// ----------------------------------------------------------------------------
+// \file : CreateTOC.pas - This file is part of my HelpNDoc.com tools.
+// \autor: Jens Kallup   - paule32 aka Blacky Cat aka Jens Kallup
+// \date : 2025 (c) all rights reserved.
+//
+// \detail
+// Some Helper Functions and Procedures that can be used multiple times for a
+// Project. Tested in an HelpNDoc.com CHM Project.
+// ----------------------------------------------------------------------------
+function RemoveSpaces(const Input: string): string;
+var
+  i: Integer;
+begin
+  Result := '';
+  for i := 1 to Length(Input) do
+  begin
+    if Input[i] <> ' ' then
+      Result := Result + Input[i];
+  end;
+end;
+%>

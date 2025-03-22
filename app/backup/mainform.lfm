@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 296
+  Left = 165
   Height = 706
-  Top = 163
-  Width = 1167
+  Top = 174
+  Width = 1153
   Caption = 'Form1'
   ClientHeight = 706
-  ClientWidth = 1167
+  ClientWidth = 1153
   Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
@@ -15,14 +15,14 @@ object Form1: TForm1
     Left = 0
     Height = 23
     Top = 683
-    Width = 1167
+    Width = 1153
     Panels = <>
   end
   object ToolBar1: TToolBar
     Left = 0
     Height = 24
     Top = 0
-    Width = 1167
+    Width = 1153
     Caption = 'ToolBar1'
     Images = ImageList1
     TabOrder = 1
@@ -54,7 +54,7 @@ object Form1: TForm1
     Left = 0
     Height = 20
     Top = 663
-    Width = 1167
+    Width = 1153
     Align = alBottom
     TabOrder = 2
     Visible = False
@@ -69,7 +69,7 @@ object Form1: TForm1
     Left = 194
     Height = 639
     Top = 24
-    Width = 823
+    Width = 825
     ActivePage = TabSheet3
     Align = alLeft
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -85,17 +85,17 @@ object Form1: TForm1
     object TabSheet1: TTabSheet
       Caption = 'TOC'
       ClientHeight = 610
-      ClientWidth = 815
+      ClientWidth = 817
       object ScrollBox2: TScrollBox
         Left = 0
         Height = 578
         Top = 32
-        Width = 815
+        Width = 817
         HorzScrollBar.Page = 784
         VertScrollBar.Page = 563
         Align = alClient
         ClientHeight = 574
-        ClientWidth = 811
+        ClientWidth = 813
         TabOrder = 0
         object lbTopicName: TLabel
           Left = 10
@@ -2340,7 +2340,7 @@ object Form1: TForm1
         Left = 0
         Height = 32
         Top = 0
-        Width = 815
+        Width = 817
         Align = alTop
         TabOrder = 1
       end
@@ -2348,21 +2348,21 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'Content'
       ClientHeight = 610
-      ClientWidth = 815
+      ClientWidth = 817
       object Panel3: TPanel
         Left = 0
         Height = 48
         Top = 0
-        Width = 815
+        Width = 817
         Align = alTop
         ClientHeight = 48
-        ClientWidth = 815
+        ClientWidth = 817
         TabOrder = 0
         object ScrollBar1: TScrollBar
           Left = 1
           Height = 20
           Top = 27
-          Width = 813
+          Width = 815
           Align = alBottom
           PageSize = 0
           TabOrder = 0
@@ -2429,7 +2429,7 @@ object Form1: TForm1
         Left = 0
         Height = 53
         Top = 48
-        Width = 815
+        Width = 817
         Align = alTop
         TabOrder = 1
         object Panel9: TPanel
@@ -2509,21 +2509,21 @@ object Form1: TForm1
         Left = 0
         Height = 509
         Top = 101
-        Width = 815
-        ActivePage = TabSheet8
+        Width = 817
+        ActivePage = TabSheet5
         Align = alClient
-        TabIndex = 4
+        TabIndex = 2
         TabOrder = 2
         OnResize = PageControl2Resize
         object TabSheetTopicContent: TTabSheet
           Caption = 'Text'
           ClientHeight = 480
-          ClientWidth = 807
+          ClientWidth = 809
           object PageControl3: TPageControl
             Left = 0
             Height = 480
             Top = 0
-            Width = 807
+            Width = 809
             ActivePage = TabSheet7
             Align = alClient
             TabIndex = 0
@@ -2532,12 +2532,12 @@ object Form1: TForm1
             object TabSheet7: TTabSheet
               Caption = 'default'
               ClientHeight = 451
-              ClientWidth = 799
+              ClientWidth = 801
               inline TopicContentSynEdit: TSynEdit
                 Left = 0
                 Height = 451
                 Top = 0
-                Width = 799
+                Width = 801
                 Align = alClient
                 Font.Height = -13
                 Font.Name = 'Courier New'
@@ -3036,7 +3036,7 @@ object Form1: TForm1
         object TabSheet4: TTabSheet
           Caption = 'Designer'
           ClientHeight = 480
-          ClientWidth = 807
+          ClientWidth = 809
           object Panel8: TPanel
             Left = 0
             Height = 480
@@ -3153,7 +3153,7 @@ object Form1: TForm1
             Left = 210
             Height = 480
             Top = 0
-            Width = 597
+            Width = 599
             HorzScrollBar.Page = 1
             VertScrollBar.Page = 1
             Align = alClient
@@ -3165,19 +3165,19 @@ object Form1: TForm1
         object TabSheet5: TTabSheet
           Caption = 'Preview'
           ClientHeight = 480
-          ClientWidth = 807
+          ClientWidth = 809
           object StatusBar2: TStatusBar
             Left = 0
             Height = 23
             Top = 457
-            Width = 807
+            Width = 809
             Panels = <>
           end
           object ComboBoxEx1: TComboBoxEx
             Left = 0
             Height = 22
             Top = 55
-            Width = 807
+            Width = 809
             Align = alTop
             ItemHeight = 16
             ItemsEx = <>
@@ -3187,11 +3187,11 @@ object Form1: TForm1
             Left = 0
             Height = 55
             Top = 0
-            Width = 807
+            Width = 809
             Align = alTop
             Caption = 'Panel12'
             ClientHeight = 55
-            ClientWidth = 807
+            ClientWidth = 809
             TabOrder = 2
             object SpeedButton12: TSpeedButton
               Left = 1
@@ -4110,11 +4110,11 @@ object Form1: TForm1
             Left = 0
             Height = 380
             Top = 77
-            Width = 807
+            Width = 809
             Align = alClient
             Caption = 'Panel13'
             ClientHeight = 380
-            ClientWidth = 807
+            ClientWidth = 809
             TabOrder = 3
             object ChromiumWindow1: TChromiumWindow
               Left = 8
@@ -4130,12 +4130,12 @@ object Form1: TForm1
         object TabSheet6: TTabSheet
           Caption = 'WYSIWYG'
           ClientHeight = 480
-          ClientWidth = 807
+          ClientWidth = 809
           object Panel14: TPanel
             Left = 0
             Height = 480
             Top = 0
-            Width = 807
+            Width = 809
             Align = alClient
             Caption = 'Panel14'
             TabOrder = 1
@@ -4152,7 +4152,7 @@ object Form1: TForm1
         object TabSheet8: TTabSheet
           Caption = 'Console'
           ClientHeight = 480
-          ClientWidth = 807
+          ClientWidth = 809
           object Panel15: TPanel
             Left = 0
             Height = 480
@@ -4737,32 +4737,32 @@ object Form1: TForm1
     object TabSheet2: TTabSheet
       Caption = 'Settings'
       ClientHeight = 610
-      ClientWidth = 815
+      ClientWidth = 817
       object ScrollBox1: TScrollBox
         Left = 0
         Height = 610
         Top = 0
-        Width = 815
+        Width = 817
         HorzScrollBar.Page = 761
         VertScrollBar.Page = 427
         Align = alClient
         ClientHeight = 606
-        ClientWidth = 811
+        ClientWidth = 813
         TabOrder = 0
         object Panel5: TPanel
           Left = 0
           Height = 86
           Top = 520
-          Width = 811
+          Width = 813
           Align = alBottom
           ClientHeight = 86
-          ClientWidth = 811
+          ClientWidth = 813
           TabOrder = 0
           object Memo1: TMemo
             Left = 1
             Height = 84
             Top = 1
-            Width = 809
+            Width = 811
             Align = alClient
             Lines.Strings = (
               'Memo1'
@@ -4775,7 +4775,7 @@ object Form1: TForm1
           Left = 0
           Height = 5
           Top = 515
-          Width = 811
+          Width = 813
           Align = alBottom
           ResizeAnchor = akBottom
         end
@@ -4783,11 +4783,11 @@ object Form1: TForm1
           Left = 0
           Height = 331
           Top = 184
-          Width = 811
+          Width = 813
           Align = alBottom
           Caption = 'Panel6'
           ClientHeight = 331
-          ClientWidth = 811
+          ClientWidth = 813
           TabOrder = 2
           object Panel7: TPanel
             Left = 1
@@ -4805,7 +4805,11 @@ object Form1: TForm1
               Top = 1
               Width = 168
               Align = alClient
-              ItemHeight = 0
+              Items.Strings = (
+                'Optimized for ...'
+                'Output'
+              )
+              ItemHeight = 16
               TabOrder = 0
             end
           end
@@ -4819,11 +4823,44 @@ object Form1: TForm1
             Left = 176
             Height = 329
             Top = 1
-            Width = 634
-            HorzScrollBar.Page = 1
-            VertScrollBar.Page = 1
+            Width = 636
+            HorzScrollBar.Page = 368
+            VertScrollBar.Page = 168
             Align = alClient
+            ClientHeight = 325
+            ClientWidth = 632
             TabOrder = 2
+            object RadioGroup1: TRadioGroup
+              Left = 8
+              Height = 160
+              Top = 8
+              Width = 360
+              AutoFill = True
+              Caption = ' Target: '
+              ChildSizing.LeftRightSpacing = 6
+              ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+              ChildSizing.EnlargeVertical = crsHomogenousChildResize
+              ChildSizing.ShrinkHorizontal = crsScaleChilds
+              ChildSizing.ShrinkVertical = crsScaleChilds
+              ChildSizing.Layout = cclLeftToRightThenTopToBottom
+              ChildSizing.ControlsPerLine = 1
+              ClientHeight = 137
+              ClientWidth = 356
+              Font.CharSet = ANSI_CHARSET
+              Font.Height = -15
+              Font.Name = 'Consolas'
+              Font.Pitch = fpFixed
+              Font.Quality = fqDraft
+              Items.Strings = (
+                ' Optimized for PASCAL'
+                ' Optimized for dBASE'
+                ' Optimized for C / C++'
+                ' Optimized for Java'
+                ' Optimized for Python'
+              )
+              ParentFont = False
+              TabOrder = 0
+            end
           end
         end
         object Splitter5: TSplitter
@@ -4831,7 +4868,7 @@ object Form1: TForm1
           Left = 0
           Height = 5
           Top = 179
-          Width = 811
+          Width = 813
           Align = alBottom
           ResizeAnchor = akBottom
         end
@@ -4963,18 +5000,20 @@ object Form1: TForm1
     end
   end
   object Splitter2: TSplitter
-    Left = 1017
+    Left = 1019
     Height = 639
     Top = 24
     Width = 5
   end
   object Panel1: TPanel
-    Left = 1022
+    Left = 1024
     Height = 639
     Top = 24
-    Width = 145
+    Width = 129
     Align = alClient
     Anchors = [akTop, akRight, akBottom]
+    ClientHeight = 639
+    ClientWidth = 129
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Name = 'Arial'
@@ -4982,6 +5021,40 @@ object Form1: TForm1
     Font.Quality = fqDraft
     ParentFont = False
     TabOrder = 6
+    object Panel18: TPanel
+      Left = 1
+      Height = 50
+      Top = 1
+      Width = 127
+      Align = alTop
+      Caption = 'Your Ads here'
+      Font.CharSet = ANSI_CHARSET
+      Font.Height = -16
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 0
+    end
+    object ChromiumWindow3: TChromiumWindow
+      Left = 1
+      Height = 54
+      Top = 584
+      Width = 127
+      Align = alBottom
+      Color = clScrollBar
+      TabOrder = 1
+      OnAfterCreated = ChromiumWindow3AfterCreated
+    end
+    object ChromiumWindow4: TChromiumWindow
+      Left = 1
+      Height = 533
+      Top = 51
+      Width = 127
+      Align = alClient
+      TabOrder = 2
+    end
   end
   object TopicTreePanel: TPanel
     Left = 0
@@ -5189,8 +5262,8 @@ object Form1: TForm1
     }
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    Left = 464
-    Top = 208
+    Left = 472
+    Top = 184
   end
   object SynPopupMenu1: TSynPopupMenu
     Left = 456

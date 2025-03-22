@@ -42,6 +42,8 @@ type
     checkList: TCheckListBox;
     ChromiumWindow1: TChromiumWindow;
     ChromiumWindow2: TChromiumWindow;
+    ChromiumWindow3: TChromiumWindow;
+    ChromiumWindow4: TChromiumWindow;
     ComboBox1: TComboBox;
     ComboBoxEx1: TComboBoxEx;
     ComboBoxEx2: TComboBoxEx;
@@ -97,6 +99,7 @@ type
     Panel15: TPanel;
     Panel16: TPanel;
     Panel17: TPanel;
+    Panel18: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
     Panel4: TPanel;
@@ -185,6 +188,8 @@ type
     procedure checkListClickCheck(Sender: TObject);
     procedure ChromiumWindow1AfterCreated(Sender: TObject);
     procedure ChromiumWindow2AfterCreated(Sender: TObject);
+    procedure ChromiumWindow3AfterCreated(Sender: TObject);
+    procedure ChromiumWindow4AfterCreated(Sender: TObject);
     procedure DesignPanelPaint(Sender: TObject);
     procedure DesignPanelResize(Sender: TObject);
     procedure edProjectPathChange(Sender: TObject);
@@ -639,6 +644,27 @@ begin
   ChromiumWindow2.ChromiumBrowser.LoadString(tr('html_content'));
 end;
 
+procedure TForm1.ChromiumWindow3AfterCreated(Sender: TObject);
+begin
+  if Assigned(ChromiumWindow3.ChromiumBrowser) then
+  ChromiumWindow3.ChromiumBrowser.LoadString(
+'<style>body{background-color:#e9e9e9;}</style><center>' +
+'<form action="https://www.paypal.com/donate" method="post" target="_blank">'+
+'<input type="hidden" name="hosted_button_id" value="V6AUUWSNVQTHC" />'+
+'<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0"'+
+'name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />'+
+'<img alt="Donate" border="0" src="https://www.paypal.com/en_DE/i/scr/pixel.gif" width="1" height="1" />'+
+'</form></center>');
+end;
+
+procedure TForm1.ChromiumWindow4AfterCreated(Sender: TObject);
+begin
+  if Assigned(ChromiumWindow4.ChromiumBrowser) then
+  ChromiumWindow4.ChromiumBrowser.LoadString(
+'<style>body{background-color:#e9e9e9;}</style><center>' +
+'</center>');
+end;
+
 const
   GRID_SIZE = 20;  // Größe des Gitters (z. B. 20x20 Pixel)
 
@@ -862,6 +888,12 @@ begin
 
   if not ChromiumWindow2.Initialized then
   ChromiumWindow2.CreateBrowser;
+
+  if not ChromiumWindow3.Initialized then
+  ChromiumWindow3.CreateBrowser;
+
+  if not ChromiumWindow4.Initialized then
+  ChromiumWindow4.CreateBrowser;
 end;
 
 procedure TForm1.ListBox2Click(Sender: TObject);

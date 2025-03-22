@@ -57,6 +57,7 @@
 {"hash":29393226,"name":"tform1.label5.caption","sourcebytes":[80,114,111,106,101,99,116,32,80,97,116,104,58],"value":"Project Path:"},
 {"hash":49597428,"name":"tform1.speedbutton1.caption","sourcebytes":[79,112,101,110,32,80,114,111,106,101,99,116],"value":"Open Project"},
 {"hash":215890979,"name":"tform1.speedbutton5.caption","sourcebytes":[65,100,100,32,116,111,32,70,97,118,111,114,105,116,101,115],"value":"Add to Favorites"},
+{"hash":188393621,"name":"tform1.panel18.caption","sourcebytes":[89,111,117,114,32,65,100,115,32,104,101,114,101],"value":"Your Ads here"},
 {"hash":8562917,"name":"tform1.sbloadfromfile.caption","sourcebytes":[76,111,97,100,32,102,114,111,109,32,70,105,108,101],"value":"Load from File"},
 {"hash":171860400,"name":"tform1.sbloadfromfile1.caption","sourcebytes":[67,114,101,97,116,101,32,72,101,108,112],"value":"Create Help"},
 {"hash":41266311,"name":"tform1.combobox1.text","sourcebytes":[72,101,108,112,32,65,117,116,111,114,105,110,103],"value":"Help Autoring"},
