@@ -1,0 +1,53 @@
+<%
+var
+	sCoverPictureId: string;
+	
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+	
+begin
+	// Cover picture info
+	sCoverPictureId := HndGeneratorInfo.GetCustomSettingValue('CoverPicture');
+
+	// Change current file
+	HndGeneratorInfo.CurrentFile := '_cover' + GetTopicExtension();
+	
+	// XML header
+	print('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Cover</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style type="text/css">
+		html { padding: 0pt; margin:0pt; }
+		body { text-align: center; background-color : #FFFFFF; }
+	</style>
+</head>
+
+<body>
+    <div>
+		<% 
+			if sCoverPictureId <> '' then
+			begin
+		%>
+
+			<img height="100%" alt="Cover" src="_cover.jpg" />
+		
+		<%
+			end;
+		%>
+    </div>
+</body>
+
+</html>
+
+<%
+	end.
+%>

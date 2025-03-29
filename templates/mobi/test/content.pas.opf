@@ -1,0 +1,157 @@
+﻿<%
+const
+	KIND_PICTURES = 1;
+	
+var
+	aTopicList: THndTopicsInfoArray;
+var
+	aPictureList: THndLibraryItemsInfoArray;
+var
+	nCnt: Integer;
+var
+	sBookId, sCoverPictureId: string;
+var
+	sCoverPicturePath, sPicturePath: string;
+	
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+	
+begin
+	// Need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := True;
+
+	// Change current file
+	HndGeneratorInfo.CurrentFile := 'content.opf';
+	
+	// Lists
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+	aPictureList := HndLibraryItems.GetItemList([KIND_PICTURES]);  // Get pictures from library
+
+	// Book ID
+	sBookId := HndGeneratorInfo.GetCustomSettingValue('BookID');
+	if (sBookId = '') then
+	begin
+		sBookId := HndProjects.GetProjectTitle();
+	end;
+	
+	// Cover picture
+	sCoverPictureId := HndGeneratorInfo.GetCustomSettingValue('CoverPicture');
+	sCoverPicturePath := '';
+	
+	// Avoid synthax error
+	println('<?xml version="1.0" encoding="UTF-8"?>');
+%>
+
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookID" version="2.0">
+	<metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+		<dc:title><% print(HndUtils.HTMLEscape(HndProjects.GetProjectTitle())); %></dc:title>
+		<dc:rights><% print(HndUtils.HTMLEscape(HndProjects.GetProjectCopyright())); %></dc:rights>
+		<dc:creator opf:role="aut"><% print(HndUtils.HTMLEscape(HndProjects.GetProjectAuthor())); %></dc:creator>
+		<dc:language><% print(HndUtils.HTMLEscape(HndProjects.GetProjectLanguageCode())); %></dc:language>
+		<dc:identifier id="BookID" opf:scheme="UUID"><% print(HndUtils.HTMLEscape(sBookId)); %></dc:identifier>
+		<%
+			// Cover meta
+			if sCoverPictureId <> '' then
+			begin
+		%>
+				<meta name="cover" content="cover-image"/>
+		<%
+			end;
+		%>
+		<meta name="HelpNDoc version" content="<% print(HndUtils.HTMLEscape(HndGeneratorInfo.HelpNDocVersion)); %>"/>
+	</metadata>
+	<manifest>
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
+		<item id="stylesheet" href="css/hnd.css" media-type="text/css"/>
+		<item id="_EmptyTopic" href="_empty<% print(GetTopicExtension()); %>" media-type="application/xhtml+xml" />
+		<item id="_toc" href="_toc<% print(GetTopicExtension()); %>" media-type="application/xhtml+xml" />
+		<%	
+			// Topics
+			for nCnt := 0 to length(aTopicList) - 1 do
+			begin
+				if aTopicList[nCnt].Kind <> 1 then  // Empty topic
+					printfln('<item id="%s" href="%s%s" media-type="application/xhtml+xml" />', [aTopicList[nCnt].HelpId, aTopicList[nCnt].HelpId, GetTopicExtension()]);
+			end;
+			
+			// Pictures
+			for nCnt := 0 to length(aPictureList) - 1 do
+			begin
+				// Picture path
+				sPicturePath := '';
+				if aPictureList[nCnt].Source = 1 then  // Included in project
+					sPicturePath := format('%s%s.%s', [HndGeneratorInfo.OutputDirLib, aPictureList[nCnt].Caption, aPictureList[nCnt].Extension])
+				else if aPictureList[nCnt].Source = 2 then  // Included at generation
+					sPicturePath := format('%s%s', [HndGeneratorInfo.OutputDirLib, ExtractFileName(HndLibraryItems.GetItemUrlFile(aPictureList[nCnt].Id))]);
+			
+				// Make sure picture exists
+				if not FileExists(HndGeneratorInfo.OutputDir + '\' + StringReplace(sPicturePath, '/', '\', [rfReplaceAll])) then
+					continue;
+				
+				printf('<item id="img-%s"', [aPictureList[nCnt].Id]);
+				// Cover image ?
+				if aPictureList[nCnt].Id = sCoverPictureId then
+				begin
+					print(' properties="cover-image"');
+					sCoverPicturePath := sPicturePath;
+				end;
+				// Path
+					printf(' href="%s"', [sPicturePath]);
+				// Media type
+				if aPictureList[nCnt].Extension = 'jpg' then
+					println(' media-type="image/jpeg" />')
+				else
+					printfln(' media-type="image/%s" />', [aPictureList[nCnt].Extension]);
+			end;
+			
+			// JPEG converted cover and cover page
+			if sCoverPictureId <> '' then
+			begin
+				println('<item id="cover-image" href="_cover.jpg" media-type="image/jpeg"/>');
+				println('<item id="_cover" href="_cover' + GetTopicExtension() + '" media-type="application/xhtml+xml" />');
+			end;
+		%>
+	</manifest>
+	<spine toc="ncx">
+		<%
+			// Inline cover page
+			if ((sCoverPictureId <> '') and HndGeneratorInfo.GetCustomSettingValue('CoverInline')) then
+			begin
+				println('<itemref idref="_cover"/>');
+			end;
+			// Inline toc
+			if HndGeneratorInfo.GetCustomSettingValue('TocInline') then
+			begin
+				println('<itemref idref="_toc"/>');
+			end;
+			// Topics
+			for nCnt := 0 to length(aTopicList) - 1 do
+			begin
+				if aTopicList[nCnt].Kind <> 1 then  // Empty topic
+					printfln('<itemref idref="%s" />', [aTopicList[nCnt].HelpId, aTopicList[nCnt].HelpId]);
+			end;
+		%>
+	</spine>
+	<guide>
+		<%
+			// Cover guide
+			if sCoverPictureId <> '' then
+			begin
+				println('<reference type="cover" title="Cover" href="_cover' + GetTopicExtension() + '" />');
+			end;
+			// Inline toc
+			if HndGeneratorInfo.GetCustomSettingValue('TocInline') then
+			begin
+				println('<reference type="toc" title="Table Of Contents" href="_toc' + GetTopicExtension() + '" />');
+			end;
+		%>
+	</guide>
+</package>
+
+<%
+end.
+%>

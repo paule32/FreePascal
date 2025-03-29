@@ -1,0 +1,61 @@
+﻿[config]
+name=test
+category=QtHelp
+extension=qhc
+topicextension=html
+inherits=Default QtHelp Template
+linkformattopic=
+linkformatanchor=
+
+[var_BaseColor]
+name=Base color
+name.de=Grundfarbe
+name.es=Color de base
+name.fr=Couleur de base
+description=Customize the documentation's base color.
+description.de=Festlegen der Grundfarbe der Dokumentation.
+description.es=Personalizar el color de base de la documentación.
+description.fr=Personnaliser la couleur de base de la documentation.
+default=#EFEFEF
+kind=color
+values=
+
+[var_CustomCss]
+name=Custom CSS
+name.de=Benutzerdefinierte CSS
+name.es=CSS Personalizado
+name.fr=CSS Personnalisé
+description=Specify custom CSS to customize the generated HTML content.
+description.de=Geben Sie benutzerdefinierte CSS zum Anpassen der generierten HTML-Inhalte an.
+description.es=Especificar CSS personalizado para personalizar el contenido HTML generado.
+description.fr=Indiquer le code CSS à utiliser pour personnaliser le contenu HTML généré.
+default=
+kind=memo
+values=
+
+[var_ShowBreadCrumbs]
+name=Show BreadCrumbs
+name.de=Brotkrümelnavigation
+name.es=Mostrar breadcrumbs
+name.fr=Afficher le cheminement
+description=Show the breadcrumbs at the top of each topic bellow the topic title.
+description.de=Brotkrümelnavigation über jedem Kapitel/Thema unterhalb des Titels anzeigen.
+description.es=Mostrar breadcrumbs en la parte superior de cada tema bajo el título del tema.
+description.fr=Afficher le cheminement au haut de chaque chapitre en dessous du titre du chapitre.
+default=1
+kind=bool
+values=
+
+[var_ShowNavigation]
+name=Show navigation arrows
+name.de=Navigationspfeile anzeigen
+name.es=Mostrar flechas de navegación
+name.fr=Afficher les flèches de navigation
+description=Show the navigation arrows at the top of each topic right of the topic title.
+description.de=Navigationspfeile über jedem Kapitel/Thema auf der rechten Seite des Titels anzeigen.
+description.es=Mostrar las flechas de navegación en la parte superior de cada tema a la derecha del título del tema.
+description.fr=Afficher les flèches de navigation en haut de chaque chapitre à droite du titre du chapitre.
+default=1
+kind=bool
+values=
+

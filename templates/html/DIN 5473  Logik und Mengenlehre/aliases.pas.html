@@ -1,0 +1,80 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+    nCurTopic, nCurAlias, nAliasLevel: integer;
+var
+	anAliasList: TStringList;
+var
+	sAlias, sRelLink: string;
+	
+	function OccurrencesOfChar(const S: string; const C: char): integer;
+	var
+		nCnt: Integer;
+	begin
+		Result := 0;
+		for nCnt := 1 to Length(S) do
+			if S[nCnt] = C then
+				Inc(result);
+	end;
+	
+	function RepeatString(const S: string; Count: cardinal): string;
+	var
+		nCnt: Integer;
+	begin
+		Result := '';
+		for nCnt := 1 to Count do
+			Result := Result + S;
+	end;
+	
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+    
+begin
+    // No need BOM for UTF8 files
+    HndGeneratorInfo.BOMOutput := False;
+
+    // Get a list of generated topics
+    aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+
+	// Each individual topics...
+	for nCurTopic := 0 to length(aTopicList) - 1 do
+    begin
+		// Get alias list
+		anAliasList := HndTopicsMeta.GetItemMetaListValue(aTopicList[nCurTopic].Id, 'Aliases', nil);
+
+		// Each individual alias...
+		for nCurAlias := 0 to anAliasList.Count - 1 do
+		begin
+			sAlias := StringReplace(anAliasList[nCurAlias], '/', '\', [rfReplaceAll]);
+			nAliasLevel := OccurrencesOfChar(sAlias, '\');
+			sRelLink := RepeatString('../', nAliasLevel);
+			// Current file
+			HndGeneratorInfo.CurrentFile := sAlias;
+
+%>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Redirecting to "<% print(HTMLEncode(aTopicList[nCurTopic].Caption)); %>"</title>
+    <link rel="canonical" href="<% print(sRelLink + aTopicList[nCurTopic].HelpId + GetTopicExtension()); %>" />
+    <meta name="robots" content="noindex">
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=<% print(sRelLink + aTopicList[nCurTopic].HelpId + GetTopicExtension()); %>" />
+</head>
+
+</html>
+
+<%
+		end;  // For each alias
+		
+		anAliasList.Free;
+	end;  // For each topic
+end.
+%>

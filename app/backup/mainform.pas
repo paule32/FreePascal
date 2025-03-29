@@ -189,6 +189,7 @@ type
     procedure ChromiumWindow1AfterCreated(Sender: TObject);
     procedure ChromiumWindow2AfterCreated(Sender: TObject);
     procedure ChromiumWindow3AfterCreated(Sender: TObject);
+    procedure ChromiumWindow4AfterCreated(Sender: TObject);
     procedure DesignPanelPaint(Sender: TObject);
     procedure DesignPanelResize(Sender: TObject);
     procedure edProjectPathChange(Sender: TObject);
@@ -654,6 +655,14 @@ begin
 'name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />'+
 '<img alt="Donate" border="0" src="https://www.paypal.com/en_DE/i/scr/pixel.gif" width="1" height="1" />'+
 '</form></center>');
+end;
+
+procedure TForm1.ChromiumWindow4AfterCreated(Sender: TObject);
+begin
+  if Assigned(ChromiumWindow4.ChromiumBrowser) then
+  ChromiumWindow4.ChromiumBrowser.LoadString(
+'<style>body{background-color:#e9e9e9;}</style><center>' +
+'</center>');
 end;
 
 const

@@ -2,10 +2,10 @@ object Form1: TForm1
   Left = 165
   Height = 706
   Top = 174
-  Width = 1153
+  Width = 1167
   Caption = 'Form1'
   ClientHeight = 706
-  ClientWidth = 1153
+  ClientWidth = 1167
   Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
@@ -15,14 +15,14 @@ object Form1: TForm1
     Left = 0
     Height = 23
     Top = 683
-    Width = 1153
+    Width = 1167
     Panels = <>
   end
   object ToolBar1: TToolBar
     Left = 0
     Height = 24
     Top = 0
-    Width = 1153
+    Width = 1167
     Caption = 'ToolBar1'
     Images = ImageList1
     TabOrder = 1
@@ -54,7 +54,7 @@ object Form1: TForm1
     Left = 0
     Height = 20
     Top = 663
-    Width = 1153
+    Width = 1167
     Align = alBottom
     TabOrder = 2
     Visible = False
@@ -69,7 +69,7 @@ object Form1: TForm1
     Left = 194
     Height = 639
     Top = 24
-    Width = 825
+    Width = 839
     ActivePage = TabSheet3
     Align = alLeft
     Anchors = [akTop, akLeft, akRight, akBottom]
@@ -85,17 +85,17 @@ object Form1: TForm1
     object TabSheet1: TTabSheet
       Caption = 'TOC'
       ClientHeight = 610
-      ClientWidth = 817
+      ClientWidth = 831
       object ScrollBox2: TScrollBox
         Left = 0
         Height = 578
         Top = 32
-        Width = 817
+        Width = 831
         HorzScrollBar.Page = 784
         VertScrollBar.Page = 563
         Align = alClient
         ClientHeight = 574
-        ClientWidth = 813
+        ClientWidth = 827
         TabOrder = 0
         object lbTopicName: TLabel
           Left = 10
@@ -2340,7 +2340,7 @@ object Form1: TForm1
         Left = 0
         Height = 32
         Top = 0
-        Width = 817
+        Width = 831
         Align = alTop
         TabOrder = 1
       end
@@ -2348,21 +2348,21 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'Content'
       ClientHeight = 610
-      ClientWidth = 817
+      ClientWidth = 831
       object Panel3: TPanel
         Left = 0
         Height = 48
         Top = 0
-        Width = 817
+        Width = 831
         Align = alTop
         ClientHeight = 48
-        ClientWidth = 817
+        ClientWidth = 831
         TabOrder = 0
         object ScrollBar1: TScrollBar
           Left = 1
           Height = 20
           Top = 27
-          Width = 815
+          Width = 829
           Align = alBottom
           PageSize = 0
           TabOrder = 0
@@ -2429,7 +2429,7 @@ object Form1: TForm1
         Left = 0
         Height = 53
         Top = 48
-        Width = 817
+        Width = 831
         Align = alTop
         TabOrder = 1
         object Panel9: TPanel
@@ -2509,21 +2509,21 @@ object Form1: TForm1
         Left = 0
         Height = 509
         Top = 101
-        Width = 817
-        ActivePage = TabSheet5
+        Width = 831
+        ActivePage = TabSheetTopicContent
         Align = alClient
-        TabIndex = 2
+        TabIndex = 0
         TabOrder = 2
         OnResize = PageControl2Resize
         object TabSheetTopicContent: TTabSheet
           Caption = 'Text'
           ClientHeight = 480
-          ClientWidth = 809
+          ClientWidth = 823
           object PageControl3: TPageControl
             Left = 0
             Height = 480
             Top = 0
-            Width = 809
+            Width = 823
             ActivePage = TabSheet7
             Align = alClient
             TabIndex = 0
@@ -2532,12 +2532,12 @@ object Form1: TForm1
             object TabSheet7: TTabSheet
               Caption = 'default'
               ClientHeight = 451
-              ClientWidth = 801
+              ClientWidth = 815
               inline TopicContentSynEdit: TSynEdit
                 Left = 0
                 Height = 451
                 Top = 0
-                Width = 801
+                Width = 815
                 Align = alClient
                 Font.Height = -13
                 Font.Name = 'Courier New'
@@ -3036,7 +3036,7 @@ object Form1: TForm1
         object TabSheet4: TTabSheet
           Caption = 'Designer'
           ClientHeight = 480
-          ClientWidth = 809
+          ClientWidth = 823
           object Panel8: TPanel
             Left = 0
             Height = 480
@@ -3153,7 +3153,7 @@ object Form1: TForm1
             Left = 210
             Height = 480
             Top = 0
-            Width = 599
+            Width = 613
             HorzScrollBar.Page = 1
             VertScrollBar.Page = 1
             Align = alClient
@@ -3165,19 +3165,19 @@ object Form1: TForm1
         object TabSheet5: TTabSheet
           Caption = 'Preview'
           ClientHeight = 480
-          ClientWidth = 809
+          ClientWidth = 823
           object StatusBar2: TStatusBar
             Left = 0
             Height = 23
             Top = 457
-            Width = 809
+            Width = 823
             Panels = <>
           end
           object ComboBoxEx1: TComboBoxEx
             Left = 0
             Height = 22
             Top = 55
-            Width = 809
+            Width = 823
             Align = alTop
             ItemHeight = 16
             ItemsEx = <>
@@ -3187,11 +3187,11 @@ object Form1: TForm1
             Left = 0
             Height = 55
             Top = 0
-            Width = 809
+            Width = 823
             Align = alTop
             Caption = 'Panel12'
             ClientHeight = 55
-            ClientWidth = 809
+            ClientWidth = 823
             TabOrder = 2
             object SpeedButton12: TSpeedButton
               Left = 1
@@ -4110,11 +4110,11 @@ object Form1: TForm1
             Left = 0
             Height = 380
             Top = 77
-            Width = 809
+            Width = 823
             Align = alClient
             Caption = 'Panel13'
             ClientHeight = 380
-            ClientWidth = 809
+            ClientWidth = 823
             TabOrder = 3
             object ChromiumWindow1: TChromiumWindow
               Left = 8
@@ -4130,12 +4130,12 @@ object Form1: TForm1
         object TabSheet6: TTabSheet
           Caption = 'WYSIWYG'
           ClientHeight = 480
-          ClientWidth = 809
+          ClientWidth = 823
           object Panel14: TPanel
             Left = 0
             Height = 480
             Top = 0
-            Width = 809
+            Width = 823
             Align = alClient
             Caption = 'Panel14'
             TabOrder = 1
@@ -4152,7 +4152,7 @@ object Form1: TForm1
         object TabSheet8: TTabSheet
           Caption = 'Console'
           ClientHeight = 480
-          ClientWidth = 809
+          ClientWidth = 823
           object Panel15: TPanel
             Left = 0
             Height = 480
@@ -4737,32 +4737,32 @@ object Form1: TForm1
     object TabSheet2: TTabSheet
       Caption = 'Settings'
       ClientHeight = 610
-      ClientWidth = 817
+      ClientWidth = 831
       object ScrollBox1: TScrollBox
         Left = 0
         Height = 610
         Top = 0
-        Width = 817
+        Width = 831
         HorzScrollBar.Page = 761
         VertScrollBar.Page = 427
         Align = alClient
         ClientHeight = 606
-        ClientWidth = 813
+        ClientWidth = 827
         TabOrder = 0
         object Panel5: TPanel
           Left = 0
           Height = 86
           Top = 520
-          Width = 813
+          Width = 827
           Align = alBottom
           ClientHeight = 86
-          ClientWidth = 813
+          ClientWidth = 827
           TabOrder = 0
           object Memo1: TMemo
             Left = 1
             Height = 84
             Top = 1
-            Width = 811
+            Width = 825
             Align = alClient
             Lines.Strings = (
               'Memo1'
@@ -4775,7 +4775,7 @@ object Form1: TForm1
           Left = 0
           Height = 5
           Top = 515
-          Width = 813
+          Width = 827
           Align = alBottom
           ResizeAnchor = akBottom
         end
@@ -4783,11 +4783,11 @@ object Form1: TForm1
           Left = 0
           Height = 331
           Top = 184
-          Width = 813
+          Width = 827
           Align = alBottom
           Caption = 'Panel6'
           ClientHeight = 331
-          ClientWidth = 813
+          ClientWidth = 827
           TabOrder = 2
           object Panel7: TPanel
             Left = 1
@@ -4823,12 +4823,12 @@ object Form1: TForm1
             Left = 176
             Height = 329
             Top = 1
-            Width = 636
+            Width = 650
             HorzScrollBar.Page = 368
             VertScrollBar.Page = 168
             Align = alClient
             ClientHeight = 325
-            ClientWidth = 632
+            ClientWidth = 646
             TabOrder = 2
             object RadioGroup1: TRadioGroup
               Left = 8
@@ -4868,7 +4868,7 @@ object Form1: TForm1
           Left = 0
           Height = 5
           Top = 179
-          Width = 813
+          Width = 827
           Align = alBottom
           ResizeAnchor = akBottom
         end
@@ -5000,13 +5000,13 @@ object Form1: TForm1
     end
   end
   object Splitter2: TSplitter
-    Left = 1019
+    Left = 1033
     Height = 639
     Top = 24
     Width = 5
   end
   object Panel1: TPanel
-    Left = 1024
+    Left = 1038
     Height = 639
     Top = 24
     Width = 129
@@ -5054,6 +5054,7 @@ object Form1: TForm1
       Width = 127
       Align = alClient
       TabOrder = 2
+      OnAfterCreated = ChromiumWindow4AfterCreated
     end
   end
   object TopicTreePanel: TPanel

@@ -1,0 +1,77 @@
+<%
+
+function EncodeRelatedTitle(const sText: string): string;
+begin
+    // /!\ We must double encode this content
+    Result := StringReplace(sText, '\', '\\\\', [rfReplaceAll]);
+    Result := StringReplace(Result, '"', '\\u0022', [rfReplaceAll]);
+end;
+
+// Return the topic extension, starting with a dot
+function GetTopicExtension: string;
+begin
+    Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+    if ((Length(Result) > 0) and (Result[1] <> '.')) then
+        Result := '.' + Result;
+end;
+
+
+var
+	aKeywordList: THndKeywordsInfoArray;
+var
+    aAssociatedTopics: array of string;
+var
+    nCurKeyword, nCurKeywordTopic: Integer;
+var
+    sParentId: string;
+var
+    sUrl, sRelated: string;
+
+begin
+    aKeywordList := HndKeywords.GetKeywordList(False);
+    print('[');
+    for nCurKeyword := 0 to length(aKeywordList) - 1 do
+    begin
+        // Init
+        sUrl := '#';
+        sRelated := '[]';
+
+        // Parent
+        sParentId := HndKeywords.GetKeywordParent(aKeywordList[nCurKeyword].Id);
+        if (sParentId = HndKeywords.GetProjectKeyword()) then
+            sParentId := '#';
+
+        // Associated topics
+        aAssociatedTopics := HndTopicsKeywordsEx.GetGeneratedTopicsAssociatedWithKeyword(aKeywordList[nCurKeyword].Id);
+
+        if Length(aAssociatedTopics) > 0 then
+        begin
+            sUrl := format('%s%s', [HndTopics.GetTopicHelpId(aAssociatedTopics[0]), GetTopicExtension()]);
+            if Length(aAssociatedTopics) > 1 then
+            begin
+                sRelated := '[';
+                for nCurKeywordTopic := 0 to Length(aAssociatedTopics) - 1 do
+                begin
+                    if nCurKeywordTopic > 0 then
+                        sRelated := sRelated + ',';
+                    sRelated := sRelated + format('{"title":"%s","url":"%s%s"}', [EncodeRelatedTitle(HndTopics.GetTopicCaption(aAssociatedTopics[nCurKeywordTopic])), HndTopics.GetTopicHelpId(aAssociatedTopics[nCurKeywordTopic]), GetTopicExtension()]);
+                end;
+                sRelated := sRelated + ']';
+            end;
+        end;
+
+        // Print the keyword
+        printf('{ "id": "%s", "parent" : "%s", "text": "%s", "a_attr": {"href": "%s", "data-related": "%s"} }', [
+            aKeywordList[nCurKeyword].Id,
+            sParentId,
+            StringReplace(aKeywordList[nCurKeyword].Caption, '"', '\"', [rfReplaceAll]),
+            StringReplace(sUrl, '"', '\"', [rfReplaceAll]),
+            StringReplace(sRelated, '"', '\"', [rfReplaceAll])
+        ]);
+        // Separator
+        if nCurKeyword < length(aKeywordList) - 1 then
+            print(',');
+    end;
+    print(']');
+end.
+%>

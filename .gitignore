@@ -30,3 +30,4 @@ app/icudtl.dat
 *.exe
 /app/lib
 *.ppu
+output/chm Dokumentation erstellen/Titel dieses Hilfeprojekts.chm

@@ -5,7 +5,7 @@ extension=chm
 topicextension=htm
 linkformattopic=%helpid%.htm
 linkformatanchor=%helpid%.htm#%anchorname%
-inherits=Default CHM Template
+inherits=
 
 [var_BaseColor]
 name=Base color

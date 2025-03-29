@@ -1,15 +1,89 @@
 <%
+// ----------------------------------------------------------------------------
+// \file : topics.pas     This file is part of my HelpNDoc.com tools.
+// \autor: Jens Kallup    paule32 aka Blacky Cat aka Jens Kallup
+// \date : 2025 (c) all rights reserved.
+//
+// \detail
+// Project. Tested in an HelpNDoc.com CHM Project.
+// ----------------------------------------------------------------------------
+var aTopicList: THndTopicsInfoArray;
+var headContent, htmlContent, topicCaption, s1: String;
+var nCurTopic, nCurParent, nTopicKind, nHeaderKind, nFooterKind: integer;
+var sCharset, sTopicHeader, sTopicFooter, sRelativeTopic: string;
+var aBreadCrumb: array of String;
+
+function RemoveSpaces(const Input: string): string;
 var
-	aTopicList: THndTopicsInfoArray;
+  i: Integer;
+  c: Char;
+  Temp, str: string;
+begin
+  Temp := '';
+  str := '';
+  // Zuerst Umlaute ersetzen
+  for i := 1 to Length(Input) do
+  begin
+    case Input[i] of
+      'Ä': Temp := Temp + 'A';
+      'ä': Temp := Temp + 'a';
+      'Ö': Temp := Temp + 'O';
+      'ö': Temp := Temp + 'o';
+      'Ü': Temp := Temp + 'U';
+      'ü': Temp := Temp + 'u';
+      'ß': Temp := Temp + 's';
+    else
+      Temp := Temp + Input[i];
+    end;
+  end;
+  
+  // Danach nur alphanumerische Zeichen übernehmen
+  Result := '';
+  for i := 1 to Length(Temp) do
+  begin
+    c := Temp[i];
+    if c in ['A'..'Z', 'a'..'z', '0'..'9'] then
+    str := str + c;
+  end;
+  
+  str := Copy(str,1,32);
+  result := str;
+end;
+
+function getNextTopic: String;
 var
-    headContent, htmlContent, topicCaption: String;
+    aTopicList: THndTopicsInfoArray;
+    aTopic: String;
+begin
+    result := '#';
+    aTopic := RemoveSpaces(
+              HndTopics.GetTopicCaption(
+              HndTopics.GetTopicNext(
+              HndTopics.GetCurrentTopic)));
+    if Length(Trim(aTopic)) > 0 then
+    begin
+        result := aTopic;
+        exit;
+    end;
+end;
+
+function getPrevTopic: String;
 var
-	nCurTopic, nCurParent, nTopicKind, nHeaderKind, nFooterKind: integer;
-var
-	sCharset, sTopicHeader, sTopicFooter, sRelativeTopic: string;
-var
-	aBreadCrumb: array of String;
-	
+    aTopicList: THndTopicsInfoArray;
+    aTopic: String;
+begin
+    result := '#';
+    aTopic := RemoveSpaces(
+              HndTopics.GetTopicCaption(
+              HndTopics.GetTopicPrevious(
+              HndTopics.GetCurrentTopic)));
+    if Length(Trim(aTopic)) > 0 then
+    begin
+        result := aTopic;
+        exit;
+    end;
+end;
+    
     function getTemplateHeaderHtml: String;
     var aTopicID: String;
     var topicCaption: String;
@@ -303,9 +377,30 @@ begin
                     '[::TemplateMDnewLine::]',
                     '<br>',
                     [rfReplaceAll]);
-                    
+                
+                s1 := getNextTopic;
+                if s1 = '#' then
+                s1 := '#' else
+                s1 := s1 + '.htm';
+                
+                htmlContent := StringReplace(
+                    htmlContent,
+                    '[::NextTopic::]',
+                    '<span class="nextlink"><a href="'+s1+'">Weiter >></a></span>',
+                    [rfReplaceAll]);
+                
+                s1 := getPrevTopic;
+                if s1 = '#' then
+                s1 := '#' else
+                s1 := s1 + '.htm';
+                
+                htmlContent := StringReplace(
+                    htmlContent,
+                    '[::PrevTopic::]',
+                    '<span class="nextlink"><a href="'+s1+'"><< Zurück</a></span>',
+                    [rfReplaceAll]);
                 print(htmlContent);
-            end;            
+            end;
         %>
 	</div>
 	

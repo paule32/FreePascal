@@ -1,0 +1,1001 @@
+<%
+var
+	aTopicList: THndTopicsInfoArray;
+var
+    sDefaultTopicId: string;
+var
+	nCurTopic, nHeaderKind, nFooterKind: integer;
+var
+	sTopicHeader, sTopicFooter, sTopicContent: string;
+var
+    sTocContent: string;
+var
+    sSitemapData: string;
+var
+    isNextDefaultTheIndex, isGeneratingIndex: Boolean;
+var
+	isDefaultSearchDataProcessed, doAddSearchDataForThisTopic: Boolean; 
+
+    // Generate the CSS for the whole project
+    procedure GenerateContentCss();
+    var
+        sCssContent: string;
+    begin
+        HndGeneratorInfo.CurrentFile := 'css\hnd.content.css';
+        sCssContent := HndProjects.GetProjectCssContent();
+        sCssContent := StringReplace(sCssContent, 'body, table,', '.main-content, .main-content table', [rfIgnoreCase]);
+        print(sCssContent);
+    end;
+
+    // Generate the search data
+    procedure GenerateSearchData();
+    begin
+        HndGeneratorInfo.CurrentFile := 'js\hndsd.min.js';
+	    print(HndJsSearchEngine.GetJsData());
+        // Clear the search engine
+        HndJsSearchEngine.ClearSearchData();
+    end;
+
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+
+    procedure SitemapAdd(sUrl: string; bIsHome: Boolean = False);
+    var
+        sPriority, sChangeFreq, sBaseUrl: string;
+    begin
+        // Do we need to generate it ?
+        if not HndGeneratorInfo.GetCustomSettingValue('SitemapGenerate') then
+         Exit;
+        // Set the properties
+        if (bIsHome) then
+        begin
+            sChangeFreq := HndGeneratorInfo.GetCustomSettingValue('SitemapChangeFreqHome');
+            sPriority := HndGeneratorInfo.GetCustomSettingValue('SitemapPriorityHome');
+        end
+        else begin
+            sChangeFreq := HndGeneratorInfo.GetCustomSettingValue('SitemapChangeFreqOther');
+            sPriority := HndGeneratorInfo.GetCustomSettingValue('SitemapPriorityOther');
+        end;
+        // Update the URL
+        sBaseUrl := HndGeneratorInfo.GetCustomSettingValue('SitemapBaseUrl');
+        if Length(sBaseUrl) > 0 then
+        begin
+            if sBaseUrl[Length(sBaseUrl)] <> '/' then
+                sBaseUrl := sBaseUrl + '/';
+        end;
+        sUrl := sBaseUrl + sUrl;
+        // Add the entry
+        sSitemapData := sSitemapData + Format('<url><loc>%s</loc><lastmod>%s</lastmod><changefreq>%s</changefreq><priority>%s</priority></url>', [sUrl, FormatDateTime('yyyy-mm-dd', Now), sChangeFreq, sPriority]);
+    end;
+
+    // Generate the sitemap
+    procedure SitemapGenerate();
+    begin
+        // Do we need to generate it ?
+        if not HndGeneratorInfo.GetCustomSettingValue('SitemapGenerate') then
+         Exit;
+        // Add the home URL
+        SitemapAdd('', True);
+        // Generate the file
+        HndGeneratorInfo.CurrentFile := 'sitemap.xml';
+        print('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
+            print(sSitemapData);
+        print('</urlset>');
+    end;
+
+    function GetCustomCss: string;
+    begin
+        Result := HndGeneratorInfo.GetCustomSettingValue('CustomCss');
+        if (Result <> '') then
+            Result := '<style type="text/css">' + Result + '</style>';
+    end;
+	
+	function GetHtmlParamValue(Value: string): string;
+	begin
+		// Replace double quotes
+		Result := StringReplace(Value, '"', '&quot;', [rfReplaceAll]);
+	end;
+
+    // Returns the footer
+    function GetTemplateHtmlFooter: string;
+    begin
+        Result := HndGeneratorInfo.GetCustomSettingValue('Footer');
+    end;
+
+    // Returns the icon
+    function GetIconAsHtml: string;
+    var 
+        aLogoId: string;
+        aLogoUrl: string;
+        aLogoLink: string;
+        aLogoAlt: string;
+        aLogoContent: TMemoryStream;
+        aLogoExtension: string;
+    begin
+        aLogoId := HndGeneratorInfo.GetCustomSettingValue('Logo');
+        aLogoUrl := HndGeneratorInfo.GetCustomSettingValue('LogoUrl');
+        aLogoLink := HndGeneratorInfo.GetCustomSettingValue('LogoLink');
+        aLogoAlt := GetHtmlParamValue(HndGeneratorInfo.GetCustomSettingValue('LogoAlt'));
+        if (aLogoAlt = '') then aLogoAlt := 'logo';
+        // Using URL
+        if aLogoUrl <> '' then
+        begin
+            // Return HTML
+            Result := Format('<img src="%s" alt="%s" class="logo"/>', [aLogoUrl, aLogoAlt]);
+        end
+        // Using library item
+        else if aLogoId <> '' then
+        begin
+            aLogoContent := HndLibraryItems.GetItemContent(aLogoId);
+            aLogoExtension := HndLibraryItems.GetItemExtension(aLogoId);
+            if Assigned(aLogoContent) then
+            try
+                if (aLogoContent.Size > 0) then
+                begin
+                    // Save logo
+                    aLogoContent.SaveToFile(ExtractFilePath(HndGeneratorInfo.OutputFile) + '_logo.' + aLogoExtension);
+                    // Return HTML
+                    Result := Format('<img src="_logo.%s" alt="%s" class="logo"/>', [aLogoExtension, aLogoAlt]);
+                end;
+            finally
+                aLogoContent.Free;
+            end;
+        end;
+        // Add the link
+        if (Result <> '') and (aLogoLink <> '') then
+            Result := '<a href="' + aLogoLink + '">' + Result + '</a>';
+    end;
+
+    // Returns the theme CSS
+    function GetThemeAsHtml: string;
+    var
+        aThemeName: string;
+    begin
+        aThemeName := LowerCase(HndGeneratorInfo.GetCustomSettingValue('Theme'));
+        Result := Format('<link href="css/theme-%s.min.css" rel="stylesheet" />', [aThemeName]);
+    end;
+
+    // Returns HTML/CSS to customize the width of the Toc 
+    function GetTocWidthAsHtml: string;
+    var 
+        aSize: integer;
+    begin
+        Result := '';
+        // Get value
+        aSize := StrToIntDef(HndGeneratorInfo.GetCustomSettingValue('TocWidth'), 0);
+        // Check panels visibility
+        if (not HndGeneratorInfo.GetCustomSettingValue('TocShow')) and (not HndGeneratorInfo.GetCustomSettingValue('TocKeywordsShow')) and (not HndGeneratorInfo.GetCustomSettingValue('TocSearchShow')) then
+            aSize := 0;
+        // Return style content
+        if (aSize > 0) then
+        begin
+            Result := Format('<style type="text/css">nav { width: %dpx} @media screen and (min-width:769px) { body.md-nav-expanded div#main { margin-left: %dpx} body.md-nav-expanded header { padding-left: %dpx} }</style>', [aSize, aSize, aSize + 14]);
+        end
+        // Hide left panel
+        else begin
+            Result := '<style type="text/css">nav {display: none} #main {margin-left: 0 !important} header {padding-left: 14px !important} header .hnd-toggle {display: none !important} #hnd-splitter{display:none !important}</style>';
+        end;
+    end;
+
+    // Returns HTML/CSS to customize the width of the inline toc
+    function GetInlineTocWidthAsHtml: string;
+    begin
+        Result := '';
+        // Get value
+        var aWidth := HndGeneratorInfo.GetCustomSettingValue('InlineTocWitdh');
+        if (aWidth <> '') then
+            Result := Format('<style type="text/css">.navigation #inline-toc { width: %s !important}</style>', [aWidth]);
+    end;
+
+    // Returns HTML/CSS to display the splitter
+    function GetSplitterAsHtml: string;
+    var 
+        aSize: integer;
+    begin
+        Result := '';
+        // Show the splitter?
+        if (not HndGeneratorInfo.GetCustomSettingValue('ShowSplitter')) then
+            Exit;
+        // Get value
+        aSize := StrToIntDef(HndGeneratorInfo.GetCustomSettingValue('TocWidth'), 0);
+        // Return content
+        if (aSize > 0) then
+        begin
+            Result := Format('<div id="hnd-splitter" style="left: %dpx"></div>', [aSize]);
+        end;
+    end;
+
+	
+	// Returns the description of the topic
+	function GetTopicDescription: string;
+	begin
+		// Get value
+		Result := HndTopics.GetTopicDescription(HndGeneratorInfo.CurrentTopic);
+		// Empty ? Use project's description instead
+		if (Result = '') then Result := HndProjects.GetProjectSummary;
+	end;
+
+    // Returns a list of keywords
+    function GetTopicKeywordsAsHtml: string;
+    var
+	    aTopicKeywords: array of string;
+        nCurKeyword: integer;
+    begin
+        Result := '';
+        aTopicKeywords := HndTopicsKeywords.GetKeywordsAssociatedWithTopic(HndGeneratorInfo.CurrentTopic);
+        for nCurKeyword := 0 to High(aTopicKeywords) do
+        begin
+            if nCurKeyword > 0 then Result := Result + ',';
+            Result := Result + HTMLEncode(HndKeywords.GetKeywordCaption(aTopicKeywords[nCurKeyword]));
+        end;
+    end;
+
+    // Returns the formatted breadcrumb for the current topic 
+    function GetTopicBreadCrumbAsHtml: string;
+    var
+	    aBreadCrumb: array of string;
+        sRelativeTopic: string;
+        nCurParent, nCurTopicKind: Integer;
+    begin 
+        Result := '';
+		// Create the breadcrumb
+		aBreadCrumb.SetLength(0);
+		if HndGeneratorInfo.GetCustomSettingValue('ShowBreadCrumbs') then
+		begin
+			sRelativeTopic := HndTopics.GetTopicParent(HndGeneratorInfo.CurrentTopic);
+			while (sRelativeTopic <> '') and (sRelativeTopic <> HndTopics.GetProjectTopic()) do
+			begin
+				aBreadCrumb.SetLength(Length(aBreadCrumb) + 1);
+				aBreadCrumb[Length(aBreadCrumb) - 1] := sRelativeTopic;
+				sRelativeTopic := HndTopics.GetTopicParent(sRelativeTopic);
+			end;
+		end;
+        // Return it if any
+        if (Length(aBreadCrumb) > 0) then
+        begin
+            for nCurParent := Length(aBreadCrumb) - 1 downto 0 do
+            begin
+                // Get topic kind
+                nCurTopicKind := HndTopics.GetTopicKind(aBreadCrumb[nCurParent]);
+                // Empty topic
+                if (nCurTopicKind = 1) then
+                begin
+                    Result := Result + format('<li>%s</li>', [HTMLEncode(HndTopics.GetTopicCaption(aBreadCrumb[nCurParent]))]);
+                end
+                // URL topic
+                else if (nCurTopicKind = 2) then
+                begin
+                    Result := Result + format('<li><a href="%s">%s</a></li>', [HndTopics.GetTopicUrlLink(aBreadCrumb[nCurParent]), HTMLEncode(HndTopics.GetTopicCaption(aBreadCrumb[nCurParent]))]);
+                end
+                // Normal topic
+                else begin
+                    Result := Result + format('<li><a href="%s%s">%s</a></li>', [HndTopics.GetTopicHelpId(aBreadCrumb[nCurParent]), GetTopicExtension(), HTMLEncode(HndTopics.GetTopicCaption(aBreadCrumb[nCurParent]))]);
+                end;
+            end;
+        end;
+    end;
+
+    // Returns the inline table of contents and navigation arrows for the current topic
+    function GetTopicNavArrowsAsHtml: string;
+    var
+        aRelativeTopic: string;
+    begin  
+        Result := '';
+
+        if HndGeneratorInfo.GetCustomSettingValue('ShowInlineToc') then
+        begin
+            Result := Result + '<div class="btn-group">';
+            Result := Result + Format('<button type="button" title="%s" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span></button>', [HndGeneratorInfo.GetCustomSettingValue('TranslationInlineToc')]);
+            Result := Result + '<ul id="inline-toc" class="dropdown-menu dropdown-menu-right"></ul>';
+            Result := Result + '</div>';
+        end;
+
+		if HndGeneratorInfo.GetCustomSettingValue('ShowNavigation') then
+        begin
+            // Parent
+            aRelativeTopic := HndTopics.GetTopicParent(HndGeneratorInfo.CurrentTopic);
+			if (aRelativeTopic <> '') and (aRelativeTopic <> HndTopics.GetProjectTopic())
+             and (HndTopics.GetTopicKind(aRelativeTopic) <> 1)  // Skip blank topics
+            then
+            begin
+                Result := Result + Format(
+                    '<a class="btn btn-default" href="%s%s" title="%s" role="button"><span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span></a>',
+                    [
+                        HndTopics.GetTopicHelpId(aRelativeTopic),
+                        GetTopicExtension(),
+                        HTMLEncode(HndTopics.GetTopicCaption(aRelativeTopic))
+                    ]
+                );
+            end;
+            // Previous
+            aRelativeTopic := HndTopicsEx.GetTopicPreviousGenerated(HndGeneratorInfo.CurrentTopic, True);
+            while (HndTopics.GetTopicKind(aRelativeTopic) = 1) do  // Skip blank topics
+                aRelativeTopic := HndTopicsEx.GetTopicPreviousGenerated(aRelativeTopic, True);
+			if (aRelativeTopic <> '') and (aRelativeTopic <> HndTopics.GetProjectTopic()) then
+            begin
+                Result := Result + Format(
+                    '<a class="btn btn-default" href="%s%s" title="%s" role="button"><span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></a>',
+                    [
+                        HndTopics.GetTopicHelpId(aRelativeTopic),
+                        GetTopicExtension(),
+                        HTMLEncode(HndTopics.GetTopicCaption(aRelativeTopic))
+                    ]
+                );
+            end;
+            // Next
+            aRelativeTopic := HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True);
+            while (HndTopics.GetTopicKind(aRelativeTopic) = 1) do  // Skip blank topics
+                aRelativeTopic := HndTopicsEx.GetTopicNextGenerated(aRelativeTopic, True);
+			if (aRelativeTopic <> '') and (aRelativeTopic <> HndTopics.GetProjectTopic()) then
+            begin
+                Result := Result + Format(
+                    '<a class="btn btn-default" href="%s%s" title="%s" role="button"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>',
+                    [
+                        HndTopics.GetTopicHelpId(aRelativeTopic),
+                        GetTopicExtension(),
+                        HTMLEncode(HndTopics.GetTopicCaption(aRelativeTopic))
+                    ]
+                );
+            end;
+        end;
+        // Wrap the content in a group
+        if Result <> '' then
+            Result := '<div class="btn-group btn-group" role="group">' + Result + '</div>';
+    end;
+
+    // Returns the table of contents
+    function GetTocAsHtml(): string;
+    var
+        aTocTopicList: THndTopicsInfoArray;
+        nBlocLevel, nDif, nClose: Integer;
+        nCurTopic, nCurTopicLevel, nCurTopicChildrenCnt: Integer;
+        nCurTopicIcon: Integer;
+        sTopicUrl, sTopicData: string;
+    begin
+        Result := '<ul>';
+        nBlocLevel := 0;
+        try
+            aTocTopicList := HndTopicsEx.GetTopicListGenerated(True, False);
+            for nCurTopic := 0 to length(aTocTopicList) - 1 do
+            begin
+                HndGeneratorInfo.CurrentTopic := aTocTopicList[nCurTopic].id;
+                nCurTopicLevel := HndTopics.GetTopicLevel(HndGeneratorInfo.CurrentTopic);
+                nCurTopicChildrenCnt := HndTopicsEx.GetTopicDirectChildrenCountGenerated(HndGeneratorInfo.CurrentTopic, True);
+                nCurTopicIcon := HndTopics.GetTopicIconIndex(HndGeneratorInfo.CurrentTopic);
+                
+                // Topic URL
+                if aTocTopicList[nCurTopic].Kind = 2 then sTopicUrl := HndTopics.GetTopicUrlLink(HndGeneratorInfo.CurrentTopic)  // Link to URL
+                else if aTocTopicList[nCurTopic].Kind = 1 then sTopicUrl := '#" onclick="return false;'  // Empty
+                else sTopicUrl := format('%s%s', [aTocTopicList[nCurTopic].HelpId, GetTopicExtension()]);  // Normal topic
+                
+                // Close the previous topics
+                if ((nCurTopic > 0) and (nCurTopicLevel < HndTopics.GetTopicLevel(aTocTopicList[nCurTopic - 1].id))) then
+                begin
+                    nDif := HndTopics.GetTopicLevel(aTocTopicList[nCurTopic - 1].id) - nCurTopicLevel;
+                    for nClose := 0 to nDif - 1 do
+                    begin
+                        Result := Result + '</ul></li>';
+                        nBlocLevel := nBlocLevel - 1;
+                    end;
+                end;
+                
+                // Topic data
+                if nCurTopicIcon > -1 then sTopicData := 'data-jstree=''{"icon": "icon-' + IntToStr(nCurTopicIcon) + '"}'''
+                else sTopicData := '';
+
+                Result := Result + format('<li id="%s" %s>', [aTocTopicList[nCurTopic].HelpId, sTopicData]);
+                Result := Result + format('<a href="%s">%s</a>', [sTopicUrl, HTMLEncode(aTocTopicList[nCurTopic].caption)]);
+
+                if (nCurTopicChildrenCnt > 0) then
+                begin
+                    Result := Result + '<ul>';
+                    nBlocLevel := nBlocLevel + 1;
+                end
+                else begin
+                    Result := Result + '</li>';
+                end;
+                
+                // Close the last topic
+                if (HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True) = '') then
+                begin
+                    while nBlocLevel > 0 do
+                    begin
+                        Result := Result + '</ul></li>';
+                        nBlocLevel := nBlocLevel - 1;
+                    end;
+                end;
+            end;
+        finally
+            Result := Result + '</ul>';
+        end;
+    end;
+
+    // Returns the keywords
+    function GetKeywordsAsHtml(): string;
+    var
+        aKeywordList: THndKeywordsInfoArray;
+        aAssociatedTopics: array of string;
+        nBlocLevel, nDif, nClose, nCurKeywordLevel, nCurKeywordChildrenCnt: Integer;
+        nCurKeyword, nCurKeywordTopic: Integer;
+        sCurrentKeyword, sKeywordLink, sKeywordRelated: string;
+        sKeywordJsCaption: string;
+    begin
+        Result := '<ul>';
+        nBlocLevel := 0;
+        try
+            aKeywordList := HndKeywords.GetKeywordList(False);
+            for nCurKeyword := 0 to length(aKeywordList) - 1 do
+            begin
+                sCurrentKeyword := aKeywordList[nCurKeyword].id;
+                nCurKeywordLevel := HndKeywords.GetKeywordLevel(sCurrentKeyword);
+                nCurKeywordChildrenCnt := HndKeywords.GetKeywordDirectChildrenCount(sCurrentKeyword);
+                
+                sKeywordLink := '#';
+                sKeywordRelated := '[]';
+
+                aAssociatedTopics := HndTopicsKeywordsEx.GetGeneratedTopicsAssociatedWithKeyword(sCurrentKeyword);
+                if Length(aAssociatedTopics) > 0 then
+                begin
+                    sKeywordLink := format('%s%s', [HndTopics.GetTopicHelpId(aAssociatedTopics[0]), GetTopicExtension()]);
+                    if Length(aAssociatedTopics) > 1 then
+                    begin
+                        sKeywordRelated := '[';
+                        for nCurKeywordTopic := 0 to Length(aAssociatedTopics) - 1 do
+                        begin
+                            if nCurKeywordTopic > 0 then
+                                sKeywordRelated := sKeywordRelated + ',';
+                            // Escape caption
+                            sKeywordJsCaption := StringReplace(HndTopics.GetTopicCaption(aAssociatedTopics[nCurKeywordTopic]), '\', '\\', [rfReplaceAll]);   
+                            sKeywordJsCaption := StringReplace(sKeywordJsCaption, '"', '\"', [rfReplaceAll]);
+                            sKeywordJsCaption := StringReplace(sKeywordJsCaption, '''', '&apos;', [rfReplaceAll]);   
+                            // Format it
+                            sKeywordRelated := sKeywordRelated + format('{"title":"%s","url":"%s%s"}', [sKeywordJsCaption, HndTopics.GetTopicHelpId(aAssociatedTopics[nCurKeywordTopic]), GetTopicExtension()]);
+                        end;
+                        sKeywordRelated := sKeywordRelated + ']';
+                    end;
+                end;
+                
+                // Close the previous keywords
+                if ((nCurKeyword > 0) and (nCurKeywordLevel < HndKeywords.GetKeywordLevel(aKeywordList[nCurKeyword - 1].id))) then
+                begin
+                    nDif := HndKeywords.GetKeywordLevel(aKeywordList[nCurKeyword - 1].id) - nCurKeywordLevel;
+                    for nClose := 0 to nDif - 1 do
+                    begin
+                        Result := Result + '</ul></li>';
+                        nBlocLevel := nBlocLevel - 1;
+                    end;
+                end;
+
+                Result := Result + '<li>';
+                Result := Result + format('<a href="%s" data-related=''%s''>%s</a>', [sKeywordLink, sKeywordRelated, aKeywordList[nCurKeyword].caption]);
+
+                if (nCurKeywordChildrenCnt > 0) then
+                begin
+                    Result := Result + '<ul>';
+                    nBlocLevel := nBlocLevel + 1;
+                end
+                else begin
+                    Result := Result + '</li>';
+                end;
+                
+                // Close the last keyword
+                if (HndKeywords.GetKeywordNext(sCurrentKeyword) = '') then
+                begin
+                    while nBlocLevel > 0 do
+                    begin
+                        Result := Result + '</ul></li>';
+                        nBlocLevel := nBlocLevel - 1;
+                    end;
+                end;
+            
+            end;
+        finally
+            Result := Result + '</ul>';
+        end;
+    end;
+
+    // Returns the header of the current topic
+    function GetTopicHeaderAsHtml(): string;
+    begin
+        Result := '';
+        // Only return if not hidden
+        if (nHeaderKind <> 2) then
+        begin
+            Result := format('<h2>%s</h2>', [HTMLEncode(sTopicHeader)])
+        end;
+    end;
+
+    // Returns the footer of the current topic
+    function GetTopicFooterAsHtml(): string;
+    begin
+        Result := '';
+        // Only return if not hidden
+        if (nFooterKind <> 2) then
+        begin
+            Result := format('<div id="topic_footer"><div id="topic_footer_content">%s</div></div>', [HTMLEncode(sTopicFooter)])
+        end;
+    end;
+
+    // Adds the default topic as the home page
+    function AddDefaultTopic(var aList: THndTopicsInfoArray): string;
+    var
+        nLength: integer;
+    begin
+        Result := HndProjects.GetProjectDefaultTopic();
+       	// Try to get the default topic
+        Result := HndProjects.GetProjectDefaultTopic();
+        // None defined: the first one is the default topic
+        if (Result = '') then
+            Result := HndTopicsEx.GetTopicNextGenerated(HndTopics.GetProjectTopic(), False);
+        if (Result <> '') then
+        begin
+            // Add the default topic another time
+            nLength := Length(aList);
+            aList.SetLength(nLength + 1);
+            aList[nLength].Id := Result;
+            aList[nLength].Caption := HndTopics.GetTopicCaption(Result);
+            aList[nLength].HelpId := HndTopics.GetTopicHelpId(Result);
+            aList[nLength].HelpContext := HndTopics.GetTopicHelpContext(Result);
+            aList[nLength].Kind := HndTopics.GetTopicKind(Result);
+            aList[nLength].Visibility := HndTopics.GetTopicVisibility(Result);
+        end;
+    end;
+	
+	// Returns the google analytics code
+	function GetGoogleAnalyticsCode(): string;
+	var
+		sId: string;
+	begin
+		Result := '';
+		// Get the analytics Id
+		sId := HndGeneratorInfo.GetCustomSettingValue('GoogleAnalyticsId');
+		if (sId <> '') then
+		begin
+			Result := Format(
+				'<!-- Global site tag (gtag.js) - Google Analytics -->'
+				+ '<script async src="https://www.googletagmanager.com/gtag/js?id=%s"></script>'
+				+ '<script>'
+				+ 'window.dataLayer = window.dataLayer || [];'
+				+ 'function gtag(){dataLayer.push(arguments);}'
+				+ 'gtag("js", new Date());'
+				+ 'gtag("config", "%s");'
+				+ '</script>',
+				[sId, sId]
+			);
+		end;
+	end;
+
+    // Returns the Google Tag Manager code
+    function GetGoogleTagManagerCode(isHead: Boolean): string;
+	var
+		sId: string;
+	begin
+		Result := '';
+		// Get the Google Tag Manager Id
+		sId := HndGeneratorInfo.GetCustomSettingValue('GoogleTagManagerId');
+		if (sId <> '') then
+		begin
+            if (isHead) then
+                Result := Format(
+                    '<!-- Google Tag Manager -->' + #13#10
+                    + '<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({''gtm.start'':' + #13#10
+                    + 'new Date().getTime(),event:''gtm.js''});var f=d.getElementsByTagName(s)[0],' + #13#10
+                    + 'j=d.createElement(s),dl=l!=''dataLayer''?''&l=''+l:'''';j.async=true;j.src=' + #13#10
+                    + '''https://www.googletagmanager.com/gtm.js?id=''+i+dl;f.parentNode.insertBefore(j,f);' + #13#10
+                    + '})(window,document,''script'',''dataLayer'',''%s'');</script>' + #13#10
+                    + '<!-- End Google Tag Manager -->',
+                    [sId]
+                )
+            else
+                Result := Format(
+                    '<!-- Google Tag Manager (noscript) -->' + #13#10
+                    + '<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=%s"' + #13#10
+                    + 'height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>' + #13#10
+                    + '<!-- End Google Tag Manager (noscript) -->',
+                    [sId]
+                )
+		end;
+    end;
+
+begin
+    // Init
+	isDefaultSearchDataProcessed := False;
+    isNextDefaultTheIndex := False;
+
+	// No need BOM for UTF8 files
+	HndGeneratorInfo.BOMOutput := False;
+
+	// Output global CSS content.
+    GenerateContentCss();
+
+	// Clear search data
+	HndJsSearchEngine.ClearSearchData();
+
+    // Get the content of the Toc. /!\ Must be done here as it updates current topic
+    sTocContent := GetTocAsHtml();
+	
+    // Get a list of generated topics
+	aTopicList := HndTopicsEx.GetTopicListGenerated(False, False);
+
+    // Trick to add the default topic as the home page
+    sDefaultTopicId := AddDefaultTopic(aTopicList);
+
+	// Each individual topics...
+	for nCurTopic := 0 to length(aTopicList) - 1 do
+	begin
+        // Init
+        isGeneratingIndex := False;
+
+		// Notify about the topic being generated
+		HndGeneratorInfo.CurrentTopic := aTopicList[nCurTopic].id;
+
+		// Topic kind
+		if (aTopicList[nCurTopic].Kind = 1) then continue;  // Empty topic: do not generate anything
+
+        // Setup the file name
+        if (HndGeneratorInfo.CurrentTopic <> sDefaultTopicId) then
+        begin
+		    HndGeneratorInfo.CurrentFile := aTopicList[nCurTopic].HelpId + GetTopicExtension();
+        end
+        // Special handle for default topic
+        else begin
+            // We will generate the index next time
+            if not isNextDefaultTheIndex then
+            begin
+                // Next time we see the default topic, it will be the index 
+                isNextDefaultTheIndex := True;
+                // Use the default convention
+		        HndGeneratorInfo.CurrentFile := aTopicList[nCurTopic].HelpId + GetTopicExtension();
+            end
+            // We generate the index now
+            else begin
+                // We are generating the index
+                isGeneratingIndex := True;
+                // Use the file chosen by the user
+                HndGeneratorInfo.CurrentFile := ExtractFileName(HndGeneratorInfo.OutputFile);
+            end;
+        end;
+
+        // XML sitemap
+        SitemapAdd(HndGeneratorInfo.CurrentFile, False);
+
+		// Topic header
+		nHeaderKind := HndTopics.GetTopicHeaderKind(HndGeneratorInfo.CurrentTopic);
+        sTopicHeader := '';
+        if (nHeaderKind <> 2) then
+		    sTopicHeader := HndTopics.GetTopicHeaderTextCalculated(HndGeneratorInfo.CurrentTopic);
+		// Topic footer
+		nFooterKind := HndTopics.GetTopicFooterKind(HndGeneratorInfo.CurrentTopic);
+        sTopicFooter := '';
+        if (nFooterKind <> 2) then
+		    sTopicFooter := HndTopics.GetTopicFooterTextCalculated(HndGeneratorInfo.CurrentTopic);
+		// Topic content
+		sTopicContent := HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic);
+		
+		// Do we add search data for this topic ?
+		doAddSearchDataForThisTopic := 
+			(HndGeneratorInfo.CurrentTopic <> sDefaultTopicId)
+			or ((HndGeneratorInfo.CurrentTopic = sDefaultTopicId) and (not isDefaultSearchDataProcessed));
+		
+		// Add Search data
+		if doAddSearchDataForThisTopic then
+		begin
+			HndJsSearchEngine.AddSearchData(
+				sTopicHeader,
+				HndGeneratorInfo.CurrentTopic,
+                HndGeneratorInfo.GetCustomSettingValue('SearchEngineMinChars')
+			);
+			HndJsSearchEngine.AddSearchData(
+				HndUtils.HtmlToText(sTopicContent),
+				HndGeneratorInfo.CurrentTopic,
+                HndGeneratorInfo.GetCustomSettingValue('SearchEngineMinChars')
+			);
+			HndJsSearchEngine.AddSearchData(
+				sTopicFooter,
+				HndGeneratorInfo.CurrentTopic,
+                HndGeneratorInfo.GetCustomSettingValue('SearchEngineMinChars')
+			);
+		end;
+		
+		// Search data already processed for default topic
+		if (HndGeneratorInfo.CurrentTopic = sDefaultTopicId) then
+			isDefaultSearchDataProcessed := True;
+%>
+
+<!DOCTYPE html>
+<html lang="<% print(HndProjects.GetProjectLanguageCodeAsHtml(True)); %>">
+
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="generator" content="<% print(HTMLEncode(HndGeneratorInfo.HelpNDocVersion)); %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="favicon.ico"/>
+
+  <title><% print(HTMLEncode(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %></title>
+  <meta name="description" content="<% print(HTMLEncode(GetTopicDescription())); %>" /> 
+  <meta name="keywords" content="<% print(GetTopicKeywordsAsHtml()); %>">
+
+<%
+    // Redirect for URL and Files topic
+    if (aTopicList[nCurTopic].Kind = 2) then
+    begin
+        printf('<meta http-equiv="refresh" content="0;URL=%s">', [HndTopics.GetTopicUrlLink(HndGeneratorInfo.CurrentTopic)]);
+    end
+    else begin
+%>
+
+  <% print(GetGoogleTagManagerCode(True)); %>
+  <% print(GetGoogleAnalyticsCode()); %>
+
+  <!-- Twitter Card data -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="<% print(HTMLEncode(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %>">
+  <meta name="twitter:description" content="<% print(HTMLEncode(GetTopicDescription())); %>">
+
+  <!-- Open Graph data -->
+  <meta property="og:title" content="<% print(HTMLEncode(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %>" />
+  <meta property="og:type" content="article" />
+  <meta property="og:description" content="<% print(HTMLEncode(GetTopicDescription())); %>" />
+  <meta property="og:site_name" content="<% print(HTMLEncode(HndProjects.GetProjectTitle())); %>" /> 
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendors/bootstrap-3.4.1/css/bootstrap.min.css" rel="stylesheet"/>
+
+  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <link href="vendors/bootstrap-3.4.1/css/ie10-viewport-bug-workaround.css" rel="stylesheet"/>
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+      <script src="vendors/html5shiv-3.7.3/html5shiv.min.js"></script>
+      <script src="vendors/respond-1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  <!-- JsTree styles -->
+  <link href="vendors/jstree-3.3.10/themes/default/style.min.css" rel="stylesheet"/>
+
+  <!-- Hnd styles -->
+  <link href="css/layout.min.css" rel="stylesheet" />
+  <link href="css/effects.min.css" rel="stylesheet" />
+  <% print(GetThemeAsHtml()); %>
+  <link href="css/print.min.css" rel="stylesheet" media="print" />
+  <% print(GetTocWidthAsHtml()); %>
+  <% print(GetInlineTocWidthAsHtml()); %>
+
+  <!-- Content style -->
+  <link href="css/hnd.content.css" rel="stylesheet" />
+
+  <% print(GetCustomCss()); %>
+
+<%
+    end;  // Redirection for URL and Files topics
+%>
+
+</head>
+
+<body class="md-nav-expanded">
+
+<%
+	// Redirect for URL and Files topic
+	if (aTopicList[nCurTopic].Kind = 2) then
+	begin
+	  printf('<a href="%s">Redirecting... click here if nothing happens</a>', [HndTopics.GetTopicUrlLink(HndGeneratorInfo.CurrentTopic)]);
+	end
+	else begin
+%>
+
+  <% print(GetGoogleTagManagerCode(False)); %>
+
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible">Skip to main content</a>
+  </div>
+
+  <header class="headroom">
+    <button class="hnd-toggle btn btn-default">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>        
+    </button>
+    <h1><% print(HTMLEncode(HndProjects.GetProjectTitle())); %></h1>
+    <% print(GetIconAsHtml()); %>
+  </header>
+
+  <nav id="panel-left" class="md-nav-expanded">
+    <!-- Nav tabs -->
+    <ul class="tab-tabs nav nav-tabs" role="tablist">
+      <li id="nav-close" role="presentation"> 
+        <button class="hnd-toggle btn btn-default" aria-label="close">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </li>
+      
+	  <% if HndGeneratorInfo.GetCustomSettingValue('TocShow') then begin %>
+        <li role="presentation" class="tab active">
+            <a href="#contents" id="tab-contents" aria-controls="contents" role="tab" data-toggle="tab">
+                <i class="glyphicon glyphicon-list"></i>
+                <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocTitle'))); %>
+            </a>
+        </li>
+      <%
+        end;
+        if HndGeneratorInfo.GetCustomSettingValue('TocKeywordsShow') then begin
+      %>
+        <li role="presentation" class="tab">
+            <a href="#index" id="tab-index" aria-controls="index" role="tab" data-toggle="tab">
+                <i class="glyphicon glyphicon-asterisk"></i>
+                <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocKeywordsTitle'))); %>
+            </a>
+        </li>
+      <%
+        end;
+        if HndGeneratorInfo.GetCustomSettingValue('TocSearchShow') then begin
+      %>
+        <li role="presentation" class="tab">
+            <a href="#search" id="tab-search" aria-controls="search" role="tab" data-toggle="tab">
+                <i class="glyphicon glyphicon-search"></i>
+                <% print(HTMLEncode(HndGeneratorInfo.GetCustomSettingValue('TocSearchTitle'))); %>
+            </a>
+        </li>
+      <%
+        end;
+      %>
+    </ul>  <!-- /Nav tabs -->
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+	  <% if HndGeneratorInfo.GetCustomSettingValue('TocShow') then begin %>
+      <div role="tabpanel" class="tab-pane active" id="contents">
+        <div id="toc" class="tree-container unselectable"
+            <% if (not isGeneratingIndex) then print('data-url="_toc.json"'); %>
+            data-openlvl="<% print(HndGeneratorInfo.GetCustomSettingValue('TocExpandLevel')); %>"
+        >
+            <% if (isGeneratingIndex) then print(sTocContent); %>
+        </div>
+      </div>  <!-- /contents-->
+      <%
+        end;
+        if HndGeneratorInfo.GetCustomSettingValue('TocKeywordsShow') then begin
+      %>
+      <div role="tabpanel" class="tab-pane" id="index">
+        <div id="keywords" class="tree-container unselectable"
+            <% if (not isGeneratingIndex) then print('data-url="_keywords.json"'); %>
+            data-openlvl="<% print(HndGeneratorInfo.GetCustomSettingValue('TocKeywordsExpandLevel')); %>"
+        >
+            <% if (isGeneratingIndex) then print(GetKeywordsAsHtml()); %>
+        </div>
+      </div>  <!-- /index-->
+      <%
+        end;
+        if HndGeneratorInfo.GetCustomSettingValue('TocSearchShow') then begin
+      %>
+      <div role="tabpanel" class="tab-pane" id="search">
+        <div class="search-content">
+          <div class="search-input">
+            <form id="search-form">
+              <div class="form-group">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="input-search" name="input-search" placeholder="<% print(HndGeneratorInfo.GetCustomSettingValue('TranslationSearch')); %>" aria-label="<% print(HndGeneratorInfo.GetCustomSettingValue('TranslationSearch')); %>" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit" aria-label="<% print(HndGeneratorInfo.GetCustomSettingValue('TranslationSearch')); %>">
+                      <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </form>
+          </div>  <!-- /search-input -->
+          <div class="search-result">
+            <div id="search-info"></div>
+            <div class="tree-container unselectable" id="search-tree"></div>
+          </div>  <!-- /search-result -->
+        </div>  <!-- /search-content -->
+      </div>  <!-- /search-->
+      <%
+        end;
+      %>
+    </div>  <!-- /Tab panes -->
+
+  </nav>
+
+  <div id="main">
+
+    <article>
+        <div id="topic-content" class="container-fluid" 
+		  data-hnd-id="<% print(aTopicList[nCurTopic].HelpId); %>"
+		  data-hnd-context="<% print(IntToStr(aTopicList[nCurTopic].HelpContext)); %>"
+		  data-hnd-title="<% print(GetHtmlParamValue(aTopicList[nCurTopic].Caption)); %>"
+		>
+            <% if (HndGeneratorInfo.GetCustomSettingValue('ShowBreadCrumbs') or HndGeneratorInfo.GetCustomSettingValue('ShowNavigation') or HndGeneratorInfo.GetCustomSettingValue('ShowInlineToc')) then begin %>
+                <div class="navigation">
+                    <ol class="breadcrumb">
+                        <% print(GetTopicBreadCrumbAsHtml()); %>
+                    </ol>
+                    <div class="nav-arrows">
+                        <% print(GetTopicNavArrowsAsHtml()); %>
+                    </div>
+                </div> 
+            <% end; %>
+
+            <a id="main-content"></a>
+
+            <% print(GetTopicHeaderAsHtml()); %>
+
+            <div class="main-content">
+                <% print(sTopicContent); %>
+            </div>
+            
+            <% print(GetTopicFooterAsHtml()); %>
+        </div>  <!-- /#topic-content -->
+    </article>
+
+    <footer><% print(GetTemplateHtmlFooter()); %></footer>
+
+  </div>  <!-- /#main -->
+
+  <div class="mask" data-toggle="sm-nav-expanded"></div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="hndModal" tabindex="-1" role="dialog" aria-labelledby="hndModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="hndModalLabel"></h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary modal-btn-close" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Splitter -->
+  <% print(GetSplitterAsHtml()); %>  
+
+  <!-- Scripts -->
+  <script src="vendors/jquery-3.7.1/jquery.min.js"></script>
+  <script src="vendors/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+  <script src="vendors/bootstrap-3.4.1/js/ie10-viewport-bug-workaround.js"></script>
+  <script src="vendors/markjs-8.11.1/jquery.mark.min.js"></script>
+  <script src="vendors/uri-1.19.11/uri.min.js"></script>
+  <script src="vendors/imageMapResizer-1.0.10/imageMapResizer.min.js"></script>
+  <script src="vendors/headroom-0.11.0/headroom.min.js"></script>
+  <script src="vendors/jstree-3.3.10/jstree.min.js"></script>  
+  <script src="vendors/interactjs-1.9.22/interact.min.js"></script>  
+
+  <!-- HelpNDoc scripts -->
+  <script src="js/polyfill.object.min.js"></script>
+  <script src="_translations.js"></script>
+  <script src="js/hndsd.min.js"></script>
+  <script src="js/hndse.min.js"></script>
+  <script src="js/app.min.js"></script>
+
+  <!-- Init script -->
+  <script src="_topic_init.js"></script>
+
+<%
+	end;  // Redirecting
+%>
+
+</body>
+
+</html>
+
+<%
+	end;  // For each topic
+	
+	// Output JS Search engine data
+	GenerateSearchData();
+
+    // Output Sitemap
+    SitemapGenerate();
+	
+end.
+%>

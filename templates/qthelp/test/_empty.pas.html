@@ -1,0 +1,32 @@
+﻿<%
+	// Return the topic extension, starting with a dot
+	function GetTopicExtension: string;
+	begin
+		Result := Trim(HndGeneratorInfo.TemplateInfo.TopicExtension);
+		if ((Length(Result) > 0) and (Result[1] <> '.')) then
+			Result := '.' + Result;
+	end;
+
+begin
+	// Setup the file name
+	HndGeneratorInfo.CurrentFile := '_empty' + GetTopicExtension();
+	
+	// Header
+	print('<!DOCTYPE html>');
+%>
+<html>
+	
+<head>
+	<title></title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="generator" content="<% print(HTMLEncode(HndGeneratorInfo.HelpNDocVersion)); %>">
+</head>
+
+<body>
+</body>
+
+</html>
+
+<%
+end.
+%>

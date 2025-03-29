@@ -50,10 +50,10 @@
       <Unit>
         <Filename Value="helper.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="3"/>
         <CursorPos X="17" Y="31"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -63,10 +63,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainForm"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="635"/>
-        <CursorPos X="30" Y="662"/>
-        <UsageCount Value="150"/>
+        <CursorPos X="17" Y="660"/>
+        <UsageCount Value="253"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -79,24 +78,24 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="7"/>
         <CursorPos X="9" Y="37"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
       </Unit>
       <Unit>
         <Filename Value="globals.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="85"/>
         <CursorPos Y="55"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="xmlstream.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="131"/>
         <CursorPos Y="165"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -105,7 +104,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="52"/>
         <CursorPos X="6" Y="14"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
       <Unit>
@@ -113,7 +112,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="23" Y="8"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
       <Unit>
@@ -121,55 +120,26 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos X="3"/>
-        <UsageCount Value="150"/>
+        <UsageCount Value="253"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="commentpreprocessor.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="CommentPreprocessor"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <CursorPos X="6" Y="223"/>
-        <UsageCount Value="85"/>
+        <UsageCount Value="188"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="htmlLexer.l.txt"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="17" Y="11"/>
-        <UsageCount Value="7"/>
-        <DefaultSyntaxHighlighter Value="Text"/>
-      </Unit>
-      <Unit>
-        <Filename Value="htmlLexer.pas"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="4"/>
-        <CursorPos X="3" Y="21"/>
-        <UsageCount Value="4"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\tplylib\src\yacclib.pas"/>
-        <UnitName Value="YaccLib"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="35"/>
-        <CursorPos Y="50"/>
-        <UsageCount Value="4"/>
-      </Unit>
-      <Unit>
-        <Filename Value="lexlib.pas"/>
-        <UnitName Value="LexLib"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="299"/>
-        <CursorPos Y="299"/>
-        <UsageCount Value="4"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\components\synedit\syneditlines.pas"/>
-        <UnitName Value="SynEditLines"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="247"/>
-        <CursorPos Y="264"/>
-        <UsageCount Value="4"/>
+        <Filename Value="..\..\DIN_5473\tools\add_topic_from_hhc.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="24"/>
+        <CursorPos Y="42"/>
+        <UsageCount Value="61"/>
+        <Loaded Value="True"/>
       </Unit>
     </Units>
     <Debugger>
