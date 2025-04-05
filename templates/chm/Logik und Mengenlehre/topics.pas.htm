@@ -7,6 +7,7 @@
 // \detail
 // Project. Tested in an HelpNDoc.com CHM Project.
 // ----------------------------------------------------------------------------
+var currentTemplate: Integer;
 var
     aTopicList: THndTopicsInfoArray;
 var
@@ -77,20 +78,20 @@ end;
     end;
     
     function getTemplateHtml: String;
-    var aTopicID: String;
+    var aTopicID, content: String;
     var topicCaption: String;
     begin
-        result := '';    
+        result := '';
         // Get first topic
         aTopicId := HndTopics.GetTopicFirst();
         // Loop through all topics
         while aTopicID <> '' do
         begin
             topicCaption := HndTopics.GetTopicCaption(aTopicID);
-            if (TopicCaption = 'Vorlage') or (TopicCaption = 'Template') then
+            if (TopicCaption = 'Vorlage') then
             begin
                 result := HndTopics.GetTopicContentAsHtml(aTopicID);
-                break;
+                break
             end;
             aTopicID := HndTopics.GetTopicNext(aTopicId);
         end;
@@ -373,6 +374,110 @@ begin
                     '[::Template::]',
                     HndTopics.GetTopicContentAsHtml(HndGeneratorInfo.CurrentTopic),
                     [rfReplaceAll]);
+                if Pos('[::TemplateMITLicense::]', htmlContent) > 0 then
+                begin
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateMITLicense::]','',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateTitle::]',
+                        'MIT - Lizenzen',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateContent::]',
+                        'Lizenz',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateSubject::]',
+                        'Bitte Lesen - Danke !',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateBottomLink::]',
+                        '&nbsp;',
+                        [rfReplaceAll]);
+                end;
+                if Pos('[::Template Common::]', htmlContent) > 0 then
+                begin
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::Template Common::]','',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateTitle::]',
+                        'Logik und Mengenlehre',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateContent::]',
+                        'Lizenz',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateSubject::]',
+                        'Bitte Lesen - Danke !',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateBottomLink::]',
+                        '&nbsp;',
+                        [rfReplaceAll]);
+                end;
+                if  Pos('[::Template Hessenberg::]', htmlContent) > 0 then
+                begin
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateTitle::]',
+                        'Logik und Mengenlehre',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateSubject::]',
+                        'Über das Unendliche in der Mathematik',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateContent::]',
+                        'G. Hessenberg',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateBottomLink::]',
+                        '<b><i><a href="https://">Staats-Biblothek München/a></i></b>',
+                        [rfReplaceAll]);
+                end;
+                if  Pos('[::Template DIN-5473::]', htmlContent) > 0 then
+                begin
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::Template DIN-5473::]', '',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateTitle::]',
+                        'Logik und Mengenlehre',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateSubject::]',
+                        'Zeichen und Symbole',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateContent::]',
+                        'DIN-5473',
+                        [rfReplaceAll]);
+                    htmlContent := StringReplace(
+                        htmlContent,
+                        '[::TemplateBottomLink::]',
+                        '<b><i><a href="https://www.din.de/de">DIN - Deutsches Institut für Normung</a></i></b>',
+                        [rfReplaceAll]);
+                end;
                 htmlContent := StringReplace(
                     htmlContent,
                     '[::Template_Date::]',
