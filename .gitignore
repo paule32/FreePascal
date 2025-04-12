@@ -31,3 +31,12 @@ app/icudtl.dat
 /app/lib
 *.ppu
 output/chm Dokumentation erstellen/Titel dieses Hilfeprojekts.chm
+/app/lib/x86_64-win64
+/app/lib
+*.ppu
+*.ppu
+*.o
+/app/lib
+/app/lib
+*.exe
+/app/CEF4Delphi

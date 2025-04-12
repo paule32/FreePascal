@@ -41,6 +41,7 @@
 {"hash":90721272,"name":"tform1.panel8.caption","sourcebytes":[80,97,110,101,108,56],"value":"Panel8"},
 {"hash":109362960,"name":"tform1.panel10.caption","sourcebytes":[80,97,110,101,108,49,48],"value":"Panel10"},
 {"hash":109362961,"name":"tform1.panel11.caption","sourcebytes":[80,97,110,101,108,49,49],"value":"Panel11"},
+{"hash":214228420,"name":"tform1.propertyedit.text","sourcebytes":[80,114,111,112,101,114,116,121,69,100,105,116],"value":"PropertyEdit"},
 {"hash":126668695,"name":"tform1.tabsheet5.caption","sourcebytes":[80,114,101,118,105,101,119],"value":"Preview"},
 {"hash":109362962,"name":"tform1.panel12.caption","sourcebytes":[80,97,110,101,108,49,50],"value":"Panel12"},
 {"hash":109362963,"name":"tform1.panel13.caption","sourcebytes":[80,97,110,101,108,49,51],"value":"Panel13"},

@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 165
+  Left = 444
   Height = 706
-  Top = 174
+  Top = 263
   Width = 1167
   Caption = 'Form1'
   ClientHeight = 706
@@ -3097,6 +3097,7 @@ object Form1: TForm1
               RowCount = 7
               TabOrder = 3
               OnColRowMoved = ValueListEditorColRowMoved
+              OnDblClick = ValueListEditorDblClick
               OnDrawCell = ValueListEditorDrawCell
               OnHeaderSized = ValueListEditorHeaderSized
               OnHeaderSizing = ValueListEditorHeaderSizing
@@ -3141,6 +3142,18 @@ object Form1: TForm1
                 0
                 'Value'
               )
+            end
+            object PropertyEdit: TEdit
+              Left = 112
+              Height = 24
+              Top = 96
+              Width = 88
+              Enabled = False
+              TabOrder = 4
+              Text = 'PropertyEdit'
+              Visible = False
+              OnExit = PropertyEditExit
+              OnKeyDown = PropertyEditKeyDown
             end
           end
           object Splitter6: TSplitter

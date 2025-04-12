@@ -48,6 +48,7 @@ type
     ComboBoxEx1: TComboBoxEx;
     ComboBoxEx2: TComboBoxEx;
     ControlBar1: TControlBar;
+    PropertyEdit: TEdit;
     edProjectAutor: TEdit;
     edProjectName: TEdit;
     edProjectPath: TEdit;
@@ -207,6 +208,9 @@ type
     procedure MenuItem9Click(Sender: TObject);
     procedure PageControl1Change(Sender: TObject);
     procedure PageControl2Resize(Sender: TObject);
+    procedure PropertyEditExit(Sender: TObject);
+    procedure PropertyEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure sbApplyCustomCSSClick(Sender: TObject);
     procedure sbApplyCustomJSClick(Sender: TObject);
     procedure sbApplyFooterContentClick(Sender: TObject);
@@ -228,6 +232,7 @@ type
     procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
     procedure TopicTreeClick(Sender: TObject);
     procedure ValueListEditorColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
+    procedure ValueListEditorDblClick(Sender: TObject);
     procedure ValueListEditorDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
     procedure ValueListEditorHeaderSized(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure ValueListEditorHeaderSizing(Sender: TObject; const IsColumn: boolean; const aIndex, aSize: Integer);
@@ -239,6 +244,8 @@ type
     UpdatingNumbers: Integer; // Zählt, wie oft die Nummerierung aktiv ist
     LastTopicTreeNode: TTreeNode;
     ini: TIniFile;
+    dblClickPropertyEditor: Boolean;
+    CurrentDesignerObject: TObject;
     procedure checkText;
     procedure ReadIniProject(flag: Integer; name: String);
 
@@ -276,6 +283,12 @@ uses
   GetText, Translations, DefaultTranslator, LCLTranslator,
   Resource, LResources, globals, htmlParser, commentPreprocessor,
   about;
+
+const
+  row_Top    = 3;
+  row_Left   = 4;
+  row_Width  = 5;
+  row_Height = 6;
 
 var
   ToolSpeedButton: array of TSpeedButton;
@@ -959,6 +972,70 @@ begin
   end;
 end;
 
+procedure TForm1.PropertyEditExit(Sender: TObject);
+var
+  ACol, ARow: Integer;
+begin
+  // bei verlassen: Wert zurück schreiben
+  ACol := PropertyEdit.Tag and $ffff;
+  ARow := PropertyEdit.Tag shr 16;
+
+  ValueListEditor.Cells[ACol, ARow] := PropertyEdit.Text;
+  PropertyEdit.Visible := false;
+  PropertyEdit.Enabled := false;
+end;
+
+procedure TForm1.PropertyEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  ACol, ARow: Integer;
+  procedure checkButton(prop: Word);
+  var
+    num: Integer;
+  begin
+    try
+      num := StrToInt(PropertyEdit.Text);
+    except
+      ShowMessage('value of property editor invalid');
+      PropertyEdit.Text := '';
+      exit;
+    end;
+    if prop = 1 then TButton(CurrentDesignerObject).Top    := num;
+    if prop = 2 then TButton(CurrentDesignerObject).Left   := num;
+    if prop = 3 then TButton(CurrentDesignerObject).Width  := num;
+    if prop = 4 then TButton(CurrentDesignerObject).Height := num;
+
+    if Assigned(SelectionFrame) then
+    SelectionFrame.SetBounds(
+      TButton(CurrentDesignerObject).Left   - 2,
+      TButton(CurrentDesignerObject).Top    - 2,
+      TButton(CurrentDesignerObject).Width  + 4,
+      TButton(CurrentDesignerObject).Height + 4);
+  end;
+begin
+  if (key = VK_RETURN) then
+  begin
+    if CurrentDesignerObject = nil then
+    begin
+      ShowMessage('no designer object selected.');
+      exit;
+    end;
+
+    ACol := PropertyEdit.Tag and $ffff;
+    ARow := PropertyEdit.Tag shr 16;
+
+    ValueListEditor.Cells[ACol, ARow] := PropertyEdit.Text;
+
+    if CurrentDesignerObject is TButton then
+    begin
+      if (ARow = row_Top)    and (ACol = 1) then checkButton(1);
+      if (ARow = row_Left)   and (ACol = 1) then checkButton(2);
+      if (ARow = row_Width)  and (ACol = 1) then checkButton(3);
+      if (ARow = row_Height) and (ACol = 1) then checkButton(4);
+    end;
+  end;
+end;
+
 procedure TForm1.sbApplyCustomCSSClick(Sender: TObject);
 var
   info: TNodeInfo;
@@ -1070,12 +1147,16 @@ begin
   Memo2.Clear;
 
   TempName := 'mytemp_' + IntToStr(Random(100000)) + '.tmp';
-  TempSrc  := CommentLexer(synEditHeaderContent.Lines.Text).Text;
+  //TempSrc  := CommentLexer(synEditHeaderContent.Lines.Text).Text;
+  //TempSrc := CommentLexer(TopicContentSynEdit.Lines.Text).Text;
 
-  OpenFileToWrite(TempFile, TempName, TempSrc);
-  OpenFileToRead (TempFile, TempName, TempSrc);
+  showmessage(TempName);
+  TopicContentSynEdit.Lines.SaveToFile(TempName);
 
-  CloseFile(TempFile);
+  //OpenFileToWrite(TempFile, TempName, TempSrc);  showmessage('written');
+  //OpenFileToRead (TempFile, TempName, TempSrc);  showmessage('read');
+
+  //CloseFile(TempFile);
 
   yymain(TempName);
 end;
@@ -1395,6 +1476,11 @@ begin
   ValueListEditor.Repaint;
 end;
 
+procedure TForm1.ValueListEditorDblClick(Sender: TObject);
+begin
+  dblClickPropertyEditor := true;
+end;
+
 procedure TForm1.ValueListEditorDrawCell(Sender: TObject; aCol, aRow: Integer;
   aRect: TRect; aState: TGridDrawState);
 var
@@ -1480,6 +1566,20 @@ procedure TForm1.ValueListEditorSelectCell(Sender: TObject; aCol,
 var
   CellRect: TRect;
   w1, w2, w3: Integer;
+  procedure openEditor;
+  begin
+    with PropertyEdit do
+    begin
+      Text    := ValueListEditor.Cells[ACol, ARow];
+      Parent  := ValueListEditor;
+      Left    := ValueListEditor.CellRect(ACol, ARow).Left + ValueListEditor.Left;
+      Top     := ValueListEditor.CellRect(ACol, ARow).Top  + ValueListEditor.Top;
+      Tag     := ACol + (ARow shl 16); // merken der Zeile
+      Enabled := true;
+      Visible := true;
+      SetFocus;
+    end;
+  end;
 begin
   if (ACol >= 0) and (ARow = 2) then
   begin
@@ -1500,6 +1600,11 @@ begin
     ToolSpeedButton[0].Top     := ValueListEditor.Top  + CellRect.Top  - 24;
     ToolSpeedButton[0].Visible := True;
   end;
+
+  if (ARow = row_Top)    and (ACol = 1) and (dblClickPropertyEditor) then openEditor;
+  if (ARow = row_Left)   and (ACol = 1) and (dblClickPropertyEditor) then openEditor;
+  if (ARow = row_Height) and (ACol = 1) and (dblClickPropertyEditor) then openEditor;
+  if (ARow = row_Width)  and (ACol = 1) and (dblClickPropertyEditor) then openEditor;
   //else
 //  end;
 //  ToolSpeedButton[0].Visible := False; // In anderen Spalten nicht anzeigen
@@ -1526,6 +1631,7 @@ procedure TForm1.ControlMouseDown(Sender: TObject; Button: TMouseButton;
 begin
   if Button = mbLeft then
   begin
+    CurrentDesignerObject := TControl(Sender);
     DraggingControl := TControl(Sender);
     SelectComponent(DraggingControl);
     OffsetX := X;
@@ -1547,6 +1653,14 @@ begin
       DraggingControl.Top    - 2,
       DraggingControl.Width  + 4,
       DraggingControl.Height + 4);
+
+    if Sender is TButton then
+    begin
+      ValueListEditor.Cells[1, row_Top]    := IntToStr(TButton(CurrentDesignerObject).Top);
+      ValueListEditor.Cells[1, row_Left]   := IntToStr(TButton(CurrentDesignerObject).Left);
+      ValueListEditor.Cells[1, row_Width]  := IntToStr(TButton(CurrentDesignerObject).Width);
+      ValueListEditor.Cells[1, row_Height] := IntToStr(TButton(CurrentDesignerObject).Height);
+    end;
   end;
 end;
 

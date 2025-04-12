@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 172
+  Left = 444
   Height = 706
-  Top = 162
+  Top = 263
   Width = 1167
   Caption = 'Form1'
   ClientHeight = 706
@@ -2510,9 +2510,9 @@ object Form1: TForm1
         Height = 509
         Top = 101
         Width = 831
-        ActivePage = TabSheet4
+        ActivePage = TabSheetTopicContent
         Align = alClient
-        TabIndex = 1
+        TabIndex = 0
         TabOrder = 2
         OnResize = PageControl2Resize
         object TabSheetTopicContent: TTabSheet
@@ -2546,6 +2546,7 @@ object Form1: TForm1
                 ParentColor = False
                 ParentFont = False
                 TabOrder = 0
+                OnKeyDown = TopicContentSynEditKeyDown
                 Gutter.Width = 57
                 Gutter.MouseActions = <>
                 RightGutter.Width = 0
@@ -3097,6 +3098,7 @@ object Form1: TForm1
               RowCount = 7
               TabOrder = 3
               OnColRowMoved = ValueListEditorColRowMoved
+              OnDblClick = ValueListEditorDblClick
               OnDrawCell = ValueListEditorDrawCell
               OnHeaderSized = ValueListEditorHeaderSized
               OnHeaderSizing = ValueListEditorHeaderSizing
@@ -3141,6 +3143,18 @@ object Form1: TForm1
                 0
                 'Value'
               )
+            end
+            object PropertyEdit: TEdit
+              Left = 112
+              Height = 24
+              Top = 96
+              Width = 88
+              Enabled = False
+              TabOrder = 4
+              Text = 'PropertyEdit'
+              Visible = False
+              OnExit = PropertyEditExit
+              OnKeyDown = PropertyEditKeyDown
             end
           end
           object Splitter6: TSplitter

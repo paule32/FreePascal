@@ -278,22 +278,25 @@ begin
       //  'x := x + 1; && Kommentar';
 
       Lexer := TCommentLexer.Create;
+//      ProcessedSource := TStringList.Create;
       ProcessedSource := Lexer.LoadFromString(src);
       ProcessedSource := Lexer.GetProcessedSource;
 
-      s := '--- Code aus String ohne Kommentare ---' + #10;
+s := ''; //      s := '--- Code aus String ohne Kommentare ---' + #10;
       for i := 0 to ProcessedSource.Count - 1 do
       begin
+        showmessage('111111 >> ' + IntToStr(i));
         if (Trim(ProcessedSource[i]) <> #13)
         or (Trim(ProcessedSource[i]) <> #10) then
         begin
+showmessage(          ProcessedSource[i]);
           s := s + ProcessedSource[i];
           //s := s + ' row: ' + IntToStr(TTokenInfo(ProcessedSource.Objects[i]).Line);
           //s := s + ' col: ' + IntToStr(TTokenInfo(ProcessedSource.Objects[i]).Column);
           s := s + #13#10;
         end;
       end;
-      ShowMessage(s);
+      ShowMessage(processedsource.text);
       result := ProcessedSource;
     except
       on E: ECommentException do

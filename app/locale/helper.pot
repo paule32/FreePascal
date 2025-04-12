@@ -174,6 +174,10 @@ msgstr ""
 msgid "Panel8"
 msgstr ""
 
+#: tform1.propertyedit.text
+msgid "PropertyEdit"
+msgstr ""
+
 #: tform1.radiogroup1.caption
 msgid " Target: "
 msgstr ""
