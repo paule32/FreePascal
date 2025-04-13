@@ -1152,7 +1152,6 @@ begin
   //TempSrc  := CommentLexer(synEditHeaderContent.Lines.Text).Text;
   //TempSrc := CommentLexer(TopicContentSynEdit.Lines.Text).Text;
 
-  showmessage(TempName);
   TopicContentSynEdit.Lines.SaveToFile(TempName);
 
   //OpenFileToWrite(TempFile, TempName, TempSrc);  showmessage('written');

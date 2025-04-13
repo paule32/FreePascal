@@ -51,7 +51,7 @@
         <Filename Value="helper.lpr"/>
         <IsPartOfProject Value="True"/>
         <TopLine Value="3"/>
-        <CursorPos X="23" Y="34"/>
+        <CursorPos X="73" Y="15"/>
         <UsageCount Value="253"/>
         <Loaded Value="True"/>
       </Unit>
@@ -63,8 +63,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="MainForm"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="1417"/>
-        <CursorPos X="34" Y="1422"/>
+        <TopLine Value="1137"/>
+        <CursorPos Y="1155"/>
         <UsageCount Value="253"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -119,8 +119,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="118"/>
-        <CursorPos Y="119"/>
+        <TopLine Value="132"/>
+        <CursorPos X="28" Y="161"/>
         <UsageCount Value="253"/>
         <Loaded Value="True"/>
       </Unit>
@@ -129,7 +129,6 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="CommentPreprocessor"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="252"/>
         <CursorPos X="3" Y="281"/>
         <UsageCount Value="245"/>
         <Loaded Value="True"/>
@@ -138,7 +137,7 @@
         <Filename Value="..\..\DIN_5473\tools\add_topic_from_hhc.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="109" Y="49"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
@@ -146,7 +145,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1802"/>
         <CursorPos X="23" Y="1819"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="7"/>
       </Unit>
     </Units>
     <Debugger>
@@ -157,123 +156,123 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="121" Column="23" TopLine="104"/>
+        <Caret Line="503" Column="24" TopLine="481"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="127" Column="27" TopLine="110"/>
+        <Caret Line="25" Column="58" TopLine="8"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="130" Column="30" TopLine="113"/>
+        <Caret Line="283" Column="41" TopLine="255"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="138" Column="23" TopLine="121"/>
+        <Caret Line="475" Column="21" TopLine="447"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="202" Column="32" TopLine="183"/>
+        <Caret Line="253" Column="41" TopLine="231"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="204" Column="66" TopLine="187"/>
+        <Caret Line="459" Column="21" TopLine="432"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="206" Column="34" TopLine="189"/>
+        <Caret Line="22" Column="37" TopLine="5"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="222" Column="26" TopLine="203"/>
+        <Caret Line="111" Column="19" TopLine="83"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="271" Column="31" TopLine="261"/>
+        <Caret Line="118" Column="23" TopLine="107"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="295" Column="18" TopLine="278"/>
+        <Caret Line="121" Column="23" TopLine="107"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="297" Column="49" TopLine="280"/>
+        <Caret Line="126" Column="43" TopLine="107"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="307" Column="29" TopLine="287"/>
+        <Caret Line="132" Column="21" TopLine="107"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="327" Column="32" TopLine="310"/>
+        <Caret Line="172" Column="37" TopLine="155"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="335" Column="59" TopLine="313"/>
+        <Caret Line="18" Column="18"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="345" Column="40" TopLine="320"/>
+        <Caret Line="328" Column="50" TopLine="300"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="347" Column="36" TopLine="330"/>
+        <Caret Line="332" Column="48" TopLine="304"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="57" Column="16" TopLine="35"/>
+        <Caret Line="336" Column="46" TopLine="308"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="93" Column="39" TopLine="64"/>
+        <Caret Line="340" Column="44" TopLine="312"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="95" Column="3" TopLine="74"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1155" Column="23" TopLine="1138"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1422" Column="5" TopLine="1417"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1141" Column="39" TopLine="1133"/>
-      </Position>
-      <Position>
-        <Filename Value="mainform.pas"/>
-        <Caret Line="1149" Column="3" TopLine="1133"/>
+        <Caret Line="408" Column="57" TopLine="380"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="132" Column="23" TopLine="115"/>
+        <Caret Line="18" Column="30"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Column="28"/>
+        <Caret Line="328" Column="50" TopLine="300"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="21" Column="10"/>
+        <Caret Line="332" Column="48" TopLine="304"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="30" Column="27" TopLine="2"/>
+        <Caret Line="336" Column="46" TopLine="308"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="36" Column="13" TopLine="7"/>
+        <Caret Line="340" Column="44" TopLine="312"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="138" Column="22" TopLine="121"/>
+        <Caret Line="545" Column="42" TopLine="513"/>
       </Position>
       <Position>
         <Filename Value="htmlParser.pas"/>
-        <Caret Line="134" Column="26" TopLine="121"/>
+        <Caret Line="507" Column="36" TopLine="489"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="517" Column="41" TopLine="491"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="156" Column="12" TopLine="135"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="157" Column="25" TopLine="140"/>
+      </Position>
+      <Position>
+        <Filename Value="htmlParser.pas"/>
+        <Caret Line="160" Column="35" TopLine="144"/>
       </Position>
     </JumpHistory>
     <RunParams>

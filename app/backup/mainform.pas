@@ -230,6 +230,8 @@ type
       );
     procedure SynEdit1KeyPress(Sender: TObject; var Key: char);
     procedure SynEdit1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
+    procedure TopicContentSynEditKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
     procedure TopicTreeClick(Sender: TObject);
     procedure ValueListEditorColRowMoved(Sender: TObject; IsColumn: Boolean; sIndex, tIndex: Integer);
     procedure ValueListEditorDblClick(Sender: TObject);
@@ -1410,6 +1412,15 @@ begin
 
   if CurX > MAX_SPALTEN then
     SynEdit1.CaretX := 1; //MAX_SPALTEN;
+end;
+
+procedure TForm1.TopicContentSynEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = VK_F2 then
+  begin
+    sbLoadFromFile1Click(Sender);
+  end;
 end;
 
 procedure TForm1.TopicTreeClick(Sender: TObject);

@@ -40,3 +40,6 @@ output/chm Dokumentation erstellen/Titel dieses Hilfeprojekts.chm
 /app/lib
 *.exe
 /app/CEF4Delphi
+/app/lib
+*.o
+*.ppu

@@ -12,29 +12,37 @@ var
 procedure yymain(AFileName: String);
 
 implementation
-uses TypInfo, MainForm;
+uses TypInfo, Generics.Collections, MainForm;
 
 resourcestring
   ERR_SCANNER_UNEXPECTED_CHAR = 'Error 0: Scanner: Unexpected char found in stream';
 
 type
   TSymbol = (
-    sUnknown, sIdent, sInteger, sPlus, sMinus, sStar, sSlash, sEqual,
+    sUnknown, sIdent, sInteger, sEOL, sEOF,
+    sPlus, sMinus, sStar, sSlash, sEqual,
     sSmaller, sBigger, sBiggerEqual, sSmallerEqual, sUnEqual,
     sOpenBracket, sCloseBracket, sComma, sDot, sSemiColon, sBecomes,
     sVar, sConst, sProcedure, sBegin, sEnd, sIf, sThen,
-    sElseIf, sElse, sWhile, sDo, sModule, sWrite, sUnit, sNone
+    sElseIf, sElse, sWhile, sDo, sModule, sWrite,
+    sUnit, sInterface, sImplementation,
+    sNone
   );
 
 const
   cSymbols : Array[TSymbol] of ShortString = (
-    '', '', '', '+', '-', '*', '/', '=',
+    '', '', '', '', '', '+', '-', '*', '/', '=',
     '<', '>', '>=', '<=', '#',
     '(', ')', ',', '.', ';', ':=',
     'VAR', 'CONST', 'PROCEDURE', 'BEGIN', 'END', 'IF', 'THEN',
     'ELSEIF', 'ELSE', 'WHILE', 'DO', 'MODULE', 'WRITE',
-    'UNIT', ''
+    'UNIT',
+    'INTERFACE',
+    'IMPLEMENTATION',
+    ''
   );
+var
+  SymbolMap: TDictionary<TSymbol, string>;
 
 type
   TIdentType = (itConstant, itVariable, itProcedure);
@@ -52,27 +60,44 @@ var
   Symbol : TSymbol;
   symbolExpected: String;
   symbolName: String;
-
-const
-  TOK_EOF = 300;
-  TOK_EOL = 301;
+  yyIdent: String;
+  commentOpen: Boolean;
 
 procedure Error(ErrorText : String);
 begin
   raise Exception.Create(Format('%d: ' + ErrorText, [Line]));
 end;
 
-procedure Expect(Expected : TSymbol);
+function MakeOneLiner(const MultiLine: string): string;
+var
+  i: Integer;
+  c: Char;
+  InWhitespace: Boolean;
 begin
-  if Symbol <> Expected then
+  Result := '';
+  InWhitespace := False;
+
+  for i := 1 to Length(MultiLine) do
   begin
-    symbolName     := GetEnumName(TypeInfo(TSymbol), Ord(Symbol));
-    symbolExpected := GetEnumName(TypeInfo(TSymbol), Ord(Expected));
-    raise Exception.Create('Expected: '
-    + symbolExpected + #10
-    + 'Found: '
-    + symbolName);
+    c := MultiLine[i];
+    // Prüfen auf Zeilenumbruch oder Leerraum
+    if c in [#10, #13, #9, ' '] then
+    begin
+      if not InWhitespace then
+      begin
+        Result := Result + ' ';
+        InWhitespace := True;
+      end;
+    end
+    else
+    begin
+      Result := Result + c;
+      InWhitespace := False;
+    end;
   end;
+
+  // Überflüssiges führendes/trailing Leerzeichen entfernen
+  Result := Trim(Result);
 end;
 
 procedure GetSym;
@@ -92,14 +117,9 @@ procedure GetSym;
       if ch = 10 then
       begin
         if yypos >= Length(yyinput) then
-        begin
-          ch := TOK_EOF;
-          exit;
-        end else
-        begin
-          ch := TOK_EOL;
-          exit;
-        end;
+        Symbol := sEOF else
+        Symbol := sEOL;
+        exit;
       end else
       begin
         raise Exception.Create(
@@ -109,23 +129,19 @@ procedure GetSym;
     if ch = 10 then
     begin
       inc(Line);
-      ch := TOK_EOL;
+      Symbol := sEOL;
       exit;
-    end else
-    if ch in [ord(#9), ord(' ')] then
-    begin
-      GetCh;
     end else
     if ch = 0 then
     begin
-      ch := TOK_EOF;
+      Symbol := sEOF;
     end;
   end;
   function getIdent: String;
   var
     id: String;
   begin
-    id := '';
+    result := '';
     while true do
     begin
       GetCh;
@@ -135,13 +151,23 @@ procedure GetSym;
       ord('0')..ord('9'),
       ord('_')] then
       begin
-        id := id + chr(ord(ch));
+        Symbol := sIdent;
+        result := result + chr(ord(ch));
       end else
       begin
-//        dec(yypos);
-        Symbol := sIdent;
-        result := id;
-        exit;
+        dec(yypos);
+        ch := ord(yyinput[yypos]);
+        if ch = 10 then dec(yypos);
+        if ch = 13 then dec(yypos);
+        if ch in [
+        ord('A')..ord('Z'),
+        ord('a')..ord('z'),
+        ord('0')..ord('9'),
+        ord('_')] then
+        begin
+          ShowMessage('>' + yyinput[yypos] + '<');
+          break;
+        end;
       end;
     end;
   end;
@@ -154,110 +180,124 @@ begin
   begin
     Str := '';
     GetCh;
+    if (Symbol = sEOF) then
+    begin
+      Error('EOF reached.');
+    end else
+    if (Symbol = sEOL) then
+    begin
+      continue;
+    end;
     case ch of
-    TOK_EOF: begin
-      break;
+    ord(#9), ord(' '): begin
+      continue;
     end;
-    TOK_EOL: begin
-      break;
-    end;
+
     ord('/'):
     begin
       GetCh;
       if ch = ord('/') then // C++ comment
       begin
+        Symbol := sNone;
         while true do
         begin
           GetCh;
-          if (ch = TOK_EOL)
-          or (ch = TOK_EOF) then break;
+          if (Symbol = sEOL)
+          or (Symbol = sEOF) then exit;
         end;
       end else
       if ch = ord('*') then // C comment
       begin
+        commentOpen := true;
         while true do
         begin
-          GetCh;
-          if ch = ord('*') then
+          inc(yypos);
+          if yypos >= Length(yyinput) then
+          Error('comment not closed.');
+          ch := ord(yyinput[yypos]);
+          if ch = ord('/') then
           begin
-            GetCh;
-            if ch = ord('/') then
-            begin
-              break
-            end else
-            if ch = TOK_EOF then
-            begin
-              raise Exception.Create(
-              Format('Error: %d: C comment not terminated.', [Line]));
-            end;
-          end else
-          if ch = TOK_EOF then
-          begin
-            raise Exception.Create(
-            Format('Error: %d: C comment not terminated.', [Line]));
+            commentOpen := false;
+            exit;
           end;
         end;
       end;
     end;
+
     ord('&'):
     begin
       GetCh;
+      if Symbol = sEOF then exit;
       if ch = ord('&') then // dbase comment 1
       begin
         while true do
         begin
           GetCh;
-          if (ch = TOK_EOL)
-          or (ch = TOK_EOF) then break;
+          if (Symbol = sEOL)
+          or (Symbol = sEOF) then exit;
         end;
         break;
       end;
     end;
+
     ord('*'):
     begin
       GetCh;
+      if Symbol = sEOF then exit;
       if ch = ord('*') then // dbase comment 2
       begin
         ShowMessage('comment DBASE end');
         while true do
         begin
           GetCh;
-          if (ch = TOK_EOL)
-          or (ch = TOK_EOF) then break;
+          if (Symbol = sEOL)
+          or (Symbol = sEOF) then exit;
         end;
       end;
     end;
+
+    // Ident/Reserved Word
     ord('A')..ord('Z'),
     ord('a')..ord('z'),ord('_'):
-    begin (*Ident/Reserved Word*)
+    begin
+      str := '';
       str := str + Chr(ord(Ch));
       str := str + getIdent;
-
       for i := sUnknown to sNone do
       begin
         if UpperCase(Str) = cSymbols[i] then
         begin
-          if i = sUNIT then
-          showmessage('a unit');
+          showmessage('yy: ' + str);
+          yyident := str;
           Symbol := i;
-          Break
+          exit;
         end;
       end;
-      Exit
-    end; (*Ident/Reserved Word*)
+      yyIdent := str;
+      Symbol := sIdent;
+      exit;
+    end;
 
-    ord(';'),ord('+'),ord('='),ord('#'),ord(','),ord('.'):
-    begin (*Symbole die nur aus 1 Zeichen bestehen können*)
+    // Symbole die nur aus 1 Zeichen bestehen können
+    ord(';'):
+    begin
+      Symbol := sSemiColon;
+      exit;
+    end;
+    ord('+'),
+    ord('='),ord('#'),
+    ord(','),ord('.'):
+    begin
       Str := chr(ord(Ch));
       Symbol := sUnknown;
       for i := sUnknown to sNone do
+      begin
         if Str = cSymbols[i] then
         begin
           Symbol := i;
-          Break
+          exit;
         end;
-      GetCh;
-      Exit
+      end;
     end; (*Symbole die nur aus 1 Zeichen bestehen können*)
 
     ord('<'):
@@ -329,7 +369,7 @@ begin
         while True do
         begin
           GetCh;
-          if (ch = TOK_EOF) then
+          if (Symbol = sEOF) then
           begin
             raise Exception.Create(
             Format('Error: %d: Pascal comment not terminated.', [Line]));
@@ -353,14 +393,15 @@ begin
       end
     end;
 
-    ord('0')..ord('9'),ord('$'): (*Zahlen*)
+    // Zahlen
+    ord('0')..ord('9'),ord('$'):
     begin
       Symbol := sInteger;
       Str := chr(ord(Ch));
       GetCh;
       if (Str = chr(ord('$'))) then
       begin
-        //HexZahl
+        // HexZahl
         while Ch in [ord('0')..ord('9'),ord('A')..ord('F')] do
         begin
           Str := Str + chr(ord(Ch));
@@ -370,7 +411,7 @@ begin
       end
       else
       begin
-        //NormaleZahl
+        // NormaleZahl
         while Ch in [ord('0')..ord('9')] do
         begin
           Str := Str + chr(ord(Ch));
@@ -378,7 +419,7 @@ begin
         end;
         Exit
       end
-    end; (*Zahlen*)
+    end; // Zahlen
 
     else
       Error(Format('%s%s%c',[ERR_SCANNER_UNEXPECTED_CHAR, #10,ch]));
@@ -387,31 +428,156 @@ begin
   end
 end (*GetSym*);
 
+procedure Expect(Expected : TSymbol);
+begin
+  GetSym;
+  if Symbol = sEOL then
+  begin
+    GetSym;
+    exit;
+  end;
+  if Symbol <> Expected then
+  begin
+    symbolName     := GetEnumName(TypeInfo(TSymbol), Ord(Symbol));
+    symbolExpected := GetEnumName(TypeInfo(TSymbol), Ord(Expected));
+    Error('Expected: '
+    + SymbolMap[Expected] + #10
+    + 'Found: '
+    + SymbolMap[Symbol]);
+  end;
+end;
+
 procedure yymain(AFileName: String);
 var
   strList: TStringList;
+  str: String;
 begin
   Ch      := ord(' ');
-  Line    := 1;
+  Line    := 0;
+  Symbol  := sNone;
   yypos   := 0;
   yyinput := '';
 
-  strList := TStringList.Create;
+  commentOpen := false;
+
+  strList   := TStringList.Create;
+  SymbolMap := TDictionary<TSymbol, string>.Create;
+
   try
-    strList.LoadFromFile(AFileName);
-    yyinput := strList.Text;
-    showmessage('--->' + yyinput);
+    try
+      strList.LoadFromFile(AFileName);
+      yyinput := (strList.Text);
+      showmessage(yyinput);
+    except
+      ShowMessage('Error: can not opern source file.');
+      exit;
+    end;
+
+    with SymbolMap do
+    begin
+      Add(sUnknown, 'Unknown');
+      Add(sIdent,   'identifier');
+      Add(sInteger, 'keyword INTEGER');
+      Add(sEOL, 'EOL - End of Line');
+      Add(sEOF, 'EOF - End of File');
+      Add(sPlus, 'plus sign (+)');
+      Add(sMinus, 'minus sign (-)');
+      Add(sStar, 'times sign (*)');
+      Add(sSlash, 'division sign (/)');
+      Add(sEqual, 'equal sign (=)');
+      Add(sSmaller, 'smaller sign (<)');
+      Add(sBigger, 'bigger sign (>)');
+      Add(sBiggerEqual, '>=');
+      Add(sSmallerEqual, '<=');
+      Add(sUnEqual, '<>');
+      Add(sOpenBracket, 'backet sign: (');
+      Add(sCloseBracket, 'bracket sign: )');
+      Add(sComma, 'comma sign (,)');
+      Add(sDot, 'dot sign (.)');
+      Add(sSemiColon, 'semicolon sign (;)');
+      Add(sBecomes, 'keyword assign sign (:=)');
+      Add(sVar, 'keyword VAR');
+      Add(sConst, 'keyword CONST');
+      Add(sProcedure, 'keyword PROCEDURE');
+      Add(sBegin, 'keyword BEGIN');
+      Add(sEnd, 'keyword END');
+      Add(sIf, 'keyword IF');
+      Add(sThen, 'keyword THEN');
+      Add(sElseIf, 'keyword ELSE IF');
+      Add(sElse, 'keyword ELSE');
+      Add(sWhile, 'keyword WHILE');
+      Add(sDo, 'keyword DO');
+      Add(sModule, 'keyword MODULE');
+      Add(sWrite, 'keyword WRITE');
+      Add(sUnit, 'keyword UNIT');
+      Add(sInterface, 'keyword INTERFACE');
+      Add(sImplementation, 'keyword IMPLEMENTATION');
+      Add(sNone, '');
+    end;
+
+    try
+      while true do
+      begin
+        Symbol := sNone;
+        GetSym;
+        if Symbol = sUnit then
+        begin
+          ShowMessage('eine unut');
+          GetSym;
+          if Symbol = sIdent then
+          begin
+            GetSym;
+            if Symbol = sSemiColon then
+            begin
+              showmessage('iddd: ' + yyident);
+            end else
+            begin
+              Error('semicolon expected.');
+            end;
+          end else
+          begin
+            Error('ident expected.');
+          end;
+
+
+          if Symbol = sEOL then
+          begin
+            GetSym;
+          end else
+          if Symbol = sEOF then Error('EOF Reached');
+          if Symbol = sIdent then
+          begin
+            showmessage(yyident);
+            GetSym;
+            if Symbol = sEOL then
+            begin
+              GetSym;
+            end else
+            if Symbol = sEOF then Error('EOF REached');
+          end;
+
+          ShowMessage('unit: ' + str);
+        end else
+        if Symbol = sIdent then
+        begin
+          ShowMessage('ident: ' + yyident);
+        end else
+        begin
+          if commentOpen then
+          Error('comment not closed.');
+        end;
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage(E.Message);
+      end;
+    end;
   finally
     strList.Free;
-    strList := nil;
+    SymbolMap.Free;
   end;
 
-  while true do
-  begin
-    GetSym;
-    if ch = TOK_EOF then
-    break;
-  end;
   Form1.Memo2.Lines.Add('2Done...');
 end;
 
