@@ -1,6 +1,0 @@
-# Bezeichnungen
-
-| ***Bezeichnungen***&nbsp; |
-| --- |
-
-

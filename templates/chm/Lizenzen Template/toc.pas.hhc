@@ -69,20 +69,7 @@ begin
 				  nBlocLevel := nBlocLevel - 1;
 				end;
 			end;
-    %>
-
-<%
-if HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic) == '[::TOC_Lizenzen::]' then
-begin
-%>
-<LI> <OBJECT type="text/sitemap">
-    <param name="Name" value="Lizenzen">
-    <param name="Local" value="mk:@MSITStore:LizenzenDark.chm::/Lizenzen.htm">
-</OBJECT> </LI>
-<%
-end else
-begin
-%>
+	%>
 
 			<li> <object type="text/sitemap">
 				<param name="Name" value="<% print(HTMLEncode(HndTopics.GetTopicCaption(HndGeneratorInfo.CurrentTopic))); %>">
@@ -111,9 +98,7 @@ begin
 			else begin
 				print('</li>');
 			end;
-
-end;    // line: 75
-
+			
 			// Close the last topic
 			if (HndTopicsEx.GetTopicNextGenerated(HndGeneratorInfo.CurrentTopic, True) = '') then
 			begin

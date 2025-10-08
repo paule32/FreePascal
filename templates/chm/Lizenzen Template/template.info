@@ -1,5 +1,5 @@
 ﻿[config]
-name=FreePascal 322 Dokumentation
+name=Lizenzen Template
 category=CHM Documentation
 extension=chm
 topicextension=htm
@@ -175,56 +175,4 @@ description.fr=
 default=
 kind=string
 values=
-
-[var_CustomTopicTitle]
-name=CustomTitle
-name.de=
-name.es=
-name.fr=
-description=topic text
-description.de=
-description.es=
-description.fr=
-default=Pascal
-kind=string
-values=
-
-[var_CustomTopicTitleText]
-name=CustomTitleText
-name.de=
-name.es=
-name.fr=
-description=text für das Topic
-description.de=
-description.es=
-description.fr=
-default=
-kind=string
-values=
-
-[var_CustomTopicTitleVersion]
-name=CustomTitleVersion
-name.de=
-name.es=
-name.fr=
-description=Left Sub Title - Version
-description.de=
-description.es=
-description.fr=
-default=FPC  v.3.2.2
-kind=string
-values=
-
-[var_CustomTopicTitleCenter]
-name=CustomTitleCenter
-name.de=
-name.es=
-name.fr=
-description=Titel in der Mitte
-description.de=
-description.es=
-description.fr=
-default=Topic=Free Pascal Compiler
-kind=enum
-values=Topic=Free Pascal Compiler|Topic=Free Pascal Compiler|Topic=Win32API
 

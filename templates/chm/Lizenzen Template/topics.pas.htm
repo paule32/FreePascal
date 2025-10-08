@@ -12,36 +12,6 @@ var headContent, htmlContent, topicCaption, s1: String;
 var nCurTopic, nCurParent, nTopicKind, nHeaderKind, nFooterKind: integer;
 var sCharset, sTopicHeader, sTopicFooter, sRelativeTopic: string;
 var aBreadCrumb: array of String;
-var ContentCenterTopic: String;
-
-function getTopicCenterTextWin32API: String;
-var kind_type: Integer;
-var kind_id: String;
-var kind_str: String;
-begin
-  result := '';
-  kind_id   := HndLibraryItems.GetItemByCaption('TopicCenterTextWin32API');
-  kind_type := HndLibraryItems.GetItemKind(kind_id);
-  if kind_type = 13 then 
-  begin
-    kind_str := HndLibraryItems.GetItemContentAsText(kind_id);
-    result := kind_str;
-  end;
-end;
-function getTopicCenterTextFPC: String;
-var kind_type: Integer;
-var kind_id: String;
-var kind_str: String;
-begin
-  result := '';
-  kind_id   := HndLibraryItems.GetItemByCaption('TopicCenterTextFPC');
-  kind_type := HndLibraryItems.GetItemKind(kind_id);
-  if kind_type = 13 then 
-  begin
-    kind_str := HndLibraryItems.GetItemContentAsText(kind_id);
-    result := kind_str;
-  end;
-end;
 
 function RemoveSpaces(const Input: string): string;
 var
@@ -113,23 +83,7 @@ begin
         exit;
     end;
 end;
-
-function getTopicString(s: String): String;
-var
-  value: string;
-  startPos, endPos: Integer;
-begin
-  // Start nach dem ersten Hochkomma finden
-  startPos := Pos('''', s) + 1;
-
-  // Ende des Werts finden (zweites Hochkomma)
-  endPos := PosEx('''', s, startPos);
-
-  // Wert extrahieren
-  value := Copy(s, startPos, endPos - startPos);
-  result := value;
-end;
-
+    
     function getTemplateHeaderHtml: String;
     var aTopicID: String;
     var topicCaption: String;
@@ -408,40 +362,6 @@ begin
             or      (TopicCaption = 'VorlageHeader'))
             then begin
                 htmlContent := getTemplateHtml;
-                htmlContent := StringReplace(
-                    htmlContent,
-                    '[::TopicTitle::]',
-                    HndGeneratorInfo.GetCustomSettingValue('CustomTopicTitle'),
-                    [rfReplaceAll]);
-                htmlContent := StringReplace(
-                    htmlContent,
-                    '[::TopicTitleVersion::]',
-                    HndGeneratorInfo.GetCustomSettingValue('CustomTopicTitleVersion'),
-                    [rfReplaceAll]);
-                
-                if HndGeneratorInfo.GetCustomSettingValue('CustomTopicTitleCenter') = 'Topic=Win32API' then
-                begin
-                    ContentCenterTopic := getTopicCenterTextWin32API;
-                    htmlContent := StringReplace(
-                    htmlContent,
-                    '[::TopicTitleTextCenter::]',
-                    ContentCenterTopic,
-                    [rfReplaceAll]);
-                end else
-                begin
-                    ContentCenterTopic := getTopicCenterTextFPC;
-                    htmlContent := StringReplace(
-                    htmlContent,
-                    '[::TopicTitleTextCenter::]',
-                    ContentCenterTopic,
-                    [rfReplaceAll]);
-                end;
-                
-                htmlContent := StringReplace(
-                    htmlContent,
-                    '[::TopicTitleText::]',
-                    HndGeneratorInfo.GetCustomSettingValue('CustomTopicTitleText'),
-                    [rfReplaceAll]);
                 htmlContent := StringReplace(
                     htmlContent,
                     '[::Template::]',
