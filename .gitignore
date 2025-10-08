@@ -43,3 +43,4 @@ output/chm Dokumentation erstellen/Titel dieses Hilfeprojekts.chm
 /app/lib
 *.o
 *.ppu
+FPC.lck
