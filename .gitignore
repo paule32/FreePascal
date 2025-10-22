@@ -68,3 +68,8 @@ assets/index.html
 FreePascal.chw
 libimpdarktoc.a
 toc.pas
+/backup
+petscii_upper_normal.json
+output/pdf/FreePascalLight.pdf
+output/pdf/FreePascalLight.pdf
+/output
